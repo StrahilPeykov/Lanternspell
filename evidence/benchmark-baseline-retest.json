@@ -1,0 +1,125 @@
+{
+  "scenario": "steady-state-courtyard-two-settings",
+  "date": "2026-09-10T18:22:15.352Z",
+  "build": "cd7b1c5 baseline retest",
+  "fixtures": false,
+  "input": "UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup",
+  "browser": "153.0.8010.12",
+  "headless": true,
+  "requestedBackend": "D3D11; actual identity below",
+  "high": {
+    "inspection": {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "drawingBuffer": [
+        1920,
+        1080
+      ],
+      "frameMs": {
+        "p50": 33.400000000001455,
+        "p95": 83.40000000000146,
+        "p99": 699.9000000000015,
+        "samples": 349
+      },
+      "resources": {
+        "geometries": 116,
+        "textures": 88,
+        "calls": 204,
+        "triangles": 292640
+      },
+      "loadedAtMs": 13628.60000000149,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    "steadyFrameMs": {
+      "p50": 33.400000000001455,
+      "p95": 83.40000000000146,
+      "p99": 116.59999999999854,
+      "samples": 252,
+      "durationMs": 12005.799999998511
+    }
+  },
+  "low": {
+    "inspection": {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1280,
+        720
+      ],
+      "drawingBuffer": [
+        1088,
+        612
+      ],
+      "frameMs": {
+        "p50": 33.30000000000291,
+        "p95": 83.29999999999927,
+        "p99": 333.2999999999993,
+        "samples": 961
+      },
+      "resources": {
+        "geometries": 116,
+        "textures": 88,
+        "calls": 204,
+        "triangles": 292640
+      },
+      "loadedAtMs": 13628.60000000149,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    "steadyFrameMs": {
+      "p50": 33.299999999995634,
+      "p95": 50,
+      "p99": 66.59999999999854,
+      "samples": 422,
+      "durationMs": 12030.299999995528
+    }
+  },
+  "errors": [
+    "error: THREE.BufferGeometryUtils: .mergeGeometries() failed with geometry at index 34. All geometries must have compatible attributes; make sure index attribute exists among all geometries, or in none of them.",
+    "warning: THREE.WebGLShadowMap: PCFSoftShadowMap has been removed. Using PCFShadowMap instead."
+  ],
+  "caveat": "One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee."
+}

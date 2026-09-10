@@ -5,6 +5,12 @@ import { availableSpells, createBattle, getIntentions, getSpell, nextDraw, previ
 const actor = (b: Battle, id = 'mage1') => b.actors.find(a => a.id === id)!;
 const plan = (spellId: SpellId, targetId = 'guardian', actorId = 'mage1'): Plan => ({ actorId, spellId, targetId });
 describe('controlled tradition variants', () => {
+  it('rejects unknown wire spell IDs before tradition metadata lookup', () => {
+    const b = createBattle('guardian', 'duo', false, { variant: 'book' });
+    for (const id of ['unknown', '__proto__', 'constructor']) {
+      expect(validatePlan(b, plan(id as SpellId))).toBe('Unknown spell.');
+    }
+  });
   it('preserves baseline exactly and gives each tradition six self-sufficient roles', () => {
     expect(createBattle('guardian', 'solo', true, { variant: 'baseline', traditions: { mage1: 'hearth' }, seed: 7 })).toEqual(createBattle('guardian', 'solo', true));
     for (const tradition of ['margin', 'hearth'] as const) {

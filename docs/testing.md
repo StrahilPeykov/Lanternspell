@@ -1,3 +1,7 @@
+# Historical first-playable evidence
+
+Current benchmark checks and limitations are in [benchmark-results.md](benchmark-results.md). The original gameplay suite predates the fountain collision and new default rules; do not treat its old fixed-route/policy assumptions as current benchmark assertions. Valuable pure-rule/protocol invariants remain in the normal test suite.
+
 # Runtime and rules evidence
 
 Evidence is recorded, not inferred from the concept art. The generated target under art/ is not a screenshot of the game.

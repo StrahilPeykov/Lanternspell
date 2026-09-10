@@ -1,3 +1,7 @@
+# Current benchmark
+
+The Sleeping Orrery remains one chapter. Full-book Marginweaver and Hearthbinder traditions, optional west reading pocket/chorus, a sealed archive, an authored Atlas and a travelling lantern crane deepen the original route. See [combat comparison](combat-benchmark.md), [benchmark art](benchmark-art.md), [audio](audio.md) and [results](benchmark-results.md) for current contracts. The text below records the first-playable foundation and is historical where superseded.
+
 # The Sleeping Orrery — first playable
 
 Provisional chapter names, not final branding. Visiting Bellweather College, the player restores a seed-lantern, practices against a Paper Moth, copies a margin note, and opens the Drowsing Atlas's ward. The observatory responds with a visible golden orrery and doorway light. Iona supplies a short invitation to the adventure. The small planted courtyard, college wings, benches, books, lamps and observatory are a single connected zone.

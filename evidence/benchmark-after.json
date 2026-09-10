@@ -1,0 +1,152 @@
+{
+  "scenario": "steady-state-courtyard-two-settings",
+  "date": "2026-09-10T18:18:02.647Z",
+  "build": "0.2.0 benchmark development",
+  "fixtures": false,
+  "input": "UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup",
+  "browser": "153.0.8010.12",
+  "headless": true,
+  "requestedBackend": "D3D11; actual identity below",
+  "high": {
+    "inspection": {
+      "version": 1,
+      "build": "0.2.0-benchmark",
+      "tradition": "margin",
+      "variant": "book",
+      "seed": 42,
+      "facts": {
+        "echo": false
+      },
+      "signature": "spirit",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "drawingBuffer": [
+        1920,
+        1080
+      ],
+      "frameMs": {
+        "p50": 49.900000000001455,
+        "p95": 116.59999999999854,
+        "p99": 450.0000000000009,
+        "samples": 329
+      },
+      "questPresentation": {
+        "echo": false
+      },
+      "quality": {
+        "low": false,
+        "shadowSize": 2048,
+        "surfaceMaterials": 14
+      },
+      "resources": {
+        "geometries": 60,
+        "textures": 79,
+        "calls": 142,
+        "triangles": 380050
+      },
+      "loadedAtMs": 7794.39999999851,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    "steadyFrameMs": {
+      "p50": 50,
+      "p95": 100,
+      "p99": 133.20000000000073,
+      "samples": 225,
+      "durationMs": 12030.3
+    }
+  },
+  "low": {
+    "inspection": {
+      "version": 1,
+      "build": "0.2.0-benchmark",
+      "tradition": "margin",
+      "variant": "book",
+      "seed": 42,
+      "facts": {
+        "echo": false
+      },
+      "signature": "spirit",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1280,
+        720
+      ],
+      "drawingBuffer": [
+        1088,
+        612
+      ],
+      "frameMs": {
+        "p50": 16.700000000004366,
+        "p95": 83.39999999999782,
+        "p99": 183.29999999999927,
+        "samples": 998
+      },
+      "questPresentation": {
+        "echo": false
+      },
+      "quality": {
+        "low": true,
+        "shadowSize": 1024,
+        "surfaceMaterials": 14
+      },
+      "resources": {
+        "geometries": 60,
+        "textures": 79,
+        "calls": 111,
+        "triangles": 260215
+      },
+      "loadedAtMs": 7794.39999999851,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    "steadyFrameMs": {
+      "p50": 16.700000000000728,
+      "p95": 66.59999999999854,
+      "p99": 66.70000000000073,
+      "samples": 500,
+      "durationMs": 12004.300000005962
+    }
+  },
+  "errors": [],
+  "caveat": "One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee."
+}

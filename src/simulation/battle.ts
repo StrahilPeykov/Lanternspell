@@ -120,6 +120,8 @@ export function nextDraw(battle: Battle, actorId: string): SpellId | null {
 /** Invalid manual commands fail explicitly; dead targets are accepted for predictable retargeting. */
 export function validatePlan(battle: Battle, plan: Plan): string | null {
   if (battle.phase !== 'planning') return 'This encounter is already complete.';
+  // Wire commands are untrusted strings even though local TypeScript callers use SpellId.
+  if (!Object.hasOwn(SPELLS, plan.spellId)) return 'Unknown spell.';
   const caster = battle.actors.find(a => a.id === plan.actorId);
   if (!caster || caster.team !== 'mage' || caster.hp <= 0) return 'Choose a living mage.';
   if (!Object.hasOwn(SPELLS, plan.spellId)) return 'Unknown spell.';

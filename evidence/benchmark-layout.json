@@ -1,0 +1,118 @@
+{
+  "scenario": "visual-layout-fixture",
+  "guardianUsesImportedSaveFixture": true,
+  "courtyardFromActualBegin": true,
+  "inspection": {
+    "version": 1,
+    "build": "0.2.0-benchmark",
+    "tradition": "margin",
+    "variant": "book",
+    "seed": 42,
+    "facts": {
+      "echo": true
+    },
+    "signature": "spirit",
+    "stage": 4,
+    "battle": {
+      "version": 1,
+      "id": "guardian-solo",
+      "kind": "guardian",
+      "mode": "solo",
+      "round": 1,
+      "revision": 0,
+      "phase": "planning",
+      "actors": [
+        {
+          "id": "mage1",
+          "name": "Visiting mage",
+          "team": "mage",
+          "hp": 38,
+          "maxHp": 38,
+          "ember": 3,
+          "ward": 0,
+          "wardUntil": 0,
+          "markedUntil": 0,
+          "staggeredUntil": 0,
+          "tradition": "margin",
+          "counter": 0
+        },
+        {
+          "id": "guardian",
+          "name": "Drowsing Atlas",
+          "team": "enemy",
+          "hp": 36,
+          "maxHp": 36,
+          "ember": 0,
+          "ward": 8,
+          "wardUntil": 9999,
+          "markedUntil": 0,
+          "staggeredUntil": 0
+        }
+      ],
+      "upgraded": true,
+      "rewardGranted": false,
+      "variant": "book",
+      "seed": 104729,
+      "intentions": [
+        {
+          "actorId": "guardian",
+          "targetId": "mage1",
+          "spellId": "strike",
+          "name": "Brass Sweep",
+          "amount": 6,
+          "tier": 2,
+          "text": "The brass follows the mage holding most Ember · 6 damage to Visiting mage."
+        }
+      ]
+    },
+    "plan": null,
+    "playing": false,
+    "modal": "",
+    "started": true,
+    "shared": null,
+    "metrics": null,
+    "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "viewport": [
+      1440,
+      900
+    ],
+    "drawingBuffer": [
+      1440,
+      900
+    ],
+    "frameMs": {
+      "p50": 33.29999999999927,
+      "p95": 66.70000000000073,
+      "p99": 316.60000000000036,
+      "samples": 392
+    },
+    "questPresentation": {
+      "echo": true
+    },
+    "quality": {
+      "low": false,
+      "shadowSize": 2048,
+      "surfaceMaterials": 14
+    },
+    "resources": {
+      "geometries": 76,
+      "textures": 83,
+      "calls": 157,
+      "triangles": 369896
+    },
+    "loadedAtMs": 8365.60000000149,
+    "loadingErrors": [],
+    "position": {
+      "x": 0,
+      "z": -14,
+      "yaw": 3.141592653589793
+    },
+    "camera": {
+      "yaw": 0,
+      "pitch": 0.27,
+      "distance": 9
+    },
+    "effectChildren": 0
+  },
+  "errors": []
+}

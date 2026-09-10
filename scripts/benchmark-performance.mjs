@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import { writeFile } from 'node:fs/promises';
 const browser=await chromium.launch({headless:true,args:['--use-angle=d3d11','--enable-gpu']});
 const page=await browser.newPage({viewport:{width:1920,height:1080}});
-const errors=[];page.on('pageerror',e=>errors.push(e.message));
+const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error'||m.type()==='warning')errors.push(m.type()+': '+m.text())});
 async function sample(){
  return page.evaluate(async()=>{
   const values=[];let last=performance.now();const start=last;
@@ -12,12 +12,12 @@ async function sample(){
  });
 }
 try{
- await page.goto('http://127.0.0.1:5180');await page.waitForFunction(()=>window.__orrery?.loadedAtMs>0);
+ await page.goto(process.env.GAME_URL??'http://127.0.0.1:5180');await page.waitForFunction(()=>window.__orrery?.loadedAtMs>0);
  await page.click('[data-action=begin]');await page.waitForTimeout(2500);
  const high=await sample();await page.screenshot({path:'evidence/local/benchmark-high.png'});
  await page.setViewportSize({width:1280,height:720});await page.click('[data-action=settings]');await page.check('#quality');await page.click('[data-action=close]');await page.waitForTimeout(2500);
  const low=await sample();await page.screenshot({path:'evidence/local/benchmark-low.png'});
- const report={scenario:'steady-state-courtyard-two-settings',date:new Date().toISOString(),build:'0.2.0 benchmark development',fixtures:false,input:'UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup',browser:await browser.version(),headless:true,requestedBackend:'D3D11; actual identity below',high,low,errors,caveat:'One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee.'};
+ const report={scenario:'steady-state-courtyard-two-settings',date:new Date().toISOString(),build:process.env.BUILD_LABEL??'0.2.0 benchmark development',fixtures:false,input:'UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup',browser:await browser.version(),headless:true,requestedBackend:'D3D11; actual identity below',high,low,errors,caveat:'One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee.'};
  await writeFile(process.env.PERF_OUTPUT??'evidence/local/benchmark-performance.json',JSON.stringify(report,null,2));console.log(JSON.stringify({high:high.steadyFrameMs,low:low.steadyFrameMs,renderer:high.inspection.renderer,errors}));
 }finally{await browser.close()}
 

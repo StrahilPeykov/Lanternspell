@@ -83,6 +83,9 @@ try {
   const makePlan = (s, seat, spellId = 'spark') => ({ kind: 'plan', roundId: s.roundId, revision: s.battle.revision, planRevision: s.planRevisions[seat], plan: { actorId: seat, spellId, targetId: 'moth1' } });
   const makeReady = s => ({ kind: 'ready', roundId: s.roundId, revision: s.battle.revision, jointPlanKey: s.jointPlanKey });
   let s = await state();
+  assert.equal((await send(pages[0], makePlan(s, 'mage1', '__proto__'))).accepted, false);
+  assert.equal((await state()).battle.revision, s.battle.revision);
+  evidence.checks.push('unknown/prototype spell ID rejected without resolving or disconnecting');
   const plans = await Promise.all([send(pages[0], makePlan(s, 'mage1')), send(pages[1], makePlan(s, 'mage2'))]);
   assert.ok(plans.every(x => x.accepted));
   await waitState(() => window.__wire.snapshot?.planRevisions.mage1 === 1 && window.__wire.snapshot?.planRevisions.mage2 === 1);

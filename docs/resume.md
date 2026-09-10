@@ -1,15 +1,17 @@
 # Resume / handoff
 
-Project root: `C:/Users/20211107/Desktop/Lanternspell`. Branch: `codex/first-playable`.
+Root: `C:/Users/20211107/Desktop/Lanternspell`. Permanent branch **main**; direct commits and immediate pushes to origin/main are explicitly authorized. No branches, PRs, force pushes, deployment or paid services. See AGENTS.md.
 
-Run `npm ci`, `npm run dev`; open http://127.0.0.1:5180. Another unrelated local app used 5173 at preflight, so this project intentionally uses 5180. Do not stop or modify that other app.
+Launch: `npm ci`, `npm run dev`, http://127.0.0.1:5180. Do not stop unrelated projects. Production: `npm run build`, `npx vite preview --host 127.0.0.1 --port 5181`. The extra baseline comparison checkout under ignored tools/baseline is disposable diagnostic material, not a working branch.
 
-Production: `npm run build`, then `npx vite preview --host 127.0.0.1 --port 5181`. Tests: `npm test`, `npm run test:e2e`, `node tests/network-real.mjs`, `node tests/duo-ui.mjs`. Asset rebuild commands and required acquired Standard archives are in art.md. No Blender process is needed at runtime.
+Checks: `npm test` (43 unit/model/diagnostic tests), `npm run typecheck`, `npm run build`. Actual input: `node tests/benchmark-solo.mjs`, `node tests/benchmark-duo.mjs`, `node tests/signature-compare.mjs`. Real protocol: `node tests/network-real.mjs`; reconstruction commands remain in network.md. Production offline-after-load: `node tests/benchmark-production.mjs`. Run GPU tests sequentially and avoid competing recording workloads.
 
-Development `window.__orrery` is an inspection-only snapshot: no state-setting functions. Debug fields include battle, stage, position, presentation, network timings and renderer diagnostics. Production omits it. Local saves use `orrery-solo-v1`, settings `orrery-settings-v1`, shared rejoin credentials `orrery-shared-seat-v1`. No automatic save merge occurs.
+Normal new campaigns use full-book traditions; old data defaults baseline. Development comparison is in the spellbook. Margin/Hearth rules and diagnostic limits: combat-benchmark.md. Shared config/quest facts/migration: benchmark-network.md. Authoring and coordinate contracts: benchmark-art.md. Sound: audio.md. Renderer resource corrections and final evidence: benchmark-results.md.
 
-Blockers before external publication: explicit user authorization, read-only verification of the actual Cloudflare Free account/configuration and quotas, and a small public creation/retention abuse-control review. Keep workers_dev and preview_urls disabled until that authorization. No deployment commands have been run.
+Source boundaries: simulation/battle+traditions are pure; server owns durability/readiness. main is controller/dialogue glue; ui contains shell/combat markup; saves validates local import. render/environment builds repeated scenery, actors dresses the rig, effects owns disposable graphics, materials owns cached surfaces, world owns camera/render loop/load integration. No animation callback mutates gameplay.
 
-Creative follow-up: evaluate setup versus direct damage with humans; watch conservative defensive pacing (18 diagnostic rounds in one solo policy); refine foliage/painted surfaces and casting transitions; validate another physical device and browser. Do not expand scope into a full RPG.
+Only curate milestone images and compact reports. New screenshots, videos and raw diagnostics go in evidence/local; no repeated .blend commits. Prettier is pinned project-locally for readable source. Old evidence and useful original .blend files remain unchanged in history.
 
-Final verification: 22 unit/model tests, typecheck and production build passed. Real local protocol/reconstruction/delay/production checks and nine duo UI checks passed. Solo full loop and defeat/retry passed separately; one sequential context asset-loading stall remains recorded. Production offline-after-load input smoke passed (`node tests/production-smoke.mjs`, preview on 5181). See testing.md for exact evidence and performance limits. No required implementation step remains before local evaluation; external publication remains gated as above.
+Next human evaluation is the three focused comparisons in limitations.md. Do not add Chapter 2 to avoid resolving remaining pacing or visual weaknesses.
+
+Performance retest after competing browser recording is paused: set `$env:PERF_OUTPUT='evidence/local/clean-performance.json'`, run `node scripts/benchmark-performance.mjs`, then clear that environment variable. Keep the renderer identity and view/buffer metadata; do not replace the bad late samples without explaining the changed conditions. Original source for the late A/B came from cd7b1c5 in ignored tools/baseline; its5184 server is stopped.

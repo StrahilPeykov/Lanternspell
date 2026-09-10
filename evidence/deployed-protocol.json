@@ -1,0 +1,141 @@
+{
+  "scenario": "deployed-do-two-browser-protocol",
+  "endpoint": "https://lanternspell.strahil-peykov.workers.dev",
+  "mocking": false,
+  "gameplayInput": false,
+  "separateDevices": false,
+  "applicationDelayMs": 0,
+  "delayIsPacketLoss": false,
+  "started": "2026-09-10T18:53:32.833Z",
+  "checks": [
+    "cross-origin creation, malformed join, and consumed invitation rejected",
+    "two independently authenticated seats connected",
+    "proximity-validated shared progression and independent encounter consent",
+    "unknown/prototype spell ID rejected without resolving or disconnecting",
+    "simultaneous plan submission against common battle revision accepted",
+    "plan edit invalidates joint readiness; stale confirm rejected",
+    "disconnect before commit pauses, opaque credential resumes original seat",
+    "duplicate command acknowledgement and old-round rejection cannot double-resolve",
+    "disconnect after committed result restores authoritative state",
+    "legal complete teaching encounter awards shared progression once"
+  ],
+  "timings": [
+    {
+      "kind": "interact",
+      "ms": 38,
+      "accepted": true
+    },
+    {
+      "kind": "interact",
+      "ms": 38,
+      "accepted": true
+    },
+    {
+      "kind": "consent",
+      "ms": 33,
+      "accepted": true
+    },
+    {
+      "kind": "consent",
+      "ms": 30,
+      "accepted": true
+    },
+    {
+      "kind": "plan",
+      "ms": 38,
+      "accepted": false
+    },
+    {
+      "kind": "plan",
+      "ms": 28,
+      "accepted": true
+    },
+    {
+      "kind": "plan",
+      "ms": 45,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 39,
+      "accepted": true
+    },
+    {
+      "kind": "plan",
+      "ms": 29,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 33,
+      "accepted": false
+    },
+    {
+      "kind": "ready",
+      "ms": 44,
+      "accepted": false
+    },
+    {
+      "kind": "ready",
+      "ms": 25,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 51,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 7,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 29,
+      "accepted": false
+    },
+    {
+      "kind": "plan",
+      "ms": 32,
+      "accepted": true
+    },
+    {
+      "kind": "plan",
+      "ms": 49,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 37,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 50,
+      "accepted": true
+    },
+    {
+      "kind": "plan",
+      "ms": 35,
+      "accepted": true
+    },
+    {
+      "kind": "plan",
+      "ms": 51,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 39,
+      "accepted": true
+    },
+    {
+      "kind": "ready",
+      "ms": 50,
+      "accepted": true
+    }
+  ],
+  "completed": "2026-09-10T18:53:50.447Z",
+  "result": "passed"
+}

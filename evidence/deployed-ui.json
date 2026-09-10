@@ -1,0 +1,24 @@
+{
+  "scenario": "production-host-join-reconnect-ui",
+  "endpoint": "https://lanternspell.strahil-peykov.workers.dev",
+  "timestamp": "2026-09-10T18:54:12.330Z",
+  "actualInputs": true,
+  "debugHooks": false,
+  "stateFixtures": false,
+  "mockedSockets": false,
+  "separateDevices": false,
+  "socketProtocols": [
+    "wss:",
+    "wss:",
+    "wss:"
+  ],
+  "checks": [
+    "built art/client loaded",
+    "private invitation from actual host UI",
+    "independent guest joins through UI",
+    "both connected",
+    "WASD input",
+    "guest reconnect through UI"
+  ],
+  "errors": []
+}

@@ -1,5 +1,7 @@
 # The Sleeping Orrery
 
+[Play online](https://lanternspell.strahil-peykov.workers.dev/) — deployed on the verified Cloudflare Workers Free plan. Two independent browser clients passed real public WSS and host/join/reconnect UI checks; two-device internet play still needs a human check.
+
 The Lanternspell game/art benchmark: one original wizard-adventure chapter at Bellweather College. Built with TypeScript, vanilla Three.js, Vite and DOM UI. The technical package name remains `wizard-adventure-prototype`.
 
 ## Play locally
@@ -19,7 +21,7 @@ Choose **Marginweaver** (write through wards and spread unfolding magic) or **He
 
 Take an optional detour around the west garden to the reading bench and sealed archive. Required progression still follows Iona’s brass lamps.
 
-For shared play, choose **♧ → Start a shared visit** and copy its private invitation. Open it in a second browser profile/incognito window and choose Join. Both mages must be connected for shared progression and consent to encounters. Use the friend menu to rejoin a saved seat. Invitations are single-use; never share a seat credential. Localhost links work on this computer only. Internet play has not been published or verified.
+For shared play, choose **♧ → Start a shared visit** and copy its private invitation. Your friend opens the same site, selects **♧**, pastes the invitation, and chooses **Join your friend**. Both mages must be connected for shared progression and consent to encounters. Use the friend menu to rejoin a saved seat. Invitations are single-use; never share a seat credential. Use the public site for different computers; localhost links work on this computer only.
 
 ## Build and verify
 

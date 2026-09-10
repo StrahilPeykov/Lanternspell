@@ -1,6 +1,6 @@
 # Resume / handoff
 
-Root: `C:/Users/20211107/Desktop/Lanternspell`. Permanent branch **main**; direct commits and immediate pushes to origin/main are explicitly authorized. No branches, PRs, force pushes, deployment or paid services. See AGENTS.md.
+Root: `C:/Users/20211107/Desktop/Lanternspell`. Permanent branch **main**; direct commits and immediate pushes to origin/main are explicitly authorized. No branches, PRs, force pushes or paid services. Existing Cloudflare deployment repair was authorized and Workers Free verified on 2026-09-10. Commit `6fdf19c` deployed successfully; public WSS and host/join/reconnect UI checks passed. See docs/deployment.md for current settings and evidence. Two-device/country testing remains a human follow-up.
 
 Launch: `npm ci`, `npm run dev`, http://127.0.0.1:5180. Do not stop unrelated projects. Production: `npm run build`, `npx vite preview --host 127.0.0.1 --port 5181`. The extra baseline comparison checkout under ignored tools/baseline is disposable diagnostic material, not a working branch.
 

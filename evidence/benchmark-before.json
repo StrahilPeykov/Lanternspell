@@ -1,0 +1,122 @@
+{
+  "scenario": "steady-state-courtyard-two-settings",
+  "date": "2026-09-10T17:06:21.504Z",
+  "build": "0.1.0 development",
+  "fixtures": false,
+  "input": "UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup",
+  "browser": "153.0.8010.12",
+  "headless": true,
+  "requestedBackend": "D3D11; actual identity below",
+  "high": {
+    "inspection": {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "drawingBuffer": [
+        1920,
+        1080
+      ],
+      "frameMs": {
+        "p50": 16.699999999999818,
+        "p95": 33.399999999999636,
+        "p99": 33.5,
+        "samples": 730
+      },
+      "resources": {
+        "geometries": 116,
+        "textures": 88,
+        "calls": 204,
+        "triangles": 292640
+      },
+      "loadedAtMs": 2750.7999999970198,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    "steadyFrameMs": {
+      "p50": 16.700000000000728,
+      "p95": 33.399999999999636,
+      "p99": 33.400000000001455,
+      "samples": 581,
+      "durationMs": 12024.40000000149
+    }
+  },
+  "low": {
+    "inspection": {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1280,
+        720
+      ],
+      "drawingBuffer": [
+        1088,
+        612
+      ],
+      "frameMs": {
+        "p50": 16.699999999999818,
+        "p95": 33.30000000000109,
+        "p99": 33.400000000001455,
+        "samples": 1674
+      },
+      "resources": {
+        "geometries": 116,
+        "textures": 88,
+        "calls": 204,
+        "triangles": 292640
+      },
+      "loadedAtMs": 2750.7999999970198,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    "steadyFrameMs": {
+      "p50": 16.69999999999709,
+      "p95": 16.700000000004366,
+      "p99": 16.80000000000291,
+      "samples": 720,
+      "durationMs": 12001.800000002979
+    }
+  },
+  "errors": [],
+  "caveat": "One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee."
+}

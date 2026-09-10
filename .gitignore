@@ -9,3 +9,9 @@ art/downloads/
 
 __pycache__/
 *.pyc
+evidence/local/
+evidence/**/*.webm
+evidence/playwright/
+art/benchmark-*.blend
+art/benchmark-*.png
+public/assets/*-raw.glb

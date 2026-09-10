@@ -1,0 +1,4 @@
+import {it,expect} from 'vitest';import {validateSave,type Save} from '../src/saves';import {createBattle} from '../src/simulation/battle';
+const save=():Save=>({version:1,mode:'solo',stage:2,identity:'teal',position:{x:0,z:-4,yaw:0},battle:createBattle('lesson','solo',false,{variant:'hand',seed:42})});
+it('restores legacy and experimental solo data without merging shared state',()=>{expect(validateSave(save())).toBe(true);expect(validateSave({...save(),battle:createBattle('lesson','solo')})).toBe(true);expect(validateSave({...save(),mode:'shared'})).toBe(false)});
+it('rejects malformed new rule fields before import can reach card rendering',()=>{const s=save();s.battle!.actors[0]!.hand![0]='unknown' as any;expect(validateSave(s)).toBe(false);expect(validateSave({...save(),tradition:'unknown'})).toBe(false);const broken=save();broken.battle!.intentions![0]!.targetId='missing';expect(validateSave(broken)).toBe(false)});

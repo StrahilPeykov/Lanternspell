@@ -1,12 +1,14 @@
-import { createBattle, resolveRound, validatePlan, type Battle, type BattleEvent, type Plan } from '../src/simulation/battle';
+import { createBattle, resolveRound, validatePlan, type Battle, type BattleEvent, type Plan, type BattleVariant, type Tradition } from '../src/simulation/battle';
 
 export type Seat = 'mage1' | 'mage2';
 export type Position = { x: number; z: number; yaw: number };
 export type Encounter = 'lesson' | 'guardian';
-export type Interaction = 'npc' | 'lantern' | 'discovery';
+export type Interaction = 'npc' | 'lantern' | 'discovery' | 'echo';
+export type Configuration = { variant?: BattleVariant; tradition?: Tradition };
 export type CommandBody =
   | { kind: 'interact'; interaction: Interaction }
-  | { kind: 'consent'; encounter: Encounter }
+  | { kind: 'configure'; configuration: Configuration }
+  | { kind: 'consent'; encounter: Encounter; configRevision?: number }
   | { kind: 'plan'; roundId: string; revision: number; planRevision: number; plan: Plan }
   | { kind: 'ready'; roundId: string; revision: number; jointPlanKey: string }
   | { kind: 'leaveBattle' }
@@ -20,15 +22,26 @@ export interface CampaignState {
   consent: Partial<Record<Seat, Encounter>>; positions: Record<Seat, Position>;
   lastResult: { id: string; events: BattleEvent[] } | null;
   battleSerial: number; rewardIds: string[];
+  variant: BattleVariant; traditions: Record<Seat, Tradition>; configRevision: number;
+  facts: { echo: boolean };
 }
 export interface Snapshot extends CampaignState {
   type: 'snapshot'; jointPlanKey: string; roundId: string; paused: boolean;
   seats: { id: Seat; connected: boolean; position: Position }[];
 }
 export const SEATS: Seat[] = ['mage1', 'mage2'];
-export const POINTS = { npc: { x: -3, z: 6 }, lantern: { x: 4, z: 1 }, discovery: { x: -5, z: -9 }, lesson: { x: 0, z: -4 }, guardian: { x: 0, z: -14 } };
+export const POINTS = { npc: { x: -3, z: 6 }, lantern: { x: 4, z: 1 }, discovery: { x: -5, z: -9 }, lesson: { x: 0, z: -4 }, guardian: { x: 0, z: -14 }, echo: { x: -10, z: 10 } };
+const isVariant = (v: unknown): v is BattleVariant => v === 'baseline' || v === 'book' || v === 'hand';
+const isTradition = (v: unknown): v is Tradition => v === 'margin' || v === 'hearth';
 export function initialCampaign(sessionId: string): CampaignState {
-  return { version: 1, sessionId, stage: 0, battle: null, plans: {}, planRevisions: { mage1: 0, mage2: 0 }, ready: {}, consent: {}, positions: { mage1: { x: -0.7, z: 10, yaw: 0 }, mage2: { x: 0.7, z: 10, yaw: 0 } }, lastResult: null, battleSerial: 0, rewardIds: [] };
+  return { version: 1, sessionId, stage: 0, battle: null, plans: {}, planRevisions: { mage1: 0, mage2: 0 }, ready: {}, consent: {}, positions: { mage1: { x: -0.7, z: 10, yaw: 0 }, mage2: { x: 0.7, z: 10, yaw: 0 } }, lastResult: null, battleSerial: 0, rewardIds: [], variant: 'book', traditions: { mage1: 'margin', mage2: 'hearth' }, configRevision: 0, facts: { echo: false } };
+}
+/** Additive v1 migration. Existing battles/results stay byte-for-byte semantically unchanged. */
+export function hydrateCampaign(saved: CampaignState): CampaignState {
+  return { ...saved, variant: isVariant(saved.variant) ? saved.variant : 'baseline',
+    traditions: { mage1: isTradition(saved.traditions?.mage1) ? saved.traditions.mage1 : 'margin', mage2: isTradition(saved.traditions?.mage2) ? saved.traditions.mage2 : 'hearth' },
+    configRevision: Number.isSafeInteger(saved.configRevision) && saved.configRevision >= 0 ? saved.configRevision : 0,
+    facts: { echo: saved.facts?.echo === true } };
 }
 export const roundId = (s: CampaignState) => s.battle ? `${s.battle.id}:${s.battle.round}` : '';
 export const jointPlanKey = (s: CampaignState) => `${roundId(s)}:${s.planRevisions.mage1}:${s.planRevisions.mage2}`;
@@ -43,8 +56,12 @@ export function parseCommand(input: string): Command | null {
   let v: any; try { v = JSON.parse(input); } catch { return null; }
   if (!v || v.version !== 1 || typeof v.commandId !== 'string' || !/^[a-zA-Z0-9-]{1,80}$/.test(v.commandId)) return null;
   if (['sync', 'leaveBattle'].includes(v.kind)) return v;
-  if (v.kind === 'interact' && ['npc', 'lantern', 'discovery'].includes(v.interaction)) return v;
-  if (v.kind === 'consent' && ['lesson', 'guardian'].includes(v.encounter)) return v;
+  if (v.kind === 'interact' && ['npc', 'lantern', 'discovery', 'echo'].includes(v.interaction)) return v;
+  if (v.kind === 'configure' && v.configuration && typeof v.configuration === 'object' && !Array.isArray(v.configuration)) {
+    const c = v.configuration;
+    if ((c.variant !== undefined || c.tradition !== undefined) && (c.variant === undefined || isVariant(c.variant)) && (c.tradition === undefined || isTradition(c.tradition))) return v;
+  }
+  if (v.kind === 'consent' && ['lesson', 'guardian'].includes(v.encounter) && (v.configRevision === undefined || (Number.isSafeInteger(v.configRevision) && v.configRevision >= 0))) return v;
   if (v.kind === 'move' && v.position && ['x', 'z', 'yaw'].every(k => typeof v.position[k] === 'number' && Number.isFinite(v.position[k])) && Math.abs(v.position.x) <= 14 && v.position.z >= -21 && v.position.z <= 16 && Math.abs(v.position.yaw) < 1000) return v;
   if (['plan', 'ready'].includes(v.kind) && typeof v.roundId === 'string' && v.roundId.length < 120 && Number.isSafeInteger(v.revision) && v.revision >= 0) {
     if (v.kind === 'ready' && typeof v.jointPlanKey === 'string' && v.jointPlanKey.length < 160) return v;
@@ -58,21 +75,38 @@ export function applyCommand(original: CampaignState, seat: Seat, command: Comma
   const reject = (reason: string) => ({ state: original, ack: { type: 'ack' as const, version: 1 as const, commandId: command.commandId, accepted: false, reason, revision: original.battle?.revision ?? 0 } });
   if (command.kind === 'sync') return { state: original, ack: { type: 'ack', version: 1, commandId: command.commandId, accepted: true, revision: s.battle?.revision ?? 0 } };
   if (command.kind === 'move') { if (s.battle?.phase === 'planning') return reject('Movement is paused during the encounter.'); s.positions[seat] = command.position; }
+  else if (command.kind === 'configure') {
+    if (s.battle) return reject('Return to the courtyard before changing traditions or the battle model.');
+    const c = command.configuration;
+    if (!c || (c.variant === undefined && c.tradition === undefined) || (c.variant !== undefined && !isVariant(c.variant)) || (c.tradition !== undefined && !isTradition(c.tradition))) return reject('Choose a supported battle model or tradition.');
+    if (c.variant !== undefined && seat !== 'mage1') return reject('Only the hosting mage chooses the shared battle model.');
+    const changed = (c.variant !== undefined && c.variant !== s.variant) || (c.tradition !== undefined && c.tradition !== s.traditions[seat]);
+    if (c.variant !== undefined) s.variant = c.variant;
+    if (c.tradition !== undefined) s.traditions[seat] = c.tradition;
+    if (changed) { s.configRevision++; s.consent = {}; s.ready = {}; }
+  }
   else {
     if (SEATS.some(id => !connected.includes(id))) return reject('Waiting for both mages to reconnect.');
     if (command.kind === 'interact') {
       if (s.battle) return reject('Finish the encounter first.');
-      const stage = { npc: 0, lantern: 1, discovery: 3 }[command.interaction];
-      if (s.stage !== stage) return reject('This discovery has already been shared, or is not ready.');
       if (!nearby(s, seat, POINTS[command.interaction])) return reject('Walk closer to interact.');
-      s.stage++;
+      if (command.interaction === 'echo') {
+        if (s.stage < 1) return reject('Speak with Iona before studying the courtyard echo.');
+        if (s.facts.echo) return reject('The courtyard echo is already in both spellbooks.');
+        s.facts.echo = true;
+      } else {
+        const stage = { npc: 0, lantern: 1, discovery: 3 }[command.interaction];
+        if (s.stage !== stage) return reject('This discovery has already been shared, or is not ready.');
+        s.stage++;
+      }
     } else if (command.kind === 'consent') {
       if (s.battle || s.stage !== (command.encounter === 'lesson' ? 2 : 4)) return reject('That encounter is not available.');
+      if ((command.configRevision ?? 0) !== s.configRevision) return reject('The shared battle setup changed. Review it before consenting again.');
       if (!nearby(s, seat, POINTS[command.encounter])) return reject('Meet near the encounter marker.');
       s.consent[seat] = command.encounter;
       for (const id of SEATS) if (!nearby(s, id, POINTS[command.encounter])) delete s.consent[id];
       if (SEATS.every(id => s.consent[id] === command.encounter)) {
-        s.battle = createBattle(command.encounter, 'duo', s.stage >= 4);
+        s.battle = createBattle(command.encounter, 'duo', s.stage >= 4, { variant: s.variant, traditions: s.traditions, seed: 1729 + s.battleSerial });
         s.battle.id = `${s.sessionId}-${++s.battleSerial}`;
         s.plans = {}; s.ready = {}; s.consent = {}; s.planRevisions = { mage1: 0, mage2: 0 }; s.lastResult = null;
       }

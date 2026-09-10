@@ -1,0 +1,363 @@
+{
+  "date": "2026-09-10T18:12:29.465Z",
+  "actualInputs": true,
+  "stateFixtures": false,
+  "identicalAuthoritativeOutcomes": true,
+  "runs": [
+    {
+      "treatment": "pages",
+      "outcome": {
+        "version": 1,
+        "id": "comparison",
+        "kind": "lesson",
+        "mode": "solo",
+        "round": 2,
+        "revision": 2,
+        "phase": "victory",
+        "actors": [
+          {
+            "id": "mage1",
+            "name": "Visiting mage",
+            "team": "mage",
+            "hp": 34,
+            "maxHp": 38,
+            "ember": 0,
+            "ward": 0,
+            "wardUntil": 0,
+            "markedUntil": 0,
+            "staggeredUntil": 0,
+            "tradition": "margin",
+            "counter": 0,
+            "lastSpell": "unfold"
+          },
+          {
+            "id": "moth1",
+            "name": "Paper Moth",
+            "team": "enemy",
+            "hp": 0,
+            "maxHp": 18,
+            "ember": 0,
+            "ward": 0,
+            "wardUntil": 0,
+            "markedUntil": 0,
+            "staggeredUntil": 0,
+            "lastIntent": "strike"
+          }
+        ],
+        "upgraded": false,
+        "rewardGranted": true,
+        "variant": "book",
+        "seed": 42,
+        "intentions": [
+          {
+            "actorId": "moth1",
+            "targetId": "mage1",
+            "spellId": "strike",
+            "name": "Inkflutter",
+            "amount": 6,
+            "tier": 2,
+            "text": "Inscribed wings · 6 damage to Visiting mage."
+          }
+        ]
+      },
+      "durationMs": 4193,
+      "before": {
+        "geometries": 97,
+        "textures": 80,
+        "calls": 173,
+        "triangles": 480253
+      },
+      "frames": [
+        {
+          "resources": {
+            "geometries": 120,
+            "textures": 80,
+            "calls": 213,
+            "triangles": 509275
+          },
+          "effects": 13,
+          "frameMs": {
+            "p50": 16.699999999999818,
+            "p95": 16.80000000000109,
+            "p99": 99.90000000000009,
+            "samples": 727
+          }
+        },
+        {
+          "resources": {
+            "geometries": 120,
+            "textures": 80,
+            "calls": 213,
+            "triangles": 509275
+          },
+          "effects": 13,
+          "frameMs": {
+            "p50": 16.699999999999818,
+            "p95": 16.80000000000109,
+            "p99": 99.90000000000009,
+            "samples": 801
+          }
+        },
+        {
+          "resources": {
+            "geometries": 97,
+            "textures": 80,
+            "calls": 183,
+            "triangles": 507534
+          },
+          "effects": 0,
+          "frameMs": {
+            "p50": 16.69999999999891,
+            "p95": 16.80000000000109,
+            "p99": 99.90000000000009,
+            "samples": 871
+          }
+        }
+      ],
+      "after": {
+        "geometries": 97,
+        "textures": 80,
+        "calls": 183,
+        "triangles": 507534
+      },
+      "errors": []
+    },
+    {
+      "treatment": "spirit",
+      "outcome": {
+        "version": 1,
+        "id": "comparison",
+        "kind": "lesson",
+        "mode": "solo",
+        "round": 2,
+        "revision": 2,
+        "phase": "victory",
+        "actors": [
+          {
+            "id": "mage1",
+            "name": "Visiting mage",
+            "team": "mage",
+            "hp": 34,
+            "maxHp": 38,
+            "ember": 0,
+            "ward": 0,
+            "wardUntil": 0,
+            "markedUntil": 0,
+            "staggeredUntil": 0,
+            "tradition": "margin",
+            "counter": 0,
+            "lastSpell": "unfold"
+          },
+          {
+            "id": "moth1",
+            "name": "Paper Moth",
+            "team": "enemy",
+            "hp": 0,
+            "maxHp": 18,
+            "ember": 0,
+            "ward": 0,
+            "wardUntil": 0,
+            "markedUntil": 0,
+            "staggeredUntil": 0,
+            "lastIntent": "strike"
+          }
+        ],
+        "upgraded": false,
+        "rewardGranted": true,
+        "variant": "book",
+        "seed": 42,
+        "intentions": [
+          {
+            "actorId": "moth1",
+            "targetId": "mage1",
+            "spellId": "strike",
+            "name": "Inkflutter",
+            "amount": 6,
+            "tier": 2,
+            "text": "Inscribed wings · 6 damage to Visiting mage."
+          }
+        ]
+      },
+      "durationMs": 6823,
+      "before": {
+        "geometries": 97,
+        "textures": 80,
+        "calls": 171,
+        "triangles": 480229
+      },
+      "frames": [
+        {
+          "resources": {
+            "geometries": 115,
+            "textures": 80,
+            "calls": 208,
+            "triangles": 509055
+          },
+          "effects": 3,
+          "frameMs": {
+            "p50": 16.699999999999818,
+            "p95": 33.399999999999636,
+            "p99": 66.70000000000073,
+            "samples": 759
+          }
+        },
+        {
+          "resources": {
+            "geometries": 97,
+            "textures": 80,
+            "calls": 183,
+            "triangles": 507534
+          },
+          "effects": 0,
+          "frameMs": {
+            "p50": 16.699999999999818,
+            "p95": 33.399999999999636,
+            "p99": 66.70000000000073,
+            "samples": 853
+          }
+        },
+        {
+          "resources": {
+            "geometries": 97,
+            "textures": 80,
+            "calls": 183,
+            "triangles": 507534
+          },
+          "effects": 0,
+          "frameMs": {
+            "p50": 16.699999999999818,
+            "p95": 33.399999999999636,
+            "p99": 66.70000000000005,
+            "samples": 944
+          }
+        }
+      ],
+      "after": {
+        "geometries": 97,
+        "textures": 80,
+        "calls": 183,
+        "triangles": 507534
+      },
+      "errors": []
+    },
+    {
+      "treatment": "eclipse",
+      "outcome": {
+        "version": 1,
+        "id": "comparison",
+        "kind": "lesson",
+        "mode": "solo",
+        "round": 2,
+        "revision": 2,
+        "phase": "victory",
+        "actors": [
+          {
+            "id": "mage1",
+            "name": "Visiting mage",
+            "team": "mage",
+            "hp": 34,
+            "maxHp": 38,
+            "ember": 0,
+            "ward": 0,
+            "wardUntil": 0,
+            "markedUntil": 0,
+            "staggeredUntil": 0,
+            "tradition": "margin",
+            "counter": 0,
+            "lastSpell": "unfold"
+          },
+          {
+            "id": "moth1",
+            "name": "Paper Moth",
+            "team": "enemy",
+            "hp": 0,
+            "maxHp": 18,
+            "ember": 0,
+            "ward": 0,
+            "wardUntil": 0,
+            "markedUntil": 0,
+            "staggeredUntil": 0,
+            "lastIntent": "strike"
+          }
+        ],
+        "upgraded": false,
+        "rewardGranted": true,
+        "variant": "book",
+        "seed": 42,
+        "intentions": [
+          {
+            "actorId": "moth1",
+            "targetId": "mage1",
+            "spellId": "strike",
+            "name": "Inkflutter",
+            "amount": 6,
+            "tier": 2,
+            "text": "Inscribed wings · 6 damage to Visiting mage."
+          }
+        ]
+      },
+      "durationMs": 6308,
+      "before": {
+        "geometries": 97,
+        "textures": 80,
+        "calls": 170,
+        "triangles": 480121
+      },
+      "frames": [
+        {
+          "resources": {
+            "geometries": 114,
+            "textures": 80,
+            "calls": 207,
+            "triangles": 510175
+          },
+          "effects": 17,
+          "frameMs": {
+            "p50": 16.699999999999818,
+            "p95": 33.40000000000009,
+            "p99": 83.29999999999927,
+            "samples": 825
+          }
+        },
+        {
+          "resources": {
+            "geometries": 97,
+            "textures": 80,
+            "calls": 183,
+            "triangles": 507534
+          },
+          "effects": 0,
+          "frameMs": {
+            "p50": 16.699999999999818,
+            "p95": 33.40000000000009,
+            "p99": 83.29999999999927,
+            "samples": 919
+          }
+        },
+        {
+          "resources": {
+            "geometries": 97,
+            "textures": 80,
+            "calls": 183,
+            "triangles": 507534
+          },
+          "effects": 0,
+          "frameMs": {
+            "p50": 16.699999999999818,
+            "p95": 33.399999999999636,
+            "p99": 66.80000000000018,
+            "samples": 1021
+          }
+        }
+      ],
+      "after": {
+        "geometries": 97,
+        "textures": 80,
+        "calls": 183,
+        "triangles": 507534
+      },
+      "errors": []
+    }
+  ],
+  "caveat": "Local recording run, not controlled GPU performance. Timings include screenshot overhead."
+}

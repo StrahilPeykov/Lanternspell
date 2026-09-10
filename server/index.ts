@@ -1,5 +1,5 @@
 import { DurableObject } from 'cloudflare:workers';
-import { applyCommand, initialCampaign, parseCommand, snapshot, type CampaignState, type Seat, type Ack } from './protocol';
+import { applyCommand, hydrateCampaign, initialCampaign, parseCommand, snapshot, type CampaignState, type Seat, type Ack } from './protocol';
 
 interface Env { CAMPAIGNS: DurableObjectNamespace<Campaign>; ASSETS: Fetcher }
 interface Stored { state: CampaignState; tokens: Partial<Record<Seat, string>>; invitation: string; acknowledgements: { seat: Seat; ack: Ack }[] }
@@ -24,6 +24,7 @@ export class Campaign extends DurableObject<Env> {
     ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS campaign (id INTEGER PRIMARY KEY CHECK(id=1), payload TEXT NOT NULL)');
     const row = ctx.storage.sql.exec<{ payload: string }>('SELECT payload FROM campaign WHERE id=1').toArray()[0];
     this.saved = row ? JSON.parse(row.payload) : null;
+    if (this.saved) this.saved.state = hydrateCampaign(this.saved.state);
     // Movement attachments survive hibernation; disk positions are safe checkpoints.
     if (this.saved) for (const ws of ctx.getWebSockets()) {
       const attachment = ws.deserializeAttachment() as Attachment;

@@ -1,0 +1,629 @@
+{
+  "scenario": "benchmark-solo-input-comparison",
+  "date": "2026-09-10T17:24:19.770Z",
+  "fixtures": false,
+  "policy": "one-round score + explicit setup/signature preference; not human enjoyment",
+  "runs": [
+    {
+      "model": "book",
+      "tradition": "margin",
+      "treatment": "spirit",
+      "lesson": {
+        "choices": [
+          "mark",
+          "unfold"
+        ],
+        "rounds": 2,
+        "hp": 34,
+        "final": {
+          "version": 1,
+          "id": "f68ab494-9742-420c-9ac7-41377f0aad35",
+          "kind": "lesson",
+          "mode": "solo",
+          "round": 2,
+          "revision": 2,
+          "phase": "victory",
+          "actors": [
+            {
+              "id": "mage1",
+              "name": "Visiting mage",
+              "team": "mage",
+              "hp": 34,
+              "maxHp": 38,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 0,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "tradition": "margin",
+              "counter": 0,
+              "lastSpell": "unfold"
+            },
+            {
+              "id": "moth1",
+              "name": "Paper Moth",
+              "team": "enemy",
+              "hp": 0,
+              "maxHp": 18,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 0,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "lastIntent": "strike"
+            }
+          ],
+          "upgraded": false,
+          "rewardGranted": true,
+          "variant": "book",
+          "seed": 42,
+          "intentions": [
+            {
+              "actorId": "moth1",
+              "targetId": "mage1",
+              "spellId": "strike",
+              "name": "Inkflutter",
+              "amount": 6,
+              "tier": 2,
+              "text": "Inscribed wings · 6 damage to Visiting mage."
+            }
+          ]
+        }
+      },
+      "guardian": {
+        "choices": [
+          "mark",
+          "unfold",
+          "mark",
+          "mend",
+          "mark",
+          "unseal",
+          "mend",
+          "unseal",
+          "spark"
+        ],
+        "rounds": 9,
+        "hp": 32,
+        "final": {
+          "version": 1,
+          "id": "5bda8f51-f685-48be-964b-97959fd8b3df",
+          "kind": "guardian",
+          "mode": "solo",
+          "round": 9,
+          "revision": 9,
+          "phase": "victory",
+          "actors": [
+            {
+              "id": "mage1",
+              "name": "Visiting mage",
+              "team": "mage",
+              "hp": 32,
+              "maxHp": 38,
+              "ember": 2,
+              "ward": 0,
+              "wardUntil": 0,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "tradition": "margin",
+              "counter": 0,
+              "lastSpell": "spark"
+            },
+            {
+              "id": "guardian",
+              "name": "Drowsing Atlas",
+              "team": "enemy",
+              "hp": 0,
+              "maxHp": 36,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 9999,
+              "markedUntil": 10,
+              "staggeredUntil": 0,
+              "lastIntent": "heavy"
+            }
+          ],
+          "upgraded": true,
+          "rewardGranted": true,
+          "variant": "book",
+          "seed": 42,
+          "intentions": [
+            {
+              "actorId": "guardian",
+              "targetId": "guardian",
+              "spellId": "rebind",
+              "name": "Gather the Loose Brass",
+              "amount": 6,
+              "tier": 2,
+              "text": "Its broken ward calls the rings home: gain 6 ward, no attack ·"
+            }
+          ]
+        }
+      },
+      "inspection": {
+        "version": 1,
+        "build": "0.2.0-benchmark",
+        "tradition": "margin",
+        "variant": "book",
+        "seed": 42,
+        "facts": {
+          "echo": true
+        },
+        "signature": "spirit",
+        "stage": 5,
+        "battle": null,
+        "plan": null,
+        "playing": false,
+        "modal": "",
+        "started": true,
+        "shared": null,
+        "metrics": null,
+        "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "viewport": [
+          1280,
+          720
+        ],
+        "drawingBuffer": [
+          1280,
+          720
+        ],
+        "frameMs": {
+          "p50": 16.700000000000045,
+          "p95": 366.5999999999999,
+          "p99": 533.3,
+          "samples": 34
+        },
+        "questPresentation": {
+          "echo": true
+        },
+        "quality": {
+          "low": false,
+          "shadowSize": 2048,
+          "surfaceMaterials": 14
+        },
+        "resources": {
+          "geometries": 126,
+          "textures": 79,
+          "calls": 262,
+          "triangles": 523074
+        },
+        "loadedAtMs": 1650.1999999955297,
+        "loadingErrors": [],
+        "position": {
+          "x": -0.27633436816052775,
+          "z": -14.064380024768072,
+          "yaw": 3.141592653589793
+        },
+        "camera": {
+          "yaw": 0,
+          "pitch": 0.27,
+          "distance": 9
+        },
+        "effectChildren": 0
+      }
+    },
+    {
+      "model": "hand",
+      "tradition": "margin",
+      "treatment": "pages",
+      "lesson": {
+        "choices": [
+          "mark",
+          "unfold"
+        ],
+        "rounds": 2,
+        "hp": 34,
+        "final": {
+          "version": 1,
+          "id": "e9274aee-fdb3-40a5-b4b1-322a1bbb47d8",
+          "kind": "lesson",
+          "mode": "solo",
+          "round": 2,
+          "revision": 2,
+          "phase": "victory",
+          "actors": [
+            {
+              "id": "mage1",
+              "name": "Visiting mage",
+              "team": "mage",
+              "hp": 34,
+              "maxHp": 38,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 0,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "tradition": "margin",
+              "counter": 0,
+              "drawPile": [
+                "mark",
+                "unseal",
+                "unfold",
+                "mend",
+                "shelter",
+                "shelter",
+                "unfold",
+                "mark"
+              ],
+              "hand": [
+                "shelter",
+                "unseal",
+                "shelter",
+                "mend"
+              ],
+              "drawIndex": 6,
+              "lastSpell": "unfold"
+            },
+            {
+              "id": "moth1",
+              "name": "Paper Moth",
+              "team": "enemy",
+              "hp": 0,
+              "maxHp": 18,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 0,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "lastIntent": "strike"
+            }
+          ],
+          "upgraded": false,
+          "rewardGranted": true,
+          "variant": "hand",
+          "seed": 42,
+          "intentions": [
+            {
+              "actorId": "moth1",
+              "targetId": "mage1",
+              "spellId": "strike",
+              "name": "Inkflutter",
+              "amount": 6,
+              "tier": 2,
+              "text": "Inscribed wings · 6 damage to Visiting mage."
+            }
+          ]
+        }
+      },
+      "guardian": {
+        "choices": [
+          "mark",
+          "unfold",
+          "unseal",
+          "spark",
+          "unfold"
+        ],
+        "rounds": 5,
+        "hp": 26,
+        "final": {
+          "version": 1,
+          "id": "2a095e6b-af4b-49ac-b041-b2461a5f0d8f",
+          "kind": "guardian",
+          "mode": "solo",
+          "round": 5,
+          "revision": 5,
+          "phase": "victory",
+          "actors": [
+            {
+              "id": "mage1",
+              "name": "Visiting mage",
+              "team": "mage",
+              "hp": 26,
+              "maxHp": 38,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 0,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "tradition": "margin",
+              "counter": 0,
+              "drawPile": [
+                "mark",
+                "unseal",
+                "unfold",
+                "mend",
+                "shelter",
+                "shelter",
+                "unfold",
+                "mark"
+              ],
+              "hand": [
+                "shelter",
+                "mark",
+                "shelter",
+                "mend"
+              ],
+              "drawIndex": 8,
+              "lastSpell": "unfold"
+            },
+            {
+              "id": "guardian",
+              "name": "Drowsing Atlas",
+              "team": "enemy",
+              "hp": 0,
+              "maxHp": 36,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 9999,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "lastIntent": "rebind"
+            }
+          ],
+          "upgraded": true,
+          "rewardGranted": true,
+          "variant": "hand",
+          "seed": 42,
+          "intentions": [
+            {
+              "actorId": "guardian",
+              "targetId": "mage1",
+              "spellId": "heavy",
+              "name": "Falling Hour",
+              "amount": 12,
+              "tier": 3,
+              "text": "Its weakened heart swings a desperate pendulum; Unstitch halves this strike · 12 damage to Visiting mage."
+            }
+          ]
+        }
+      },
+      "inspection": {
+        "version": 1,
+        "build": "0.2.0-benchmark",
+        "tradition": "margin",
+        "variant": "hand",
+        "seed": 42,
+        "facts": {
+          "echo": false
+        },
+        "signature": "spirit",
+        "stage": 5,
+        "battle": null,
+        "plan": null,
+        "playing": false,
+        "modal": "",
+        "started": true,
+        "shared": null,
+        "metrics": null,
+        "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "viewport": [
+          1280,
+          720
+        ],
+        "drawingBuffer": [
+          1280,
+          720
+        ],
+        "frameMs": {
+          "p50": 16.700000000000045,
+          "p95": 300,
+          "p99": 450,
+          "samples": 33
+        },
+        "questPresentation": {
+          "echo": false
+        },
+        "quality": {
+          "low": false,
+          "shadowSize": 2048,
+          "surfaceMaterials": 14
+        },
+        "resources": {
+          "geometries": 126,
+          "textures": 79,
+          "calls": 262,
+          "triangles": 523074
+        },
+        "loadedAtMs": 1797.6000000014901,
+        "loadingErrors": [],
+        "position": {
+          "x": 0.12390015687586572,
+          "z": -13.728407756126039,
+          "yaw": 3.141592653589793
+        },
+        "camera": {
+          "yaw": 0,
+          "pitch": 0.27,
+          "distance": 9
+        },
+        "effectChildren": 0
+      }
+    },
+    {
+      "model": "book",
+      "tradition": "hearth",
+      "treatment": "eclipse",
+      "lesson": {
+        "choices": [
+          "mark",
+          "unfold"
+        ],
+        "rounds": 2,
+        "hp": 38,
+        "final": {
+          "version": 1,
+          "id": "cc851704-b1eb-427d-8b7d-c085a3e3b503",
+          "kind": "lesson",
+          "mode": "solo",
+          "round": 2,
+          "revision": 2,
+          "phase": "victory",
+          "actors": [
+            {
+              "id": "mage1",
+              "name": "Visiting mage",
+              "team": "mage",
+              "hp": 38,
+              "maxHp": 38,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 2,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "tradition": "hearth",
+              "counter": 0,
+              "lastSpell": "unfold"
+            },
+            {
+              "id": "moth1",
+              "name": "Paper Moth",
+              "team": "enemy",
+              "hp": 0,
+              "maxHp": 18,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 0,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "lastIntent": "strike"
+            }
+          ],
+          "upgraded": false,
+          "rewardGranted": true,
+          "variant": "book",
+          "seed": 42,
+          "intentions": [
+            {
+              "actorId": "moth1",
+              "targetId": "mage1",
+              "spellId": "strike",
+              "name": "Inkflutter",
+              "amount": 6,
+              "tier": 2,
+              "text": "Inscribed wings · 6 damage to Visiting mage."
+            }
+          ]
+        }
+      },
+      "guardian": {
+        "choices": [
+          "mark",
+          "unfold",
+          "unseal",
+          "mark",
+          "unseal",
+          "unseal",
+          "mark",
+          "unfold"
+        ],
+        "rounds": 8,
+        "hp": 36,
+        "final": {
+          "version": 1,
+          "id": "0886f829-a6db-4448-8f49-b53a7a699e29",
+          "kind": "guardian",
+          "mode": "solo",
+          "round": 8,
+          "revision": 8,
+          "phase": "victory",
+          "actors": [
+            {
+              "id": "mage1",
+              "name": "Visiting mage",
+              "team": "mage",
+              "hp": 36,
+              "maxHp": 38,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 8,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "tradition": "hearth",
+              "counter": 0,
+              "lastSpell": "unfold"
+            },
+            {
+              "id": "guardian",
+              "name": "Drowsing Atlas",
+              "team": "enemy",
+              "hp": 0,
+              "maxHp": 36,
+              "ember": 0,
+              "ward": 0,
+              "wardUntil": 9999,
+              "markedUntil": 0,
+              "staggeredUntil": 0,
+              "lastIntent": "rebind"
+            }
+          ],
+          "upgraded": true,
+          "rewardGranted": true,
+          "variant": "book",
+          "seed": 42,
+          "intentions": [
+            {
+              "actorId": "guardian",
+              "targetId": "mage1",
+              "spellId": "heavy",
+              "name": "Falling Hour",
+              "amount": 12,
+              "tier": 3,
+              "text": "Its weakened heart swings a desperate pendulum; Unstitch halves this strike · 12 damage to Visiting mage."
+            }
+          ]
+        }
+      },
+      "inspection": {
+        "version": 1,
+        "build": "0.2.0-benchmark",
+        "tradition": "hearth",
+        "variant": "book",
+        "seed": 42,
+        "facts": {
+          "echo": false
+        },
+        "signature": "spirit",
+        "stage": 5,
+        "battle": null,
+        "plan": null,
+        "playing": false,
+        "modal": "",
+        "started": true,
+        "shared": null,
+        "metrics": null,
+        "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "viewport": [
+          1280,
+          720
+        ],
+        "drawingBuffer": [
+          1280,
+          720
+        ],
+        "frameMs": {
+          "p50": 16.700000000000273,
+          "p95": 283.34400000000005,
+          "p99": 516.5999999999999,
+          "samples": 44
+        },
+        "questPresentation": {
+          "echo": false
+        },
+        "quality": {
+          "low": false,
+          "shadowSize": 2048,
+          "surfaceMaterials": 14
+        },
+        "resources": {
+          "geometries": 126,
+          "textures": 79,
+          "calls": 241,
+          "triangles": 495500
+        },
+        "loadedAtMs": 2680.6999999955297,
+        "loadingErrors": [],
+        "position": {
+          "x": -0.2260222259483401,
+          "z": -13.486284437724802,
+          "yaw": 3.141592653589793
+        },
+        "camera": {
+          "yaw": 0,
+          "pitch": 0.27,
+          "distance": 9
+        },
+        "effectChildren": 0
+      }
+    }
+  ],
+  "errors": []
+}

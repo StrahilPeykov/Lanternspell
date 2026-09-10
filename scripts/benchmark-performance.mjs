@@ -17,7 +17,7 @@ try{
  const high=await sample();await page.screenshot({path:'evidence/local/benchmark-high.png'});
  await page.setViewportSize({width:1280,height:720});await page.click('[data-action=settings]');await page.check('#quality');await page.click('[data-action=close]');await page.waitForTimeout(2500);
  const low=await sample();await page.screenshot({path:'evidence/local/benchmark-low.png'});
- const report={scenario:'steady-state-courtyard-two-settings',date:new Date().toISOString(),build:'0.1.0 development',fixtures:false,input:'UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup',browser:await browser.version(),headless:true,requestedBackend:'D3D11; actual identity below',high,low,errors,caveat:'One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee.'};
+ const report={scenario:'steady-state-courtyard-two-settings',date:new Date().toISOString(),build:'0.2.0 benchmark development',fixtures:false,input:'UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup',browser:await browser.version(),headless:true,requestedBackend:'D3D11; actual identity below',high,low,errors,caveat:'One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee.'};
  await writeFile(process.env.PERF_OUTPUT??'evidence/local/benchmark-performance.json',JSON.stringify(report,null,2));console.log(JSON.stringify({high:high.steadyFrameMs,low:low.steadyFrameMs,renderer:high.inspection.renderer,errors}));
 }finally{await browser.close()}
 

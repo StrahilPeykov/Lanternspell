@@ -1,4 +1,7 @@
 /** Pure, deterministic, serializable battle rules. Presentation never mutates these rules. */
+import { makeDeck, traditionalSpell, type BattleOptions, type BattleVariant, type Tradition } from './traditions';
+export { TRADITIONS } from './traditions';
+export type { BattleOptions, BattleVariant, Tradition } from './traditions';
 export type SpellId = 'spark' | 'mark' | 'unfold' | 'shelter' | 'unseal' | 'mend';
 export type BattleKind = 'lesson' | 'guardian';
 export type BattleMode = 'solo' | 'duo';
@@ -17,10 +20,13 @@ export const BATTLE_TUNING = { startingEmber: 3, emberCap: 7, emberPerRound: 2, 
 export interface Actor {
   id: string; name: string; team: 'mage' | 'enemy'; hp: number; maxHp: number;
   ember: number; ward: number; wardUntil: number; markedUntil: number; staggeredUntil: number;
+  tradition?: Tradition; hand?: SpellId[]; drawPile?: SpellId[]; drawIndex?: number;
+  counter?: number; lastSpell?: SpellId; lastIntent?: string;
 }
 export interface Battle {
   version: 1; id: string; kind: BattleKind; mode: BattleMode; round: number; revision: number;
   phase: 'planning' | 'victory' | 'defeat'; actors: Actor[]; upgraded: boolean; rewardGranted: boolean;
+  variant?: BattleVariant; seed?: number; intentions?: Intention[];
 }
 export interface Plan { actorId: string; spellId: SpellId; targetId: string }
 export interface QueueEntry {
@@ -36,7 +42,7 @@ const actor = (id: string, name: string, team: 'mage' | 'enemy', hp: number, war
   id, name, team, hp, maxHp: hp, ember: team === 'mage' ? BATTLE_TUNING.startingEmber : 0,
   ward, wardUntil: ward ? 9999 : 0, markedUntil: 0, staggeredUntil: 0,
 });
-export function createBattle(kind: BattleKind, mode: BattleMode, upgraded = false): Battle {
+export function createBattle(kind: BattleKind, mode: BattleMode, upgraded = false, options: BattleOptions = {}): Battle {
   const actors = [actor('mage1', 'Visiting mage', 'mage', BATTLE_TUNING.mageHealth)];
   if (mode === 'duo') actors.push(actor('mage2', 'Fellow mage', 'mage', BATTLE_TUNING.mageHealth));
   if (kind === 'lesson') {
@@ -45,9 +51,25 @@ export function createBattle(kind: BattleKind, mode: BattleMode, upgraded = fals
     actors.push(actor('guardian', 'Drowsing Atlas', 'enemy', mode === 'solo' ? 36 : 62, 8));
     if (mode === 'duo') actors.push(actor('moth1', 'Margin Moth', 'enemy', 14));
   }
-  return { version: 1, id: `${kind}-${mode}`, kind, mode, round: 1, revision: 0, phase: 'planning', actors, upgraded, rewardGranted: false };
+  const battle: Battle = { version: 1, id: `${kind}-${mode}`, kind, mode, round: 1, revision: 0, phase: 'planning', actors, upgraded, rewardGranted: false };
+  if (options.variant && options.variant !== 'baseline') {
+    battle.variant = options.variant;
+    battle.seed = (options.seed ?? 104729) >>> 0;
+    for (const [index, mage] of actors.filter(a => a.team === 'mage').entries()) {
+      mage.tradition = options.traditions?.[mage.id as 'mage1' | 'mage2'] ?? (index ? 'hearth' : 'margin');
+      mage.counter = 0;
+      if (battle.variant === 'hand') {
+        mage.drawPile = makeDeck(battle.seed + index * 7919);
+        mage.hand = mage.drawPile.slice(0, 4); mage.drawIndex = 4;
+      }
+    }
+    battle.intentions = stateIntentions(battle);
+  }
+  return battle;
 }
 export function getIntentions(battle: Battle): Intention[] {
+  if (battle.phase !== 'planning') return [];
+  if (battle.variant && battle.variant !== 'baseline') return (battle.intentions ?? stateIntentions(battle)).map(i => ({ ...i }));
   const mages = battle.actors.filter(a => a.team === 'mage' && a.hp > 0);
   if (!mages.length || battle.phase !== 'planning') return [];
   return battle.actors.filter(a => a.team === 'enemy' && a.hp > 0).map((enemy, index) => {
@@ -61,19 +83,54 @@ export function getIntentions(battle: Battle): Intention[] {
       text: `${amount} damage to ${target.name}${heavy ? ' · Unstitch halves this strike' : ''}.` };
   });
 }
+/** Intentions are locked at the planning boundary, never chosen after seeing this round's plans. */
+function stateIntentions(battle: Battle): Intention[] {
+  const mages = battle.actors.filter(a => a.team === 'mage' && a.hp > 0);
+  if (!mages.length) return [];
+  return battle.actors.filter(a => a.team === 'enemy' && a.hp > 0).map(enemy => {
+    const candidates = [...mages].sort((a, b) => b.ember - a.ember || b.hp - a.hp || a.id.localeCompare(b.id));
+    const target = candidates[0]!;
+    const intention = (spellId: string, name: string, amount: number, tier: number, reason: string, targetId = target.id): Intention => ({ actorId: enemy.id, targetId, spellId, name, amount, tier, text: `${reason} · ${targetId === enemy.id ? '' : `${amount} damage to ${target.name}.`}`.trim() });
+    if (enemy.id !== 'guardian') {
+      const reader = [...mages].sort((a, b) => a.ward - b.ward || a.hp - b.hp || a.id.localeCompare(b.id))[0]!;
+      const amount = enemy.markedUntil >= battle.round ? 6 : battle.kind === 'lesson' ? 4 : 3;
+      return { ...intention('strike', amount === 6 ? 'Inkflutter' : 'Paper Flutter', amount, 2, amount === 6 ? 'Its inscription stirs the wings' : 'The moth seeks an unguarded reader', reader.id), text: `${amount === 6 ? 'Inscribed wings' : 'Least ward'} · ${amount} damage to ${reader.name}.` };
+    }
+    if (enemy.ward === 0 && enemy.lastIntent !== 'rebind') return intention('rebind', 'Gather the Loose Brass', 6, 2, 'Its broken ward calls the rings home: gain 6 ward, no attack', enemy.id);
+    if (enemy.hp <= enemy.maxHp * .4 && enemy.lastIntent !== 'heavy') return intention('heavy', 'Falling Hour', 12, 3, 'Its weakened heart swings a desperate pendulum; Unstitch halves this strike');
+    if (enemy.markedUntil >= battle.round && enemy.lastIntent !== 'purge') return intention('purge', 'Polish the Margins', 4, 2, 'An inscription troubles the brass: erase it and gain 4 ward, no attack', enemy.id);
+    if (target.ward >= 8 && enemy.lastIntent !== 'heavy') return intention('heavy', 'Test the Shelter', 12, 3, 'A strong shelter draws the pendulum; Unstitch halves this strike');
+    if (enemy.lastIntent === 'strike' && enemy.ward > 0) return intention('heavy', 'Pendulum Fall', 12, 3, 'Its intact rings wind up after a sweep; Unstitch halves this strike');
+    return intention('strike', 'Brass Sweep', 6, 2, 'The brass follows the mage holding most Ember');
+  });
+}
+export function getSpell(battle: Battle, actorId: string, spellId: SpellId): Spell {
+  const base = SPELLS[spellId];
+  const tradition = battle.actors.find(a => a.id === actorId)?.tradition;
+  return battle.variant && battle.variant !== 'baseline' && (tradition === 'margin' || tradition === 'hearth') ? traditionalSpell(base, tradition) : base;
+}
+export function availableSpells(battle: Battle, actorId: string): Spell[] {
+  const actor = battle.actors.find(a => a.id === actorId);
+  return Object.values(SPELLS).filter(s => battle.variant !== 'hand' || s.id === 'spark' || actor?.hand?.includes(s.id)).map(s => getSpell(battle, actorId, s.id));
+}
+export function nextDraw(battle: Battle, actorId: string): SpellId | null {
+  const mage = battle.actors.find(a => a.id === actorId);
+  return mage?.drawPile?.[(mage.drawIndex ?? 0) % mage.drawPile.length] ?? null;
+}
 /** Invalid manual commands fail explicitly; dead targets are accepted for predictable retargeting. */
 export function validatePlan(battle: Battle, plan: Plan): string | null {
   if (battle.phase !== 'planning') return 'This encounter is already complete.';
   const caster = battle.actors.find(a => a.id === plan.actorId);
   if (!caster || caster.team !== 'mage' || caster.hp <= 0) return 'Choose a living mage.';
-  const spell = SPELLS[plan.spellId];
-  if (!spell) return 'Unknown spell.';
+  if (!Object.hasOwn(SPELLS, plan.spellId)) return 'Unknown spell.';
+  const spell = getSpell(battle, plan.actorId, plan.spellId);
+  if (!availableSpells(battle, plan.actorId).some(s => s.id === spell.id)) return 'That page is not in your current hand.';
   if (caster.ember < spell.cost) return `Needs ${spell.cost} Ember.`;
   const target = battle.actors.find(a => a.id === plan.targetId);
   if (!target || target.team !== spell.target) return `Choose a ${spell.target === 'mage' ? 'friendly' : 'hostile'} target.`;
   return null;
 }
-function clone(b: Battle): Battle { return { ...b, actors: b.actors.map(a => ({ ...a })) }; }
+function clone(b: Battle): Battle { return { ...b, ...(b.intentions ? { intentions: b.intentions.map(i => ({ ...i })) } : {}), actors: b.actors.map(a => ({ ...a, ...(a.hand ? { hand: [...a.hand] } : {}), ...(a.drawPile ? { drawPile: [...a.drawPile] } : {}) })) }; }
 function targetFor(b: Battle, requested: string, team: Actor['team'], casterId: string): Actor | undefined {
   const wanted = b.actors.find(a => a.id === requested && a.team === team && a.hp > 0);
   if (wanted) return wanted;
@@ -95,7 +152,7 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
   const livingMages = battle.actors.filter(a => a.team === 'mage' && a.hp > 0);
   if (plans.length !== livingMages.length || new Set(plans.map(p => p.actorId)).size !== plans.length) throw new Error('Exactly one plan per living mage is required.');
   for (const plan of plans) { const error = validatePlan(battle, plan); if (error) throw new Error(error); }
-  const actions: QueueEntry[] = plans.map(plan => ({ ...plan, ...{ name: SPELLS[plan.spellId].name, tier: SPELLS[plan.spellId].tier, amount: 0, text: SPELLS[plan.spellId].description } }));
+  const actions: QueueEntry[] = plans.map(plan => { const spell = getSpell(battle, plan.actorId, plan.spellId); return { ...plan, name: spell.name, tier: spell.tier, amount: 0, text: spell.description }; });
   actions.push(...getIntentions(battle));
   // Stable actor IDs break ties, never arrival order. Mages win equal-tier ties.
   actions.sort((a, b) => a.tier - b.tier || Number(!a.actorId.startsWith('mage')) - Number(!b.actorId.startsWith('mage')) || a.actorId.localeCompare(b.actorId));
@@ -109,39 +166,64 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
     if (caster.hp <= 0) continue;
     if (!battle.actors.some(a => a.team !== caster.team && a.hp > 0)) break;
     if (caster.team === 'enemy') {
-      if (action.spellId === 'rebind') {
+      if (battle.variant && battle.variant !== 'baseline') caster.lastIntent = action.spellId;
+      if (action.spellId === 'rebind' || action.spellId === 'purge') {
+        if (action.spellId === 'purge') caster.markedUntil = 0;
         caster.ward = Math.max(caster.ward, action.amount); caster.wardUntil = 9999;
-        emit(action, 'status', action.amount, `${caster.name} restores ${action.amount} ward.`);
+        emit(action, 'status', action.amount, `${caster.name} restores ${action.amount} ward.${action.spellId === 'purge' ? ' The inscription is polished away.' : ''}`);
       } else {
         const target = targetFor(battle, action.targetId, 'mage', caster.id);
         if (!target) continue;
         const damage = action.spellId === 'heavy' && caster.staggeredUntil >= battle.round ? Math.floor(action.amount / 2) : action.amount;
+        const guarded = target.ward > 0;
         const actual = hit(target, damage);
-        emit({ ...action, targetId: target.id, ...(target.id !== action.targetId ? { fallbackFrom: action.targetId } : {}) }, 'attack', actual, `${caster.name}: ${action.name} — ${damage} damage${actual < damage ? ' (ward absorbed some)' : ''}.`);
+        let returned = 0;
+        if (guarded && target.counter) { returned = hit(caster, target.counter); target.counter = 0; }
+        emit({ ...action, targetId: target.id, ...(target.id !== action.targetId ? { fallbackFrom: action.targetId } : {}) }, 'attack', actual, `${caster.name}: ${action.name} — ${damage} damage${actual < damage ? ' (ward absorbed some)' : ''}.${returned ? ` Hearthlash returns ${returned} damage.` : ''}`);
       }
       continue;
     }
-    const spell = SPELLS[action.spellId as SpellId];
+    const spell = getSpell(battle, caster.id, action.spellId as SpellId);
     const target = targetFor(battle, action.targetId, spell.target, caster.id);
     if (!target) continue;
     caster.ember -= spell.cost;
+    const tradition = battle.variant && battle.variant !== 'baseline' ? caster.tradition : undefined;
     let amount = 0, text = '';
     switch (spell.id) {
       case 'spark': amount = hit(target, 5); text = `${target.name}: 5 damage.`; break;
-      case 'mark': amount = hit(target, 2); target.markedUntil = battle.round + 2; text = `${target.name}: 2 damage; inscribed through round ${target.markedUntil}.`; break;
+      case 'mark': {
+        if (tradition === 'margin') { amount = Math.min(target.hp, 4); target.hp -= amount; }
+        else amount = hit(target, tradition === 'hearth' ? 3 : 2);
+        target.markedUntil = battle.round + 2;
+        if (tradition === 'hearth') { caster.ward = Math.max(caster.ward, 6); caster.wardUntil = battle.round + 1; }
+        text = `${target.name}: ${tradition === 'margin' ? '4 damage through ward' : `${tradition === 'hearth' ? 3 : 2} damage`}; inscribed through round ${target.markedUntil}.${tradition === 'hearth' ? ' Your kindling grants 6 ward.' : ''}`; break;
+      }
       case 'unfold': {
-        const damage = (target.markedUntil >= battle.round ? 18 : 9) + (battle.upgraded ? 3 : 0);
         const seeded = target.markedUntil >= battle.round;
+        const released = tradition === 'hearth' ? Math.min(caster.ward, 8) : 0;
+        const damage = (tradition === 'hearth' ? 8 + (seeded ? 6 : 0) + released : seeded ? 18 : 9) + (battle.upgraded ? 3 : 0);
+        if (released) caster.ward -= released;
         target.markedUntil = 0; amount = hit(target, damage);
-        text = `${target.name}: ${damage} damage${seeded ? '; seed unfolds into a constellation' : ''}.`;
+        const spread = tradition === 'margin' && seeded ? battle.actors.filter(a => a.team === 'enemy' && a.id !== target.id && a.hp > 0) : [];
+        for (const other of spread) hit(other, 5);
+        text = `${target.name}: ${damage} damage${seeded ? '; seed unfolds into a constellation' : ''}.${released ? ` Released ${released} of your ward.` : ''}${spread.length ? ' Loose pages deal 5 to other foes.' : ''}`;
         break;
       }
-      case 'shelter': target.ward = Math.max(target.ward, 11); target.wardUntil = battle.round + 1; amount = 11; text = `${target.name}: 11 ward through round ${target.wardUntil}.`; break;
+      case 'shelter': target.ward = Math.max(target.ward, 11); target.wardUntil = battle.round + 1; if (tradition === 'hearth') target.counter = 5; amount = 11; text = `${target.name}: 11 ward through round ${target.wardUntil}.${tradition === 'hearth' ? ' The next absorbed attack returns 5 damage.' : ''}`; break;
       case 'unseal': {
         const removed = target.ward; target.ward = 0; target.staggeredUntil = battle.round;
-        amount = hit(target, 4); text = `${target.name}: ${removed} ward removed, 4 damage; heavy strike halved this round.`; break;
+        amount = hit(target, 4); text = `${target.name}: ${removed} ward removed, 4 damage; heavy strike halved this round.`;
+        if (removed && tradition === 'margin') { target.markedUntil = battle.round + 2; text += ' The cut binding leaves an inscription.'; }
+        if (removed && tradition === 'hearth') { caster.ward = Math.max(caster.ward, Math.min(4, removed)); caster.wardUntil = battle.round + 1; text += ` Rewoven ${Math.min(4, removed)} ward onto you.`; }
+        break;
       }
-      case 'mend': amount = Math.min(12, target.maxHp - target.hp); target.hp += amount; text = `${target.name}: ${amount} health restored.`; break;
+      case 'mend': amount = Math.min(12, target.maxHp - target.hp); target.hp += amount; text = `${target.name}: ${amount} health restored.`; if (tradition === 'hearth') { const extra = Math.min(6, 12 - amount); if (extra) { target.ward = Math.max(target.ward, extra); target.wardUntil = battle.round + 1; text += ` ${extra} excess healing becomes ward.`; } } break;
+    }
+    if (tradition) caster.lastSpell = spell.id;
+    if (battle.variant === 'hand' && spell.id !== 'spark' && caster.hand && caster.drawPile) {
+      const index = caster.hand.indexOf(spell.id);
+      if (index >= 0) caster.hand[index] = caster.drawPile[(caster.drawIndex ?? 0) % caster.drawPile.length]!;
+      caster.drawIndex = (caster.drawIndex ?? 0) + 1;
     }
     emit({ ...action, targetId: target.id, ...(target.id !== action.targetId ? { fallbackFrom: action.targetId } : {}) }, 'cast', amount, `${spell.name} — ${text}`);
   }
@@ -157,10 +239,11 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
     battle.round += 1;
     for (const a of battle.actors) {
       if (a.team === 'mage' && a.hp > 0) a.ember = Math.min(BATTLE_TUNING.emberCap, a.ember + BATTLE_TUNING.emberPerRound);
-      if (a.wardUntil < battle.round) a.ward = 0;
+      if (a.wardUntil < battle.round) { a.ward = 0; if (a.counter) a.counter = 0; }
       if (a.markedUntil < battle.round) a.markedUntil = 0;
       if (a.staggeredUntil < battle.round) a.staggeredUntil = 0;
     }
+    if (battle.variant && battle.variant !== 'baseline') battle.intentions = stateIntentions(battle);
   }
   return { battle, events, queue };
 }
@@ -168,7 +251,7 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
 export function previewQueue(battle: Battle, plans: Plan[]): QueueEntry[] {
   const mages = battle.actors.filter(a => a.team === 'mage' && a.hp > 0);
   if (plans.length === mages.length && plans.every(p => validatePlan(battle, p) === null)) return execute(battle, plans).queue;
-  return [...plans.filter(p => !validatePlan(battle, p)).map(p => ({ ...p, name: SPELLS[p.spellId].name, tier: SPELLS[p.spellId].tier, amount: 0, text: SPELLS[p.spellId].description })), ...getIntentions(battle)]
+  return [...plans.filter(p => !validatePlan(battle, p)).map(p => { const spell = getSpell(battle, p.actorId, p.spellId); return { ...p, name: spell.name, tier: spell.tier, amount: 0, text: spell.description }; }), ...getIntentions(battle)]
     .sort((a, b) => a.tier - b.tier || Number(!a.actorId.startsWith('mage')) - Number(!b.actorId.startsWith('mage')) || a.actorId.localeCompare(b.actorId));
 }
 export function resolveRound(battle: Battle, plans: Plan[]): { battle: Battle; events: BattleEvent[] } {

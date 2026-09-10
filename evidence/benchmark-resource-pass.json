@@ -1,0 +1,132 @@
+{
+  "scenario": "steady-state-courtyard-two-settings",
+  "date": "2026-09-10T17:11:07.926Z",
+  "build": "0.1.0 development",
+  "fixtures": false,
+  "input": "UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup",
+  "browser": "153.0.8010.12",
+  "headless": true,
+  "requestedBackend": "D3D11; actual identity below",
+  "high": {
+    "inspection": {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1920,
+        1080
+      ],
+      "drawingBuffer": [
+        1920,
+        1080
+      ],
+      "frameMs": {
+        "p50": 16.700000000000728,
+        "p95": 33.400000000001455,
+        "p99": 66.59999999999854,
+        "samples": 622
+      },
+      "quality": {
+        "low": false,
+        "shadowSize": 2048,
+        "surfaceMaterials": 12
+      },
+      "resources": {
+        "geometries": 79,
+        "textures": 72,
+        "calls": 189,
+        "triangles": 269416
+      },
+      "loadedAtMs": 2135.3000000044703,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    "steadyFrameMs": {
+      "p50": 16.700000000000728,
+      "p95": 33.400000000001455,
+      "p99": 50,
+      "samples": 489,
+      "durationMs": 12016.799999998511
+    }
+  },
+  "low": {
+    "inspection": {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1280,
+        720
+      ],
+      "drawingBuffer": [
+        1088,
+        612
+      ],
+      "frameMs": {
+        "p50": 16.700000000000728,
+        "p95": 33.400000000001455,
+        "p99": 50.100000000000364,
+        "samples": 1504
+      },
+      "quality": {
+        "low": true,
+        "shadowSize": 1024,
+        "surfaceMaterials": 12
+      },
+      "resources": {
+        "geometries": 79,
+        "textures": 72,
+        "calls": 134,
+        "triangles": 204988
+      },
+      "loadedAtMs": 2135.3000000044703,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    "steadyFrameMs": {
+      "p50": 16.700000000000728,
+      "p95": 33.400000000001455,
+      "p99": 50,
+      "samples": 612,
+      "durationMs": 12013.999999995533
+    }
+  },
+  "errors": [],
+  "caveat": "One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee."
+}

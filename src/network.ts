@@ -1,5 +1,5 @@
 import type { BattleEvent, Plan } from './simulation/battle';
-import type { Ack, Command, CommandBody, Encounter, Interaction, Position, Seat, Snapshot } from '../server/protocol';
+import type { Ack, Command, CommandBody, Configuration, Encounter, Interaction, Position, Seat, Snapshot } from '../server/protocol';
 export type SharedSnapshot = Snapshot;
 export type Credential = { sessionId: string; token: string; seat: Seat; invitation?: string };
 export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected';
@@ -90,7 +90,8 @@ export class SharedClient {
     return this.command({ kind: 'ready', roundId: s.roundId, revision: s.battle.revision, jointPlanKey: s.jointPlanKey });
   }
   interact(interaction: Interaction) { return this.command({ kind: 'interact', interaction }); }
-  consent(encounter: Encounter) { return this.command({ kind: 'consent', encounter }); }
+  configure(configuration: Configuration) { return this.command({ kind: 'configure', configuration }); }
+  consent(encounter: Encounter) { return this.command({ kind: 'consent', encounter, configRevision: this.snapshot?.configRevision ?? 0 }); }
   leaveBattle() { return this.command({ kind: 'leaveBattle' }); }
   move(position: Position) {
     if (this.lastSentPosition && Math.hypot(position.x - this.lastSentPosition.x, position.z - this.lastSentPosition.z) < 0.01 && Math.abs(position.yaw - this.lastSentPosition.yaw) < 0.01) return;

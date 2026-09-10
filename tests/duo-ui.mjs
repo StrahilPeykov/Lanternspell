@@ -110,6 +110,14 @@ try {
   assert.deepEqual((await inspect(guest)).battle, victorious);
   assert.equal((await inspect(guest)).playing, false);
   evidence.checks.push('guest page reload paused partner; Rejoin saved seat DOM restored committed victory without replay');
+  const messagesBeforeReconnect = (await inspect(guest)).metrics.received;
+  await action(guest, 'shared'); await action(guest, 'rejoin');
+  await guest.waitForFunction(before => window.__orrery.shared?.paused === false && window.__orrery.metrics.received > before, messagesBeforeReconnect);
+  assert.ok((await inspect(guest)).metrics.received > messagesBeforeReconnect);
+  assert.equal((await inspect(guest)).playing, false);
+  assert.equal((await inspect(guest)).stage, 3);
+  assert.deepEqual((await inspect(guest)).battle, victorious);
+  evidence.checks.push('same-client Reconnect this seat button restored unchanged victory without starting presentation');
   await action(host, 'leave-battle');
   await bothUntil(() => window.__orrery.battle === null && window.__orrery.stage === 3);
   await guest.screenshot({ path: 'evidence/duo-08-rejoined-path.png' });

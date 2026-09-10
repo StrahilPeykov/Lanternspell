@@ -1,7 +1,7 @@
 {
   "scenario": "actual-input-two-game-clients",
   "endpoint": "http://127.0.0.1:5180",
-  "started": "2026-09-10T16:07:48.248Z",
+  "started": "2026-09-10T16:22:48.333Z",
   "mockedNetwork": false,
   "stateFixtures": false,
   "protocolInjection": false,
@@ -20,7 +20,8 @@
     "concurrent DOM spell choices accepted; guest edited after host ready and both readiness states cleared",
     "both confirmed the same joint queue; committed result matched before playback; skip/repeated Enter did not double-apply",
     "setup plus partner exploit won lesson; shared victory and reward flag remained single after repeated actual confirm input",
-    "guest page reload paused partner; Rejoin saved seat DOM restored committed victory without replay"
+    "guest page reload paused partner; Rejoin saved seat DOM restored committed victory without replay",
+    "same-client Reconnect this seat button restored unchanged victory without starting presentation"
   ],
   "errors": [],
   "initial": [
@@ -45,10 +46,10 @@
         720
       ],
       "frameMs": {
-        "p50": 33.30000000000018,
-        "p95": 266.7000000000003,
-        "p99": 733.2840000000001,
-        "samples": 54
+        "p50": 16.700000000000728,
+        "p95": 216.59999999999945,
+        "p99": 1033.3000000000002,
+        "samples": 60
       },
       "resources": {
         "geometries": 116,
@@ -56,7 +57,7 @@
         "calls": 204,
         "triangles": 292640
       },
-      "loadedAtMs": 3373.7999999970198,
+      "loadedAtMs": 3829,
       "loadingErrors": [],
       "position": {
         "x": 0,
@@ -91,10 +92,10 @@
         720
       ],
       "frameMs": {
-        "p50": 16.700000000000273,
-        "p95": 166.69999999999982,
-        "p99": 716.6100000000001,
-        "samples": 66
+        "p50": 33.29999999999927,
+        "p95": 316.7000000000003,
+        "p99": 716.714,
+        "samples": 54
       },
       "resources": {
         "geometries": 116,
@@ -102,7 +103,7 @@
         "calls": 204,
         "triangles": 292640
       },
-      "loadedAtMs": 1252.8999999985099,
+      "loadedAtMs": 3838.60000000149,
       "loadingErrors": [],
       "position": {
         "x": 0,
@@ -138,21 +139,21 @@
         "ready": {},
         "positions": {
           "mage1": {
-            "x": 0.15102082861730654,
-            "z": -3.8534208002736863,
+            "x": 0.23394260094890665,
+            "z": -2.964462495082054,
             "yaw": 3.141592653589793
           },
           "mage2": {
-            "x": 0.2613554188346146,
-            "z": -3.4470626714278194,
+            "x": -0.09856014270407154,
+            "z": -3.2913850206102806,
             "yaw": 3.141592653589793
           }
         }
       },
       "metrics": {
-        "sent": 71,
-        "received": 93,
-        "lastAckMs": 109.39999999850988,
+        "sent": 70,
+        "received": 88,
+        "lastAckMs": 119.39999999850988,
         "maxQueueBytes": 0
       },
       "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
@@ -166,21 +167,21 @@
       ],
       "frameMs": {
         "p50": 33.29999999999927,
-        "p95": 66.69999999999982,
-        "p99": 200,
-        "samples": 895
+        "p95": 66.70000000000073,
+        "p99": 116.59999999999854,
+        "samples": 918
       },
       "resources": {
         "geometries": 119,
         "textures": 110,
-        "calls": 212,
-        "triangles": 319708
+        "calls": 214,
+        "triangles": 319732
       },
-      "loadedAtMs": 3373.7999999970198,
+      "loadedAtMs": 3829,
       "loadingErrors": [],
       "position": {
-        "x": 0.15102082861730654,
-        "z": -3.8534208002736863,
+        "x": 0.23394260094890665,
+        "z": -2.964462495082054,
         "yaw": 3.141592653589793
       },
       "camera": {
@@ -210,20 +211,20 @@
         "ready": {},
         "positions": {
           "mage1": {
-            "x": 0.15102082861730654,
-            "z": -3.8534208002736863,
+            "x": 0.23394260094890665,
+            "z": -2.964462495082054,
             "yaw": 3.141592653589793
           },
           "mage2": {
-            "x": 0.2613554188346146,
-            "z": -3.4470626714278194,
+            "x": -0.09856014270407154,
+            "z": -3.2913850206102806,
             "yaw": 3.141592653589793
           }
         }
       },
       "metrics": {
         "sent": 0,
-        "received": 2,
+        "received": 3,
         "lastAckMs": 0,
         "maxQueueBytes": 0
       },
@@ -237,10 +238,10 @@
         720
       ],
       "frameMs": {
-        "p50": 33.299999999999955,
-        "p95": 100,
-        "p99": 583.336,
-        "samples": 79
+        "p50": 33.30000000000018,
+        "p95": 83.40000000000009,
+        "p99": 616.7000000000003,
+        "samples": 96
       },
       "resources": {
         "geometries": 116,
@@ -248,11 +249,11 @@
         "calls": 213,
         "triangles": 319720
       },
-      "loadedAtMs": 3039.10000000149,
+      "loadedAtMs": 3028.7999999970198,
       "loadingErrors": [],
       "position": {
-        "x": 0.2613554188346146,
-        "z": -3.4470626714278194,
+        "x": -0.09856014270407154,
+        "z": -3.2913850206102806,
         "yaw": 3.141592653589793
       },
       "camera": {
@@ -264,7 +265,7 @@
     }
   ],
   "result": "passed",
-  "completed": "2026-09-10T16:08:20.451Z",
+  "completed": "2026-09-10T16:23:22.239Z",
   "videos": [
     "evidence/duo-client-1.webm",
     "evidence/duo-client-2.webm"

@@ -1,0 +1,7 @@
+vendor/
+preview-*.png
+*-sized.glb
+*-dedup.glb
+*-pruned.glb
+*-final.glb
+*-build.log

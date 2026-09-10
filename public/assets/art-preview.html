@@ -1,0 +1,14 @@
+<!doctype html><html><head><title>Asset inspection only</title><style>body{margin:0}#label{position:absolute;color:white;font:16px sans-serif;padding:16px}</style></head><body><div id="label">Asset inspection · not gameplay evidence</div><script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script><script type="module">
+import * as THREE from '/node_modules/three/build/three.module.js';
+import { GLTFLoader } from '/node_modules/three/examples/jsm/loaders/GLTFLoader.js';
+const scene=new THREE.Scene();scene.background=new THREE.Color('#91a9b5');
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(1);renderer.shadowMap.enabled=true;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.25;document.body.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight('#e5f3ff','#655442',2.5));const sun=new THREE.DirectionalLight('#fff0ce',3);sun.position.set(5,8,6);scene.add(sun);
+const camera=new THREE.PerspectiveCamera(38,innerWidth/innerHeight,.1,100);const p=new URLSearchParams(location.search);const asset=p.get('asset')||'wizard';
+camera.position.set(asset==='wizard'?2.8:15,asset==='wizard'?1.8:9,asset==='wizard'?4:20);camera.lookAt(0,asset==='wizard'?1:4,0);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(100,100),new THREE.MeshStandardMaterial({color:'#7c9293'}));ground.rotation.x=-Math.PI/2;ground.position.y=-.015;scene.add(ground);
+const gltf=await new GLTFLoader().loadAsync('/assets/'+asset+'.glb');scene.add(gltf.scene);const mixer=new THREE.AnimationMixer(gltf.scene);if(gltf.animations.length)mixer.clipAction(gltf.animations.find(a=>a.name===(p.get('clip')||'Idle'))||gltf.animations[0]).play();
+window.artInfo={clips:gltf.animations.map(a=>({name:a.name,duration:a.duration})),renderer:renderer.getContext().getParameter(renderer.getContext().RENDERER)};window.artReady=true;let last=performance.now();
+renderer.setAnimationLoop(t=>{mixer.update(Math.min(.05,(t-last)/1000));last=t;renderer.render(scene,camera)});
+</script></body></html>
+

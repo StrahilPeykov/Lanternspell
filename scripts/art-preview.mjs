@@ -1,0 +1,3 @@
+import {chromium} from '@playwright/test';
+const b=await chromium.launch({headless:true}); const page=await b.newPage({viewport:{width:1100,height:900}}); page.on('pageerror',e=>console.log(e.message));
+for (const [asset,clip] of [['wizard','Idle'],['wizard','Walk'],['wizard','Cast'],['observatory','Idle']]) {await page.goto(`http://127.0.0.1:5182/assets/art-preview.html?asset=${asset}&clip=${clip}`); await page.waitForFunction(()=>window.artReady);await page.waitForTimeout(800);await page.screenshot({path:`art/preview-${asset}-${clip}.png`});console.log(asset,clip,await page.evaluate(()=>window.artInfo))};await b.close();

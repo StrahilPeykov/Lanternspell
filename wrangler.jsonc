@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "wizard-adventure-prototype",
+  "main": "server/index.ts",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": { "binding": "ASSETS", "not_found_handling": "single-page-application", "run_worker_first": ["/api/*"] },
+  "durable_objects": { "bindings": [{ "name": "CAMPAIGNS", "class_name": "Campaign" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Campaign"] }],
+  "observability": { "enabled": false }
+}

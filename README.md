@@ -49,4 +49,4 @@ One courtyard, a brief keeper conversation, a seed-lantern, two encounters, six 
 
 The wizard incorporates verified CC0 Quaternius Standard assets with original costume additions. Architecture, spell geometry, surface washes and synthesized sounds are original to this project. Useful original Blender sources are preserved; new reproducible authoring scripts are authoritative. See [benchmark art](docs/benchmark-art.md) and [local sound](docs/audio.md). See [asset manifest](docs/asset-manifest.md) and [art notes](docs/art.md).
 
-Cloudflare configuration is prepared locally, with publication disabled. **Do not run deployment yet.** Actual account Free settings, public session-creation abuse controls, and explicit publication authorization are still required. No external resources were created.
+Cloudflare deployment repair was authorized on 2026-09-10 and Workers Free verified in the dashboard. Run `npm run deploy:check` for a build plus non-publishing Wrangler validation. See [deployment settings and network explanation](docs/deployment.md). No TURN server or paid service is required for this game's server-based WebSocket multiplayer.

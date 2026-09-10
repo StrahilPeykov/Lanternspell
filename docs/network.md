@@ -1,5 +1,7 @@
 # Shared session authority
 
+Deployment follow-up, 2026-09-10: the owner requested repair of the existing Cloudflare deployment. Workers Free is now verified; current build settings, creation rate limiting, and publication evidence are in [deployment.md](deployment.md). The original pre-publication statements below describe the first local milestone.
+
 `server/index.ts` runs the same `src/simulation/battle.ts` rules as local solo. The Cloudflare Vite plugin runs a real local workerd Durable Object with SQLite; production configuration declares one `Campaign` object per opaque session ID and a SQLite migration. No Cloudflare account or external resources were used. Deployment is not authorized and actual account Free configuration remains unverified. There is no deployment script, paid API, runtime generation or external dependency on the resolution path.
 
 ## Contract

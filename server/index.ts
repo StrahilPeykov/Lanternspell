@@ -1,7 +1,7 @@
 import { DurableObject } from 'cloudflare:workers';
 import { applyCommand, hydrateCampaign, initialCampaign, parseCommand, snapshot, type CampaignState, type Seat, type Ack } from './protocol';
 
-interface Env { CAMPAIGNS: DurableObjectNamespace<Campaign>; ASSETS: Fetcher }
+interface Env { CAMPAIGNS: DurableObjectNamespace<Campaign>; ASSETS: Fetcher; SESSION_CREATION: RateLimit }
 interface Stored { state: CampaignState; tokens: Partial<Record<Seat, string>>; invitation: string; acknowledgements: { seat: Seat; ack: Ack }[] }
 interface Attachment { seat: Seat; window: number; count: number; movementAt: number; position: { x: number; z: number; yaw: number } }
 const opaque = () => crypto.randomUUID().replaceAll('-', '') + crypto.randomUUID().replaceAll('-', '');
@@ -125,8 +125,12 @@ export default {
     const origin = request.headers.get('Origin');
     if (origin && origin !== url.origin) return json({ error: 'Same-origin access required.' }, 403);
     if (Number(request.headers.get('Content-Length') || 0) > 4096) return json({ error: 'Request too large.' }, 413);
-    if (url.pathname === '/api/health') return json({ version: 1, authority: 'sqlite-durable-object', deployment: 'not-authorized' });
+    if (url.pathname === '/api/health') return json({ version: 1, authority: 'sqlite-durable-object', transport: 'websocket', build: 'deployment-1' });
     if (url.pathname === '/api/session' && request.method === 'POST') {
+      // Only new campaign creation is limited; never interfere with an existing
+      // party's plans or reconnects. This anonymous prototype has no account ID.
+      const { success } = await env.SESSION_CREATION.limit({ key: `lanternspell:create:${request.headers.get('CF-Connecting-IP') ?? 'local'}` });
+      if (!success) return Response.json({ error: 'Too many new visits. Please wait a minute, or rejoin your saved visit.' }, { status: 429, headers: { 'Retry-After': '60', 'Cache-Control': 'no-store' } });
       const id = env.CAMPAIGNS.newUniqueId();
       return env.CAMPAIGNS.get(id).fetch(new Request('https://internal/initialize', { method: 'POST', body: JSON.stringify({ sessionId: id.toString() }) }));
     }

@@ -1,10 +1,11 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "wizard-adventure-prototype",
+  "name": "lanternspell",
   "main": "server/index.ts",
   "compatibility_date": "2026-09-01",
-  "workers_dev": false,
+  "workers_dev": true,
   "preview_urls": false,
+  "ratelimits": [{ "name": "SESSION_CREATION", "namespace_id": "202609101", "simple": { "limit": 6, "period": 60 } }],
   "assets": { "binding": "ASSETS", "not_found_handling": "single-page-application", "run_worker_first": ["/api/*"] },
   "durable_objects": { "bindings": [{ "name": "CAMPAIGNS", "class_name": "Campaign" }] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Campaign"] }],

@@ -8,7 +8,7 @@ const browser = await chromium.launch({ headless: true });
 const contexts = await Promise.all([browser.newContext(), browser.newContext()]);
 const pages = await Promise.all(contexts.map(c => c.newPage()));
 const applicationDelayMs = Math.min(2000, Number(process.env.APPLICATION_DELAY_MS || 0));
-const evidence = { scenario: 'real-local-do-two-browser-protocol', endpoint: base, mocking: false, gameplayInput: false, applicationDelayMs, delayIsPacketLoss: false, started: new Date().toISOString(), checks: [], timings: [] };
+const evidence = { scenario: base.startsWith('https:') ? 'deployed-do-two-browser-protocol' : 'real-local-do-two-browser-protocol', endpoint: base, mocking: false, gameplayInput: false, separateDevices: false, applicationDelayMs, delayIsPacketLoss: false, started: new Date().toISOString(), checks: [], timings: [] };
 try {
   await Promise.all(pages.map(p => p.goto(base + '/api/health')));
   if (process.env.REJOIN === '1') {
@@ -16,7 +16,7 @@ try {
     for (let i = 0; i < 2; i++) {
       await pages[i].evaluate(async credential => {
         window.__restored = null;
-        const ws = new WebSocket(`ws://${location.host}/api/session/${credential.sessionId}`, ['wizard-v1', `seat.${credential.token}`]);
+        const ws = new WebSocket(`${location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/api/session/${credential.sessionId}`, ['wizard-v1', `seat.${credential.token}`]);
         window.__socket = ws;
         ws.onmessage = e => { const data = JSON.parse(e.data); if (data.type === 'snapshot') window.__restored = data; };
         await new Promise((resolve, reject) => { ws.onopen = resolve; ws.onerror = reject; });

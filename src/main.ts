@@ -494,6 +494,10 @@ function settings() {
   );
 }
 let binding: string | null = null;
+function updateSharedStatus() {
+  const status = document.getElementById("shared-status");
+  if (status) status.textContent = `Connection: ${connection}. ${shared?.paused ? "Waiting safely for both seats." : ""}`;
+}
 function sharedPanel() {
   modal = "shared";
   let saved: Credential | null = null;
@@ -502,7 +506,7 @@ function sharedPanel() {
   } catch {}
   panel(
     "A friend at the gate",
-    `<p>Visit together in one small shared world. Each mage keeps their own spell plan. Both agree before an encounter begins.</p>${client ? `<p class="note">Connection: ${connection}. ${shared?.paused ? "Waiting safely for both seats." : ""}</p>${invitation ? `<label>Private invitation<input id="invite-output" readonly value="${escape(invitation)}"></label>` : ""}<button data-action="rejoin">Reconnect this seat</button><button data-action="solo">Return to local solo</button>` : `<button class="primary" data-action="host">Start a shared visit</button><p>Have an invitation?</p><input id="join-input" placeholder="Paste private invitation link" aria-label="Private invitation"><button data-action="join">Join your friend</button>${saved ? '<button data-action="resume-shared">Rejoin saved seat</button>' : ""}`}<p class="note">Local testing uses the real local session server. Internet deployment is not published. Shared and solo saves stay separate.</p>`,
+    `<p>Visit together in one small shared world. Each mage keeps their own spell plan. Both agree before an encounter begins.</p>${client ? `<p id="shared-status" class="note" role="status">Connection: ${connection}. ${shared?.paused ? "Waiting safely for both seats." : ""}</p>${invitation ? `<label>Private invitation<input id="invite-output" readonly value="${escape(invitation)}"></label>` : ""}<button data-action="rejoin">Reconnect this seat</button><button data-action="solo">Return to local solo</button>` : `<button class="primary" data-action="host">Start a shared visit</button><p>Have an invitation?</p><input id="join-input" placeholder="Paste private invitation link" aria-label="Private invitation"><button data-action="join">Join your friend</button>${saved ? '<button data-action="resume-shared">Rejoin saved seat</button>' : ""}`}<p class="note">Both friends must open this same site. Share the private invitation above; shared and solo saves stay separate.</p>`,
   );
 }
 function connect(credential: Credential) {
@@ -521,6 +525,7 @@ function connect(credential: Credential) {
       const entering = !battle && !!s.battle;
       if (incomingResult) playing = true;
       shared = s;
+      updateSharedStatus();
       variant = s.variant;
       tradition = s.traditions[credential.seat];
       facts = { ...s.facts };
@@ -544,6 +549,7 @@ function connect(credential: Credential) {
     },
     onConnection: (s) => {
       connection = s;
+      updateSharedStatus();
       if (s === "connecting") {
         first = true;
         playbackToken++;

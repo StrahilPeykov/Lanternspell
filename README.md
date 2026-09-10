@@ -26,6 +26,8 @@ npm run build
 npx vite preview --host 127.0.0.1 --port 5181
 ```
 
+With that production preview running, `node tests/production-smoke.mjs` checks solo interaction after disconnecting browser networking.
+
 With the development server on 5180:
 
 ```powershell

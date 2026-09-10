@@ -1,0 +1,204 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\20211107\\Desktop\\Lanternspell\\node_modules\\@playwright\\test\\cli.js",
+      "test"
+    ],
+    "configFile": "C:\\Users\\20211107\\Desktop\\Lanternspell\\playwright.config.ts",
+    "rootDir": "C:/Users/20211107/Desktop/Lanternspell/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/20211107/Desktop/Lanternspell/evidence/playwright",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Users/20211107/Desktop/Lanternspell/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/gameplay.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "evidence/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "gameplay.spec.ts",
+      "file": "gameplay.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual-input solo chapter, settings gates, committed playback skip, and save reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 58565,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-10T16:12:56.383Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\20211107\\Desktop\\Lanternspell\\evidence\\playwright\\gameplay-actual-input-solo-751ab-ayback-skip-and-save-reload\\video.webm"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "a8475ef9564cfbc88065-0a93e033e466c1a3f85f",
+          "file": "gameplay.spec.ts",
+          "line": 72,
+          "column": 1
+        },
+        {
+          "title": "actual-input free-attack defeat and fresh guardian retry without state fixtures",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 90170,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 60000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 60000ms exceeded while waiting on the predicate\n    at C:\\Users\\20211107\\Desktop\\Lanternspell\\tests\\gameplay.spec.ts:182:89",
+                    "location": {
+                      "file": "C:\\Users\\20211107\\Desktop\\Lanternspell\\tests\\gameplay.spec.ts",
+                      "column": 89,
+                      "line": 182
+                    },
+                    "snippet": "  180 |   const started = Date.now();\n  181 |   await page.goto('/');\n> 182 |   await expect.poll(async () => (await inspect(page))?.loadedAtMs, { timeout: 60_000 }).toBeGreaterThan(0);\n      |                                                                                         ^\n  183 |   await page.locator('[data-action=\"begin\"]').click();\n  184 |   await interactAndAccept(page, -3, 6);\n  185 |   await interactAndAccept(page, 4, 1);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\20211107\\Desktop\\Lanternspell\\tests\\gameplay.spec.ts",
+                        "column": 89,
+                        "line": 182
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 60000ms exceeded while waiting on the predicate\n\n  180 |   const started = Date.now();\n  181 |   await page.goto('/');\n> 182 |   await expect.poll(async () => (await inspect(page))?.loadedAtMs, { timeout: 60_000 }).toBeGreaterThan(0);\n      |                                                                                         ^\n  183 |   await page.locator('[data-action=\"begin\"]').click();\n  184 |   await interactAndAccept(page, -3, 6);\n  185 |   await interactAndAccept(page, 4, 1);\n    at C:\\Users\\20211107\\Desktop\\Lanternspell\\tests\\gameplay.spec.ts:182:89"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-09-10T16:13:55.158Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Users\\20211107\\Desktop\\Lanternspell\\evidence\\playwright\\gameplay-actual-input-free-b6345-etry-without-state-fixtures\\test-failed-1.png"
+                    },
+                    {
+                      "name": "video",
+                      "contentType": "video/webm",
+                      "path": "C:\\Users\\20211107\\Desktop\\Lanternspell\\evidence\\playwright\\gameplay-actual-input-free-b6345-etry-without-state-fixtures\\video.webm"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\20211107\\Desktop\\Lanternspell\\evidence\\playwright\\gameplay-actual-input-free-b6345-etry-without-state-fixtures\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\20211107\\Desktop\\Lanternspell\\evidence\\playwright\\gameplay-actual-input-free-b6345-etry-without-state-fixtures\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\20211107\\Desktop\\Lanternspell\\tests\\gameplay.spec.ts",
+                    "column": 89,
+                    "line": 182
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a8475ef9564cfbc88065-a264712c7b0e0d1468a2",
+          "file": "gameplay.spec.ts",
+          "line": 177,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-09-10T16:12:54.625Z",
+    "duration": 161796.9,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -7,3 +7,4 @@
 - Native image-generation tool is available; only that subscription-native path is permitted.
 - Dependencies are project local with lockfile. Blender is not on PATH; art task will inspect/install a free portable distribution if needed.
 - Final QA: batch static geometry after measured draw-call count; use a battle-specific camera framing offset to reserve DOM tray space; commit state first while deferring shared target disappearance and world illumination until presentation ends.
+- Small repeated courtyard props and animated spell-page geometry remain reproducible TypeScript geometry rather than additional Blender exports; the hero costume and main architectural landmark retain editable Blender sources. This keeps the bounded effect/scene iteration direct without extra asset-loading machinery.

@@ -1,0 +1,173 @@
+{
+  "scenario": "actual-input-free-attack-defeat-and-retry",
+  "endpoint": "http://127.0.0.1:5180/",
+  "stateFixtures": false,
+  "mockedNetwork": false,
+  "elapsedMs": 24362,
+  "guardianRounds": 7,
+  "defeated": {
+    "version": 1,
+    "build": "0.1.0",
+    "stage": 4,
+    "battle": {
+      "version": 1,
+      "id": "ae14da6b-a21c-4cfb-a7a7-2e5ce1a998d3",
+      "kind": "guardian",
+      "mode": "solo",
+      "round": 7,
+      "revision": 7,
+      "phase": "defeat",
+      "actors": [
+        {
+          "id": "mage1",
+          "name": "Visiting mage",
+          "team": "mage",
+          "hp": 0,
+          "maxHp": 38,
+          "ember": 7,
+          "ward": 0,
+          "wardUntil": 0,
+          "markedUntil": 0,
+          "staggeredUntil": 0
+        },
+        {
+          "id": "guardian",
+          "name": "Drowsing Atlas",
+          "team": "enemy",
+          "hp": 17,
+          "maxHp": 36,
+          "ember": 0,
+          "ward": 0,
+          "wardUntil": 9999,
+          "markedUntil": 0,
+          "staggeredUntil": 0
+        }
+      ],
+      "upgraded": true,
+      "rewardGranted": false
+    },
+    "plan": null,
+    "playing": false,
+    "modal": "",
+    "started": true,
+    "shared": null,
+    "metrics": null,
+    "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "viewport": [
+      1280,
+      720
+    ],
+    "drawingBuffer": [
+      1280,
+      720
+    ],
+    "frameMs": {
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "p99": 66.69999999999982,
+      "samples": 1128
+    },
+    "resources": {
+      "geometries": 130,
+      "textures": 89,
+      "calls": 149,
+      "triangles": 214688
+    },
+    "loadedAtMs": 3142.60000000149,
+    "loadingErrors": [],
+    "position": {
+      "x": 0.04928584996410987,
+      "z": -13.433571712627003,
+      "yaw": 3.141592653589793
+    },
+    "camera": {
+      "yaw": 0,
+      "pitch": 0.27,
+      "distance": 9
+    },
+    "effectChildren": 0
+  },
+  "retried": {
+    "version": 1,
+    "build": "0.1.0",
+    "stage": 4,
+    "battle": {
+      "version": 1,
+      "id": "485f37a9-5eb2-40b7-82a8-028449a6dc09",
+      "kind": "guardian",
+      "mode": "solo",
+      "round": 1,
+      "revision": 0,
+      "phase": "planning",
+      "actors": [
+        {
+          "id": "mage1",
+          "name": "Visiting mage",
+          "team": "mage",
+          "hp": 38,
+          "maxHp": 38,
+          "ember": 3,
+          "ward": 0,
+          "wardUntil": 0,
+          "markedUntil": 0,
+          "staggeredUntil": 0
+        },
+        {
+          "id": "guardian",
+          "name": "Drowsing Atlas",
+          "team": "enemy",
+          "hp": 36,
+          "maxHp": 36,
+          "ember": 0,
+          "ward": 8,
+          "wardUntil": 9999,
+          "markedUntil": 0,
+          "staggeredUntil": 0
+        }
+      ],
+      "upgraded": true,
+      "rewardGranted": false
+    },
+    "plan": null,
+    "playing": false,
+    "modal": "",
+    "started": true,
+    "shared": null,
+    "metrics": null,
+    "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "viewport": [
+      1280,
+      720
+    ],
+    "drawingBuffer": [
+      1280,
+      720
+    ],
+    "frameMs": {
+      "p50": 16.69999999999891,
+      "p95": 16.799999999999272,
+      "p99": 66.69999999999982,
+      "samples": 1181
+    },
+    "resources": {
+      "geometries": 130,
+      "textures": 89,
+      "calls": 187,
+      "triangles": 269456
+    },
+    "loadedAtMs": 3142.60000000149,
+    "loadingErrors": [],
+    "position": {
+      "x": 0.04928584996410987,
+      "z": -13.433571712627003,
+      "yaw": 3.141592653589793
+    },
+    "camera": {
+      "yaw": 0,
+      "pitch": 0.27,
+      "distance": 9
+    },
+    "effectChildren": 0
+  },
+  "errors": []
+}

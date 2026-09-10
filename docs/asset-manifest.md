@@ -19,3 +19,4 @@ Archive SHA-256:
 - Animation Standard: `CC73FC4E495B82958207316596317A3F40B9FA38065BDE1027937452DA537724`
 
 No proprietary inspiration-game assets were downloaded or incorporated. Browser asset-inspection screenshots are clearly labelled inspection images and do not constitute complete gameplay evidence.
+`src/render/world.ts` additionally authors the courtyard wings, paving, foliage, furnishings, repeat props, moth/guardian forms, spell-page geometry and canvas surface washes reproducibly in TypeScript. These are original project-created assets (2026-09-10), not third-party catalog meshes. `src/audio.ts` creates original local procedural casting/footstep cues with Web Audio; no sampled third-party audio or runtime service is used. `art/gameplay-target.png` is a native-generated concept reference, excluded from runtime; exact prompt and provenance are in `art/concept-prompt.txt`.

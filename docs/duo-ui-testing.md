@@ -1,0 +1,17 @@
+# Two-client gameplay input scenario
+
+Run `npm run dev` in one terminal, then `node tests/duo-ui.mjs` in another. The script defaults to http://127.0.0.1:5180 and needs the development-only, read-only `window.__orrery` diagnostics. It starts two isolated Chromium contexts at 1280×720 with D3D11 requested. Actual renderer identity is captured with final diagnostics. Run after source changes settle; Vite HMR resets the clients and invalidates an in-progress walkthrough.
+
+All gameplay changes use keyboard or DOM controls. There are no save fixtures, position mutations, raw network commands, mocked sockets or test-only action shortcuts. The script hosts/joins from the friend menu, walks both mages to the NPC, verifies local dialogue remains open during a shared outcome, wakes the lantern, obtains both independent encounter consents, submits concurrent spell choices, edits after readiness, confirms, inspects committed results before animation, skips presentation, wins the lesson with ordinary setup/exploit synergy, reloads the guest, and uses Rejoin saved seat.
+
+Outputs: `evidence/duo-ui.json`, numbered `evidence/duo-*.png` runtime captures, and `evidence/duo-client-1.webm` / `evidence/duo-client-2.webm`. Failure writes diagnostics and screenshots as well. Two signature screenshots sample its progression, followed by a resolution-end capture; these are actual runtime evidence. Videos show the complete input path. The private invitation appears briefly in the local test video but has already been consumed; seat tokens are never logged.
+
+These are two game clients on the same host/GPU and actual local workerd authority. Frame measurements during recording include both clients, asset loading, modal UI and screenshot work; they are not single-client hardware certification. This test does not establish two-device internet stability or real geographic latency.
+
+## Observed result
+
+The final complete run passed on 2026-09-10 with both clients reporting Intel UHD Graphics through ANGLE D3D11. All eight gameplay assertions listed in `duo-ui.json` passed with no page errors or loading errors. The guest's local NPC dialogue remained open when the host applied the shared outcome; both clients agreed on the committed battle state before presentation; editing a partner plan cleared readiness; repeated Enter and skipping did not grant another result; rejoining restored the victory without replay.
+
+Visual inspection of the final planning captures confirms that both wizard silhouettes and feet fit above the tray, the two personal color identities remain distinct on the guest, the stale encounter-consent toast has cleared, and the queue identifies You, Friend and Paper Moth. Early/middle Folded Sky frames show its paper ring expanding and rotating. The resolution-end image can show the outcome once the signature has finished; it is deliberately not labelled as another signature frame. The full videos preserve locomotion, transitions and the inspected presentation.
+
+An intermediate repeat was interrupted to avoid contaminating the lead's separate GPU performance sample; it is not reported as a passing run. Its partial raw videos were discarded. The final JSON, numbered screenshots and canonical videos all come from the subsequent complete clean run.

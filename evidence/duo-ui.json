@@ -1,0 +1,273 @@
+{
+  "scenario": "actual-input-two-game-clients",
+  "endpoint": "http://127.0.0.1:5180",
+  "started": "2026-09-10T16:07:48.248Z",
+  "mockedNetwork": false,
+  "stateFixtures": false,
+  "protocolInjection": false,
+  "viewport": [
+    1280,
+    720
+  ],
+  "browser": "Playwright Chromium, headless, D3D11 requested; actual renderer recorded below",
+  "browserVersion": "153.0.8010.12",
+  "platform": "win32",
+  "checks": [
+    "host and guest created/joined through friend-menu DOM in independent browser contexts",
+    "shared NPC outcome applied once while guest read-only dialogue stayed open",
+    "both mages walked through real WASD input; one lantern interaction updated both clients",
+    "first encounter consent did not start battle; guest explicitly consented from own dialogue",
+    "concurrent DOM spell choices accepted; guest edited after host ready and both readiness states cleared",
+    "both confirmed the same joint queue; committed result matched before playback; skip/repeated Enter did not double-apply",
+    "setup plus partner exploit won lesson; shared victory and reward flag remained single after repeated actual confirm input",
+    "guest page reload paused partner; Rejoin saved seat DOM restored committed victory without replay"
+  ],
+  "errors": [],
+  "initial": [
+    {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1280,
+        720
+      ],
+      "drawingBuffer": [
+        1280,
+        720
+      ],
+      "frameMs": {
+        "p50": 33.30000000000018,
+        "p95": 266.7000000000003,
+        "p99": 733.2840000000001,
+        "samples": 54
+      },
+      "resources": {
+        "geometries": 116,
+        "textures": 88,
+        "calls": 204,
+        "triangles": 292640
+      },
+      "loadedAtMs": 3373.7999999970198,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 0,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": null,
+      "metrics": null,
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1280,
+        720
+      ],
+      "drawingBuffer": [
+        1280,
+        720
+      ],
+      "frameMs": {
+        "p50": 16.700000000000273,
+        "p95": 166.69999999999982,
+        "p99": 716.6100000000001,
+        "samples": 66
+      },
+      "resources": {
+        "geometries": 116,
+        "textures": 88,
+        "calls": 204,
+        "triangles": 292640
+      },
+      "loadedAtMs": 1252.8999999985099,
+      "loadingErrors": [],
+      "position": {
+        "x": 0,
+        "z": 10,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    }
+  ],
+  "final": [
+    {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 3,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": {
+        "stage": 3,
+        "paused": false,
+        "roundId": "",
+        "planRevisions": {
+          "mage1": 0,
+          "mage2": 0
+        },
+        "ready": {},
+        "positions": {
+          "mage1": {
+            "x": 0.15102082861730654,
+            "z": -3.8534208002736863,
+            "yaw": 3.141592653589793
+          },
+          "mage2": {
+            "x": 0.2613554188346146,
+            "z": -3.4470626714278194,
+            "yaw": 3.141592653589793
+          }
+        }
+      },
+      "metrics": {
+        "sent": 71,
+        "received": 93,
+        "lastAckMs": 109.39999999850988,
+        "maxQueueBytes": 0
+      },
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1280,
+        720
+      ],
+      "drawingBuffer": [
+        1280,
+        720
+      ],
+      "frameMs": {
+        "p50": 33.29999999999927,
+        "p95": 66.69999999999982,
+        "p99": 200,
+        "samples": 895
+      },
+      "resources": {
+        "geometries": 119,
+        "textures": 110,
+        "calls": 212,
+        "triangles": 319708
+      },
+      "loadedAtMs": 3373.7999999970198,
+      "loadingErrors": [],
+      "position": {
+        "x": 0.15102082861730654,
+        "z": -3.8534208002736863,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    },
+    {
+      "version": 1,
+      "build": "0.1.0",
+      "stage": 3,
+      "battle": null,
+      "plan": null,
+      "playing": false,
+      "modal": "",
+      "started": true,
+      "shared": {
+        "stage": 3,
+        "paused": false,
+        "roundId": "",
+        "planRevisions": {
+          "mage1": 0,
+          "mage2": 0
+        },
+        "ready": {},
+        "positions": {
+          "mage1": {
+            "x": 0.15102082861730654,
+            "z": -3.8534208002736863,
+            "yaw": 3.141592653589793
+          },
+          "mage2": {
+            "x": 0.2613554188346146,
+            "z": -3.4470626714278194,
+            "yaw": 3.141592653589793
+          }
+        }
+      },
+      "metrics": {
+        "sent": 0,
+        "received": 2,
+        "lastAckMs": 0,
+        "maxQueueBytes": 0
+      },
+      "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+      "viewport": [
+        1280,
+        720
+      ],
+      "drawingBuffer": [
+        1280,
+        720
+      ],
+      "frameMs": {
+        "p50": 33.299999999999955,
+        "p95": 100,
+        "p99": 583.336,
+        "samples": 79
+      },
+      "resources": {
+        "geometries": 116,
+        "textures": 109,
+        "calls": 213,
+        "triangles": 319720
+      },
+      "loadedAtMs": 3039.10000000149,
+      "loadingErrors": [],
+      "position": {
+        "x": 0.2613554188346146,
+        "z": -3.4470626714278194,
+        "yaw": 3.141592653589793
+      },
+      "camera": {
+        "yaw": 0,
+        "pitch": 0.27,
+        "distance": 9
+      },
+      "effectChildren": 0
+    }
+  ],
+  "result": "passed",
+  "completed": "2026-09-10T16:08:20.451Z",
+  "videos": [
+    "evidence/duo-client-1.webm",
+    "evidence/duo-client-2.webm"
+  ],
+  "performanceCaveat": "Two concurrent headless game clients on one Intel D3D11 GPU. Metrics include loading, dialogs and captures; not a stable single-client benchmark or two-device internet evidence."
+}

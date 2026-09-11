@@ -17,7 +17,7 @@ The second command applies glTF Transform dedup/prune while retaining attachment
 
 The social anchor is a small reflecting basin and brass book-dial at (0,0,3). Collision radius about 1.4m; two generous routes pass either side. A reading pocket occupies x=-11.7…-8.2, z=9.3…11.5. Its table/book is centered (-10,0,10.5), radius about .7m. The inaccessible archive door is centered (-12.45,0,10), facing +X; the seal is on x=-12.07. This is an opaque closed architectural feature, not a teleport or invented new region. The lead owns interaction facts/prompts and final collision integration.
 
-Geometry after optimization: courtyard 50,991 triangles, 10 drawing primitives, 10 materials and 10 packed 128×128 textures. This is resource inventory, not a frame-rate result.
+September 10 inventory: courtyard 50,991 triangles. September 11 refinement: 26,815 triangles, with the same 10 drawing primitives, 10 materials and 10 packed 128×128 textures; see art-refinement.md. This is resource inventory, not a frame-rate result.
 
 ## Atlas contract
 

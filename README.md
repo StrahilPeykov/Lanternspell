@@ -45,7 +45,7 @@ node tests/signature-compare.mjs
 node tests/network-real.mjs
 ```
 
-Playwright uses bundled Chromium. If missing, run `npx playwright install chromium`. The local Windows gameplay tests request D3D11; other systems should choose their available graphics backend and record the renderer. Run browser recordings and performance sampling separately. See [benchmark results](docs/benchmark-results.md), [combat comparison](docs/combat-benchmark.md), and [historical testing evidence](docs/testing.md), [network checks](docs/network.md), and [resume notes](docs/resume.md).
+Playwright uses bundled Chromium. If missing, run `npx playwright install chromium`. The local Windows gameplay tests request D3D11; other systems should choose their available graphics backend and record the renderer. Finish builds/server startup before browser runs, and run recordings separately from performance sampling. Duo video is opt-in with `RECORD_VIDEO=1`; screenshots remain enabled. Set `EVIDENCE_FILE` to an ignored local output to preserve historical reports. See [current refinement results](docs/refinement-results.md), [combat refinement](docs/combat-refinement.md), [previous benchmark](docs/benchmark-results.md), [network checks](docs/network.md), and [resume notes](docs/resume.md).
 
 ## Scope and provenance
 

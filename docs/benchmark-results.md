@@ -1,5 +1,7 @@
 # Sleeping Orrery benchmark evidence
 
+Historical September 10 benchmark. The continued September 11 implementation, current measurements and remaining limits are in [refinement-results.md](refinement-results.md). The evidence below is preserved rather than replaced with newer results.
+
 Current comparison controls, rules and limitations are documented in README.md, combat-benchmark.md and limitations.md. This is the same chapter, not a campaign expansion. No paid service, billed API, purchase or public deployment was used.
 
 ## Play and correctness

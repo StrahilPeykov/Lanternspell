@@ -1,0 +1,24 @@
+{
+  "scenario": "production-host-join-reconnect-ui",
+  "endpoint": "http://127.0.0.1:5181",
+  "timestamp": "2026-09-11T16:58:50.041Z",
+  "actualInputs": true,
+  "debugHooks": false,
+  "stateFixtures": false,
+  "mockedSockets": false,
+  "separateDevices": false,
+  "socketProtocols": [
+    "ws:",
+    "ws:",
+    "ws:"
+  ],
+  "checks": [
+    "built art/client loaded",
+    "private invitation from actual host UI",
+    "independent guest joins through UI",
+    "both connected",
+    "WASD input",
+    "guest reconnect through UI"
+  ],
+  "errors": []
+}

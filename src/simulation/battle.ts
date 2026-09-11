@@ -46,7 +46,7 @@ export function createBattle(kind: BattleKind, mode: BattleMode, upgraded = fals
   const actors = [actor('mage1', 'Visiting mage', 'mage', BATTLE_TUNING.mageHealth)];
   if (mode === 'duo') actors.push(actor('mage2', 'Fellow mage', 'mage', BATTLE_TUNING.mageHealth));
   if (kind === 'lesson') {
-    actors.push(actor('moth1', 'Paper Moth', 'enemy', mode === 'solo' ? 18 : 28));
+    actors.push(actor('moth1', 'Paper Moth', 'enemy', mode === 'solo' ? (options.variant === 'book' ? 24 : 18) : 28));
   } else {
     actors.push(actor('guardian', 'Drowsing Atlas', 'enemy', mode === 'solo' ? 36 : 62, 8));
     if (mode === 'duo') actors.push(actor('moth1', 'Margin Moth', 'enemy', 14));

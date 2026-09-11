@@ -8,25 +8,25 @@ export interface BattleOptions {
   seed?: number;
 }
 export const TRADITIONS: Record<Tradition, { id: Tradition; name: string; description: string; motif: string }> = {
-  margin: { id: 'margin', name: 'Marginweaver', description: 'Write through wards. Turn an inscription into a wide constellation, or cut a binding to reveal a new margin.', motif: 'ink, folded paper, orbiting script' },
-  hearth: { id: 'hearth', name: 'Hearthbinder', description: 'Protect while preparing. Keep your shelter for a counterstroke, or weave its remaining ward into your signature.', motif: 'warm thread, woven lanterns, sheltering wings' },
+  margin: { id: 'margin', name: 'Marginweaver', description: 'Damage through shields. Mark a foe, then hit it harder with your signature. This is the book you practised with.', motif: 'ink, folded paper, orbiting script' },
+  hearth: { id: 'hearth', name: 'Hearthbinder', description: 'Gain protection while marking foes. Your signature spends leftover protection for more damage.', motif: 'warm thread, woven lanterns, sheltering wings' },
 };
 const traditionSpells: Record<Tradition, Record<SpellId, [string, string]>> = {
   margin: {
-    spark: ['Quill Flick', 'Deal 5 damage. Always available, even outside your hand.'],
-    mark: ['Living Marginalia', 'Deal 4 damage through ward; inscribe through two further rounds. Useful now, ready to unfold later.'],
-    unfold: ['Atlas Unbound', 'Deal 9 damage, or 18 to an inscribed foe and 5 to other foes. Consume its seed. Margin note adds 3 to the main hit.'],
-    shelter: ['Paper Sanctuary', 'Give yourself or a living ally 11 ward through the next round. Ward does not stack.'],
-    unseal: ['Cut the Binding', 'Remove all ward and deal 4 damage. Removing ward also inscribes the foe. Halve its heavy strike this round.'],
-    mend: ['A Quiet Margin', 'Restore 12 health to yourself or a living ally.'],
+    spark: ['Quill Flick', '5 damage. No Ember cost.'],
+    mark: ['Living Marginalia', '4 damage through ward. Mark the foe for 2 more rounds.'],
+    unfold: ['Atlas Unbound', '9 damage. Marked foe: 18 damage, plus 5 to other foes. Uses the mark.'],
+    shelter: ['Paper Sanctuary', '11 protection for you or an ally through next round. Replaces existing ward.'],
+    unseal: ['Cut the Binding', 'Remove ward; 4 damage. Marks shielded foes. Halves this round’s heavy strike.'],
+    mend: ['A Quiet Margin', 'Restore 12 health to you or an ally.'],
   },
   hearth: {
-    spark: ['Hearth Spark', 'Deal 5 damage. Always available, even outside your hand.'],
-    mark: ['Kindling Stitch', 'Deal 3 damage; inscribe through two further rounds and give yourself 6 ward through the next round.'],
-    unfold: ['The Lantern Wakes', 'Deal 8 damage, +6 if inscribed. Consume the seed and up to 8 of your ward for equal extra damage. Margin note adds 3.'],
-    shelter: ['Hearthlash Mantle', 'Give yourself or an ally 11 ward through next round. The next hit absorbed by it returns 5 damage to its attacker.'],
-    unseal: ['Loose the Knot', 'Remove ward, deal 4 damage, and halve this round’s heavy strike. Reweave up to 4 removed ward onto yourself.'],
-    mend: ['Lantern Mending', 'Restore 12 health. Up to 6 excess healing becomes ward through the next round, ready to shelter or release.'],
+    spark: ['Hearth Spark', '5 damage. No Ember cost.'],
+    mark: ['Kindling Stitch', '3 damage. Mark for 2 more rounds; gain 6 ward through next round.'],
+    unfold: ['The Lantern Wakes', '8 damage; +6 if marked. Uses the mark and up to 8 of your ward for extra damage.'],
+    shelter: ['Hearthlash Mantle', '11 ward for you or an ally through next round. The next absorbed hit returns 5 damage.'],
+    unseal: ['Loose the Knot', 'Remove ward; 4 damage. Halves this round’s heavy strike. Keep up to 4 removed ward.'],
+    mend: ['Lantern Mending', 'Restore 12 health. Up to 6 excess healing becomes ward through next round.'],
   },
 };
 export function traditionalSpell(base: Spell, tradition: Tradition): Spell {

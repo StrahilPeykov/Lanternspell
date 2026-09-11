@@ -951,3 +951,14 @@ input:not([type="range"], [type="checkbox"], [type="file"]) {
     width: 133px;
   }
 }
+
+/* First-contact hierarchy: the world and one useful action take priority. */
+[hidden] { display: none !important; }
+#subobjective:empty, .lesson-hint:empty { display: none; }
+.opening-copy .quiet { display: block; margin-top: 16px; }
+.teaching-cards { max-width: 650px; }
+.teaching-cards .spell { min-height: 155px; }
+.lesson-hint { font: 15px/1.4 var(--sans); margin: 10px 0 14px; color: #fff2cc; }
+.spell.recommended { outline: 2px solid #e5c476; outline-offset: 3px; }
+.disclosure { background: transparent; color: #eee2c5; padding: 7px 10px; margin: 8px 8px 0 0; font: 12px var(--sans); border-color: #ffffff40; }
+.queue-row > .primary { margin-left: auto; }

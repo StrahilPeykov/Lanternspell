@@ -1,3 +1,4 @@
+import { lessonView } from "./ui/onboarding";
 import { shell } from "./ui/shell";
 import { combatMarkup } from "./ui/combat";
 import "./style.css";
@@ -28,6 +29,11 @@ const ui = document.querySelector<HTMLDivElement>("#ui")!;
 ui.innerHTML = shell;
 const el = (id: string) => document.getElementById(id)!;
 const sound = new Sound();
+let movedHint = localStorage.getItem("orrery-moved-v1") === "yes";
+let lessonCompleted = localStorage.getItem("orrery-lesson-v1") === "yes";
+let expandedCombat = false;
+let detailedCombat = false;
+
 let tradition: Tradition = "margin",
   variant: BattleVariant = "book",
   seed = 42,
@@ -60,7 +66,14 @@ let stage = 0,
   lastStage = -1;
 const world = new World(document.querySelector("#world")!, (p) => {
   if (client) client.move(p);
-  if (world.moving) sound.step();
+  if (world.moving) {
+    sound.step();
+    if (!movedHint) {
+      movedHint = true;
+      localStorage.setItem("orrery-moved-v1", "yes");
+      el("controls").style.display = "none";
+    }
+  }
 });
 world.active = false;
 const points = [
@@ -82,8 +95,8 @@ const points = [
   {
     x: -5,
     z: -9,
-    label: "Read the forgotten margin note",
-    verb: "Read margin note",
+    label: "Read the field book",
+    verb: "Read field book",
     type: "discovery",
   },
   {
@@ -163,12 +176,14 @@ function update() {
       ? "Shared visit · waiting for your friend"
       : `Shared visit · ${TRADITIONS[tradition].name}`
     : stage === 5
-      ? "A small story, completed."
-      : TRADITIONS[tradition].name + " · The Sleeping Orrery";
+      ? "Chapter complete"
+      : stage >= 4
+        ? TRADITIONS[tradition].name
+        : "";
   el("hud").style.display = started ? "flex" : "none";
   el("nav").style.display = started ? "flex" : "none";
   el("controls").style.display =
-    started && !battle && !modal ? "block" : "none";
+    started && !battle && !modal && !movedHint ? "block" : "none";
   renderCombat();
   gate();
 }
@@ -210,7 +225,7 @@ function begin(resume = false) {
     try {
       const s = JSON.parse(localStorage.getItem("orrery-solo-v1") ?? "null");
       if (validateSave(s)) restore(s);
-      else toast("No saved visit yet. A new story begins.");
+      else toast("No solo save found. Starting a new visit.");
     } catch {
       toast("The saved visit could not be read.");
     }
@@ -219,8 +234,7 @@ function begin(resume = false) {
   el("opening").hidden = true;
   update();
   paintIdentity();
-  if (!resume)
-    toast("Welcome, visiting mage. Keeper Iona is beside the courtyard bench.");
+
   save();
 }
 function panel(
@@ -230,7 +244,7 @@ function panel(
 ) {
   sound.book();
   el("modal").innerHTML =
-    `<div class="scrim"><section class="paper-panel" role="dialog" aria-modal="true" aria-label="${title}"><button class="close" data-action="close" aria-label="Close">×</button><div class="eyebrow">BELLWEATHER FIELD NOTES</div><h2>${title}</h2>${body}<footer>${footer}</footer></section></div>`;
+    `<div class="scrim"><section class="paper-panel" role="dialog" aria-modal="true" aria-label="${title}"><button class="close" data-action="close" aria-label="Close">×</button><div class="eyebrow">BELLWEATHER COLLEGE</div><h2>${title}</h2>${body}<footer>${footer}</footer></section></div>`;
   gate();
 }
 function close() {
@@ -266,57 +280,64 @@ function interact() {
   modal = p.type;
   if (p.type === "echo") {
     panel(
-      "Tea for the absent-minded",
+      "The staff kettle",
       facts.echo
         ? "<p>The kettle hums your borrowed tune. Someone has put a second cup beside it.</p>"
-        : `<p>A cold kettle sits on three books labelled <em>Do Not Heat</em>. Its lid taps a rhythm.</p><p>You answer with a fingertip. A tiny choir of steam sings the missing final note.</p><p class="note">Optional field note: The Kettle Chorus. No battle advantage required.</p>`,
+        : `<p>A kettle sits on a heatproof tile. A label on its handle reads <em>Return to staff room</em>. Its lid taps a rhythm.</p><p>You tap the table. The kettle answers in the same rhythm.</p><p class="note">Optional discovery: the kettle answers you.</p>`,
       facts.echo
         ? undefined
-        : '<button class="primary" data-action="accept">Remember the kettle chorus</button>',
+        : '<button class="primary" data-action="accept">Tap the table</button>',
     );
     return;
   }
   if (p.type === "archive") {
     panel(
-      "A door with no hour",
-      `<p>Behind the sealed arch, a staircase appears to lead into yesterday.</p><p>A notice reads: <strong>West Archive closed. Please stop returning books before you borrow them. — Iona</strong></p><p class="note">The seal has no matching constellation in your book. This door remains closed in this chapter.</p>`,
+      "West Archive",
+      `<p>Behind the sealed arch, a staircase hangs sideways. Dust falls toward its steps.</p><p>A notice reads: <strong>WEST ARCHIVE CLOSED — stair repairs. Return books at the main desk.</strong></p><p class="note">You cannot open this seal yet.</p>`,
     );
     return;
   }
   if (stage === 0)
     panel(
-      "A light left sleeping",
-      `<div class="speaker">IONA <span>Keeper of the small hours</span></div><p>“Good. Someone with boots on. The observatory has stopped, the kettle is singing, and I have six overdue atlases.”</p><p>“Our observatory has closed its eye. Start with the seed-lantern by the east garden. Then follow the brass lamps. If you hear tea singing behind the west garden, that is a separate problem.”</p><p class="note">Follow the brass lamps through the courtyard. You can open your spellbook whenever you like.</p>`,
-      `<button class="primary" data-action="accept">I’ll see what it remembers →</button>`,
+      "Iona",
+      `<div class="speaker">OBSERVATORY KEEPER</div><p>“The telescope's stopped again. Could you start the lamp across the courtyard? The round one by the flower bed.”</p><p>“I'd do it, but it keeps burning my gloves.”</p>`,
+      `<button class="primary" data-action="accept">I'll try</button>`,
     );
-  else if (stage === 1)
+  else if (stage === 1) {
+    accept();
+  } else if (stage === 2 || stage === 4)
     panel(
-      "The smallest sunrise",
-      `<p>A warm seed floats inside the glass. It leans toward your hand, as though listening.</p><p>You trace a little circle. The seed opens one golden petal, then another. A paper moth rustles awake farther along the path.</p>`,
-      `<button class="primary" data-action="accept">Lend it a little light ✦</button>`,
-    );
-  else if (stage === 2 || stage === 4)
-    panel(
-      stage === 2 ? "A lesson with wings" : "The Drowsing Atlas",
+      stage === 2 ? "Paper Moth practice" : "The Drowsing Atlas",
       stage === 2
-        ? `<p>The college’s practice moth opens its paper wings. Its edges are soft; its intentions are plainly written.</p><p>Choose one spell each round. <strong>${spellView("mark").name}</strong> helps now and prepares a target; <strong>${spellView("unfold").name}</strong> turns that seed into a constellation. Your free <strong>${spellView("spark").name}</strong> always works. ${variant === "hand" ? "Paid pages replace their own slot. Your free spell turns the leftmost page into the visible next page." : "Your full prepared book is available."}</p><p class="note">The queue previews the order. Wards & remedies → quick spells → unfolding → heavy strikes.</p>`
-        : `<p>Brass rings turn around the guardian’s sleeping heart. A stubborn ward holds them shut.</p><p><strong>${spellView("unseal").name}</strong> opens wards and softens a heavy strike. Protect or mend yourself when the pendulum rises. Its intention responds to wards, inscriptions and shelter, then stays fixed while you plan.</p><p class="note">${client ? "Both mages must choose to begin. Your friend’s dialogue stays their own." : "This is a solo encounter. Every spell in your book works for you."}</p>`,
-      `<button class="primary" data-action="accept">${client ? "I’m ready to begin" : "Begin encounter"} →</button>`,
+        ? `<p>The college's practice moth is ready.</p>`
+        : `<p>The guardian is blocking the observatory. Its brass shield absorbs damage.</p>`,
+      `<button class="primary" data-action="accept">${client ? "Ready to begin" : "Begin encounter"} →</button>`,
     );
   else if (stage === 3)
     panel(
-      "A sky between the pages",
-      `<p>A handwritten note peeks from a weathered field book:</p><blockquote>“A constellation is a promise that small lights can make something together.”</blockquote><p>You copy the pattern into your own book. <strong>${spellView("unfold").name} now deals 3 more damage.</strong> The same spell; a deeper understanding.</p>`,
-      `<button class="primary" data-action="accept">Keep the margin note ✧</button>`,
+      "The field book",
+      `<p><strong>Signature spell: +3 damage.</strong> Someone has corrected the diagram in the margin.</p><h3>Choose your approach</h3><div class="tradition-picker">${Object.values(
+        TRADITIONS,
+      )
+        .map(
+          (t) =>
+            `<button data-tradition="${t.id}" class="${t.id === tradition ? "selected" : ""}"><b>${t.name}</b><small>${t.description}</small></button>`,
+        )
+        .join(
+          "",
+        )}</div><p class="note">Change this later in your spellbook.</p>`,
+      `<button class="primary" data-action="accept">Keep the note</button>`,
     );
   else
     panel(
-      "The hour that came home",
-      `<p>The orrery turns. Light runs from window to window, and the college’s long, quiet afternoon finally exhales.</p><p>“There you are,” Iona says to the stars. “We kept your place.”</p><p class="note">Chapter complete. Your spellbook keeps the margin note. Wander a little, or start a fresh visit from Settings.</p>`,
+      "The observatory is open",
+      `<p>“Good. We can take tonight's measurements.” Iona checks her watch. “And I can finally put the kettle on.”</p><p class="note">Chapter complete. You can keep exploring or start again in Settings.</p>`,
     );
 }
 function accept() {
   const type = modal;
+  toastUntil = 0;
+  el("toast").classList.remove("shown");
   close();
   sound.cast(type === "lantern" ? "mend" : "mark");
   if (type === "lesson" || type === "guardian") {
@@ -324,7 +345,7 @@ function accept() {
     el("toast").classList.remove("shown");
     if (client) {
       client.consent(type);
-      toast("Your consent is sent. Waiting for both mages by the marker.");
+      toast("Ready sent. Waiting for your friend nearby.");
     } else {
       battle = createBattle(type, "solo", stage >= 4, {
         variant,
@@ -353,12 +374,17 @@ function accept() {
       save();
     }
     if (type === "lantern") world.effect("mend", "mage1", "mage1", 2);
-    if (type === "discovery")
-      toast("Margin note learned · Folded Sky +3 damage");
+    if (type === "discovery") toast("Signature spell upgraded: +3 damage");
   }
 }
 function chooseSpell(id: SpellId) {
   if (!battle || playing) return;
+  if (
+    !lessonView(battle, seat(), lessonCompleted, expandedCombat).spells.some(
+      (s) => s.id === id,
+    )
+  )
+    return;
   const spell = getSpell(battle, seat(), id),
     actor = battle.actors.find((a) => a.id === seat())!;
   if (
@@ -448,15 +474,18 @@ function renderCombat() {
     shared,
     !!client,
     playbackSpeed,
+    lessonCompleted,
+    expandedCombat,
+    detailedCombat,
   );
 }
 
 function journal() {
   modal = "journal";
   panel(
-    "Your travelling spellbook",
+    "Spellbook",
     `<p><strong>${TRADITIONS[tradition].name}</strong> · ${TRADITIONS[tradition].description}</p>${
-      !battle
+      !battle && stage >= 3
         ? `<div class="tradition-picker">${Object.values(TRADITIONS)
             .map(
               (t) =>
@@ -464,7 +493,7 @@ function journal() {
             )
             .join(
               "",
-            )}</div><p class="note">Changes apply to your next encounter. Your friend chooses independently.</p>`
+            )}</div><p class="note">Changes apply to your next encounter. Your friend chooses separately.</p>`
         : ""
     }<div class="journal-grid">${Object.values(SPELLS)
       .map((base) => {
@@ -480,7 +509,7 @@ function journal() {
 function settings() {
   modal = "settings";
   panel(
-    "Make yourself at home",
+    "Settings",
     `<div class="settings"><label>Camera sensitivity <input id="sensitivity" type="range" min="0.3" max="2" step="0.1" value="${world.sensitivity}"></label><label>Reduced camera motion <input id="reduced" type="checkbox" ${world.reduced ? "checked" : ""}></label><label>Low graphics <input id="quality" type="checkbox" ${world.low ? "checked" : ""}></label><label>Mute sound <input id="mute" type="checkbox" ${sound.muted ? "checked" : ""}></label></div><h3>Essential controls</h3><p class="note">Select a binding, then press a key. Escape closes panels. Number keys 1–6 select spells; Enter confirms a round.</p><div class="bindings">${Object.entries(
       world.bindings,
     )
@@ -497,7 +526,7 @@ let binding: string | null = null;
 function updateSharedStatus() {
   const status = document.getElementById("shared-status");
   if (status)
-    status.textContent = `Connection: ${connection}. ${shared?.paused ? "Waiting safely for both seats." : ""}`;
+    status.textContent = `Connection: ${connection}. ${shared?.paused ? "Waiting for your friend." : ""}`;
 }
 function sharedPanel() {
   modal = "shared";
@@ -506,8 +535,8 @@ function sharedPanel() {
     saved = JSON.parse(localStorage.getItem("orrery-shared-seat-v1") ?? "null");
   } catch {}
   panel(
-    "A friend at the gate",
-    `<p>Visit together in one small shared world. Each mage keeps their own spell plan. Both agree before an encounter begins.</p>${client ? `<p id="shared-status" class="note" role="status">Connection: ${connection}. ${shared?.paused ? "Waiting safely for both seats." : ""}</p>${invitation ? `<label>Private invitation<input id="invite-output" readonly value="${escape(invitation)}"></label>` : ""}<button data-action="rejoin">Reconnect this seat</button><button data-action="solo">Return to local solo</button>` : `<button class="primary" data-action="host">Start a shared visit</button><p>Have an invitation?</p><input id="join-input" placeholder="Paste private invitation link" aria-label="Private invitation"><button data-action="join">Join your friend</button>${saved ? '<button data-action="resume-shared">Rejoin saved seat</button>' : ""}`}<p class="note">Both friends must open this same site. Share the private invitation above; shared and solo saves stay separate.</p>`,
+    "Play with a friend",
+    `<p>Two mages, one shared visit. Each chooses a spell; both confirm before a round starts.</p>${client ? `<p id="shared-status" class="note" role="status">Connection: ${connection}. ${shared?.paused ? "Waiting for your friend." : ""}</p>${invitation ? `<label>Private invitation<input id="invite-output" readonly value="${escape(invitation)}"></label>` : ""}<button data-action="rejoin">Reconnect this seat</button><button data-action="solo">Return to local solo</button>` : `<button class="primary" data-action="host">Start a shared visit</button><p>Have an invitation?</p><input id="join-input" placeholder="Paste private invitation link" aria-label="Private invitation"><button data-action="join">Join your friend</button>${saved ? '<button data-action="resume-shared">Rejoin saved seat</button>' : ""}`}<p class="note">Both friends must open this same site. Share the private invitation above; shared and solo saves stay separate.</p>`,
   );
 }
 function connect(credential: Credential) {
@@ -657,6 +686,14 @@ ui.addEventListener("click", async (e) => {
       case "accept":
         accept();
         break;
+      case "combat-expand":
+        expandedCombat = !expandedCombat;
+        renderCombat();
+        break;
+      case "combat-details":
+        detailedCombat = !detailedCombat;
+        renderCombat();
+        break;
       case "confirm":
         void confirm();
         break;
@@ -668,6 +705,10 @@ ui.addEventListener("click", async (e) => {
         renderCombat();
         break;
       case "leave-battle":
+        if (battle?.kind === "lesson" && battle.phase === "victory") {
+          lessonCompleted = true;
+          localStorage.setItem("orrery-lesson-v1", "yes");
+        }
         if (client) client.leaveBattle();
         else {
           battle = null;
@@ -824,7 +865,9 @@ window.addEventListener("keydown", (e) => {
   else if (e.code === world.bindings.confirm && battle) void confirm();
   else if (/^Digit[1-6]$/.test(e.code)) {
     const id = battle
-      ? availableSpells(battle, seat())[Number(e.code.slice(-1)) - 1]?.id
+      ? lessonView(battle, seat(), lessonCompleted, expandedCombat).spells[
+          Number(e.code.slice(-1)) - 1
+        ]?.id
       : undefined;
     if (id) chooseSpell(id);
   }
@@ -846,10 +889,12 @@ setInterval(() => {
   if (!started) return;
   const p = nearbyPoint(),
     near = Math.hypot(world.position.x - p.x, world.position.z - p.z) < 3.3;
-  el("prompt").innerHTML =
+  const promptHtml =
     near && !modal && !battle && !shared?.paused
       ? `<button data-action="interact"><kbd>${world.bindings.interact.replace("Key", "")}</kbd> ${p.verb} <span>✧</span></button>`
       : "";
+  if (el("prompt").innerHTML !== promptHtml)
+    el("prompt").innerHTML = promptHtml;
   if (performance.now() > toastUntil) el("toast").classList.remove("shown");
 }, 150);
 setInterval(() => {
@@ -904,7 +949,7 @@ for (const name of ["begin", "continue"])
 const beginButton = document.querySelector<HTMLButtonElement>(
   '[data-action="begin"]',
 )!;
-beginButton.textContent = "Opening the gate…";
+beginButton.textContent = "Loading…";
 const loadingTimer = setInterval(() => {
   if (world.loadedAt) {
     clearInterval(loadingTimer);
@@ -912,10 +957,17 @@ const loadingTimer = setInterval(() => {
       (
         document.querySelector(`[data-action="${name}"]`) as HTMLButtonElement
       ).disabled = false;
-    beginButton.innerHTML = "Enter the courtyard <span>→</span>";
+    beginButton.innerHTML = "Begin playing <span>→</span>";
     paintIdentity();
     if (world.loadingErrors.length)
       toast("Some artwork could not load. Reload to try again.");
     update();
   }
 }, 150);
+
+try {
+  const saved = JSON.parse(localStorage.getItem("orrery-solo-v1") ?? "null");
+  (
+    document.querySelector('[data-action="continue"]') as HTMLButtonElement
+  ).hidden = !validateSave(saved);
+} catch {}

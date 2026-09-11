@@ -5,6 +5,7 @@ test-results/
 playwright-report/
 tools/
 art/downloads/
+art/vendor/
 *.blend1
 
 __pycache__/

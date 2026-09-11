@@ -1,0 +1,1332 @@
+{
+  "version": 1,
+  "scenario": "benchmark-actual-input-duo",
+  "started": "2026-09-11T16:52:38.824Z",
+  "endpoint": "http://127.0.0.1:5180",
+  "mockedSockets": false,
+  "injectedCommands": false,
+  "stateFixtures": false,
+  "policy": "One-round deterministic diagnostic scoring of detached battle snapshots; selected commands applied only through spell/target/confirm UI. This is completion/correctness evidence, not human enjoyment.",
+  "results": [
+    {
+      "id": "mixed-book",
+      "variant": "book",
+      "traditions": [
+        "margin",
+        "hearth"
+      ],
+      "recordVideo": false,
+      "started": "2026-09-11T16:52:39.636Z",
+      "checks": [
+        "session created/joined and model/personal traditions selected through DOM",
+        "optional echo shared once without advancing required chapter; local NPC dialogue preserved",
+        "concurrent personal plans accepted; edit after ready cleared joint readiness",
+        "lesson completed through real spell/target/confirm UI; both committed states matched; skip/repeated Enter harmless",
+        "guardian completed through real spell/target/confirm UI; both committed states matched; skip/repeated Enter harmless",
+        "fresh-page and same-client seat rejoin restored completed quest plus optional fact without cinematic replay"
+      ],
+      "encounters": [
+        {
+          "kind": "lesson",
+          "variant": "book",
+          "seed": 1729,
+          "rounds": [
+            {
+              "round": 1,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "mark",
+                  "targetId": "moth1"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "shelter",
+                  "targetId": "mage1"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage1",
+                  "spellId": "strike",
+                  "name": "Paper Flutter",
+                  "amount": 4,
+                  "tier": 2,
+                  "text": "Least ward · 4 damage to Visiting mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 7,
+                  "ember": 4
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 3
+                },
+                {
+                  "id": "moth1",
+                  "hp": 19,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 2,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unfold",
+                  "targetId": "moth1"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "mark",
+                  "targetId": "moth1"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage2",
+                  "spellId": "strike",
+                  "name": "Inkflutter",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "Inscribed wings · 6 damage to Fellow mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 7,
+                  "ember": 0
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 6,
+                  "ember": 2
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            }
+          ],
+          "signatureInspected": true,
+          "result": "victory"
+        },
+        {
+          "kind": "guardian",
+          "variant": "book",
+          "seed": 1730,
+          "rounds": [
+            {
+              "round": 1,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unseal",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "shelter",
+                  "targetId": "mage1"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "mage1",
+                  "spellId": "strike",
+                  "name": "Brass Sweep",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "The brass follows the mage holding most Ember · 6 damage to Visiting mage."
+                },
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage1",
+                  "spellId": "strike",
+                  "name": "Paper Flutter",
+                  "amount": 3,
+                  "tier": 2,
+                  "text": "Least ward · 3 damage to Visiting mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 2,
+                  "ember": 3
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 3
+                },
+                {
+                  "id": "guardian",
+                  "hp": 53,
+                  "ward": 0,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 14,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 2,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "mark",
+                  "targetId": "moth1"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "shelter",
+                  "targetId": "mage2"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "guardian",
+                  "spellId": "rebind",
+                  "name": "Gather the Loose Brass",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "Its broken ward calls the rings home: gain 6 ward, no attack ·"
+                },
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage2",
+                  "spellId": "strike",
+                  "name": "Paper Flutter",
+                  "amount": 3,
+                  "tier": 2,
+                  "text": "Least ward · 3 damage to Fellow mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 4
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 8,
+                  "ember": 3
+                },
+                {
+                  "id": "guardian",
+                  "hp": 53,
+                  "ward": 6,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 5,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 3,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unfold",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "unseal",
+                  "targetId": "guardian"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "guardian",
+                  "spellId": "purge",
+                  "name": "Polish the Margins",
+                  "amount": 4,
+                  "tier": 2,
+                  "text": "An inscription troubles the brass: erase it and gain 4 ward, no attack ·"
+                },
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage1",
+                  "spellId": "strike",
+                  "name": "Inkflutter",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "Inscribed wings · 6 damage to Visiting mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 2
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 8,
+                  "ember": 3
+                },
+                {
+                  "id": "guardian",
+                  "hp": 28,
+                  "ward": 4,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 4,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unseal",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "shelter",
+                  "targetId": "mage2"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "mage2",
+                  "spellId": "heavy",
+                  "name": "Test the Shelter",
+                  "amount": 12,
+                  "tier": 3,
+                  "text": "A strong shelter draws the pendulum; Unstitch halves this strike · 12 damage to Fellow mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 2
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 5,
+                  "ember": 3
+                },
+                {
+                  "id": "guardian",
+                  "hp": 19,
+                  "ward": 0,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 5,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "spark",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "spark",
+                  "targetId": "guardian"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "guardian",
+                  "spellId": "rebind",
+                  "name": "Gather the Loose Brass",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "Its broken ward calls the rings home: gain 6 ward, no attack ·"
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 4
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 5
+                },
+                {
+                  "id": "guardian",
+                  "hp": 9,
+                  "ward": 6,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 6,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unfold",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "shelter",
+                  "targetId": "mage2"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "mage2",
+                  "spellId": "heavy",
+                  "name": "Falling Hour",
+                  "amount": 12,
+                  "tier": 3,
+                  "text": "Its weakened heart swings a desperate pendulum; Unstitch halves this strike · 12 damage to Fellow mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 0
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 11,
+                  "ember": 3
+                },
+                {
+                  "id": "guardian",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            }
+          ],
+          "signatureInspected": true,
+          "result": "victory"
+        }
+      ],
+      "errors": [],
+      "screenshots": [
+        "evidence/local/benchmark-duo/mixed-book/optional-echo.png",
+        "evidence/local/benchmark-duo/mixed-book/lesson-planning.png",
+        "evidence/local/benchmark-duo/mixed-book/lesson-signature-early.png",
+        "evidence/local/benchmark-duo/mixed-book/lesson-signature-middle.png",
+        "evidence/local/benchmark-duo/mixed-book/lesson-victory.png",
+        "evidence/local/benchmark-duo/mixed-book/guardian-planning.png",
+        "evidence/local/benchmark-duo/mixed-book/guardian-joint-forecast.png",
+        "evidence/local/benchmark-duo/mixed-book/guardian-signature-early.png",
+        "evidence/local/benchmark-duo/mixed-book/guardian-signature-middle.png",
+        "evidence/local/benchmark-duo/mixed-book/guardian-victory.png",
+        "evidence/local/benchmark-duo/mixed-book/rejoined-completion.png"
+      ],
+      "final": [
+        {
+          "stage": 5,
+          "facts": {
+            "echo": true
+          },
+          "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+          "viewport": [
+            1280,
+            720
+          ],
+          "drawingBuffer": [
+            1280,
+            720
+          ],
+          "loadingErrors": [],
+          "resources": {
+            "geometries": 129,
+            "textures": 103,
+            "calls": 221,
+            "triangles": 331248
+          },
+          "network": {
+            "sent": 203,
+            "received": 364,
+            "lastAckMs": 249.60000000009313,
+            "maxQueueBytes": 0,
+            "movementPending": false,
+            "movementCorrections": 0,
+            "lastMovementAckMs": 33.8000000002794
+          }
+        },
+        {
+          "stage": 5,
+          "facts": {
+            "echo": true
+          },
+          "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+          "viewport": [
+            1280,
+            720
+          ],
+          "drawingBuffer": [
+            1280,
+            720
+          ],
+          "loadingErrors": [],
+          "resources": {
+            "geometries": 102,
+            "textures": 97,
+            "calls": 221,
+            "triangles": 331248
+          },
+          "network": {
+            "sent": 0,
+            "received": 2,
+            "lastAckMs": 0,
+            "maxQueueBytes": 0,
+            "movementPending": false,
+            "movementCorrections": 0,
+            "lastMovementAckMs": 0
+          }
+        }
+      ],
+      "result": "passed",
+      "videos": [],
+      "completed": "2026-09-11T16:54:17.116Z"
+    },
+    {
+      "id": "same-hand",
+      "variant": "hand",
+      "traditions": [
+        "margin",
+        "margin"
+      ],
+      "recordVideo": false,
+      "started": "2026-09-11T16:54:17.480Z",
+      "checks": [
+        "session created/joined and model/personal traditions selected through DOM",
+        "optional echo shared once without advancing required chapter; local NPC dialogue preserved",
+        "concurrent personal plans accepted; edit after ready cleared joint readiness",
+        "lesson completed through real spell/target/confirm UI; both committed states matched; skip/repeated Enter harmless",
+        "guardian completed through real spell/target/confirm UI; both committed states matched; skip/repeated Enter harmless",
+        "fresh-page and same-client seat rejoin restored completed quest plus optional fact without cinematic replay"
+      ],
+      "encounters": [
+        {
+          "kind": "lesson",
+          "variant": "hand",
+          "seed": 1729,
+          "rounds": [
+            {
+              "round": 1,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "mark",
+                  "targetId": "moth1"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "shelter",
+                  "targetId": "mage1"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage1",
+                  "spellId": "strike",
+                  "name": "Paper Flutter",
+                  "amount": 4,
+                  "tier": 2,
+                  "text": "Least ward · 4 damage to Visiting mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 7,
+                  "ember": 4,
+                  "hand": [
+                    "shelter",
+                    "unfold",
+                    "unfold",
+                    "mark"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 3,
+                  "hand": [
+                    "mark",
+                    "unfold",
+                    "unseal",
+                    "unfold"
+                  ]
+                },
+                {
+                  "id": "moth1",
+                  "hp": 24,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 2,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unfold",
+                  "targetId": "moth1"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "spark",
+                  "targetId": "moth1"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage2",
+                  "spellId": "strike",
+                  "name": "Inkflutter",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "Inscribed wings · 6 damage to Fellow mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 2,
+                  "hand": [
+                    "shelter",
+                    "mend",
+                    "unfold",
+                    "mark"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 32,
+                  "ward": 0,
+                  "ember": 5,
+                  "hand": [
+                    "unfold",
+                    "unseal",
+                    "unfold",
+                    "mark"
+                  ]
+                },
+                {
+                  "id": "moth1",
+                  "hp": 1,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 3,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "shelter",
+                  "targetId": "mage2"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "spark",
+                  "targetId": "moth1"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage2",
+                  "spellId": "strike",
+                  "name": "Paper Flutter",
+                  "amount": 4,
+                  "tier": 2,
+                  "text": "Least ward · 4 damage to Fellow mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 0,
+                  "hand": [
+                    "unseal",
+                    "mend",
+                    "unfold",
+                    "mark"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 32,
+                  "ward": 11,
+                  "ember": 5,
+                  "hand": [
+                    "unseal",
+                    "unfold",
+                    "mark",
+                    "shelter"
+                  ]
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            }
+          ],
+          "signatureInspected": true,
+          "result": "victory"
+        },
+        {
+          "kind": "guardian",
+          "variant": "hand",
+          "seed": 1730,
+          "rounds": [
+            {
+              "round": 1,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "shelter",
+                  "targetId": "mage1"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "unseal",
+                  "targetId": "guardian"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "mage1",
+                  "spellId": "strike",
+                  "name": "Brass Sweep",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "The brass follows the mage holding most Ember · 6 damage to Visiting mage."
+                },
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage1",
+                  "spellId": "strike",
+                  "name": "Paper Flutter",
+                  "amount": 3,
+                  "tier": 2,
+                  "text": "Least ward · 3 damage to Visiting mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 2,
+                  "ember": 3,
+                  "hand": [
+                    "mark",
+                    "unfold",
+                    "unfold",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 3,
+                  "hand": [
+                    "mark",
+                    "unfold",
+                    "shelter",
+                    "mark"
+                  ]
+                },
+                {
+                  "id": "guardian",
+                  "hp": 58,
+                  "ward": 0,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 14,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 2,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "mark",
+                  "targetId": "moth1"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "shelter",
+                  "targetId": "mage2"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "guardian",
+                  "spellId": "rebind",
+                  "name": "Gather the Loose Brass",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "Its broken ward calls the rings home: gain 6 ward, no attack ·"
+                },
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage2",
+                  "spellId": "strike",
+                  "name": "Paper Flutter",
+                  "amount": 3,
+                  "tier": 2,
+                  "text": "Least ward · 3 damage to Fellow mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 4,
+                  "hand": [
+                    "shelter",
+                    "unfold",
+                    "unfold",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 8,
+                  "ember": 3,
+                  "hand": [
+                    "mark",
+                    "unfold",
+                    "unfold",
+                    "mark"
+                  ]
+                },
+                {
+                  "id": "guardian",
+                  "hp": 58,
+                  "ward": 6,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 10,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 3,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unfold",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "spark",
+                  "targetId": "moth1"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "guardian",
+                  "spellId": "purge",
+                  "name": "Polish the Margins",
+                  "amount": 4,
+                  "tier": 2,
+                  "text": "An inscription troubles the brass: erase it and gain 4 ward, no attack ·"
+                },
+                {
+                  "actorId": "moth1",
+                  "targetId": "mage1",
+                  "spellId": "strike",
+                  "name": "Inkflutter",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "Inscribed wings · 6 damage to Visiting mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 2,
+                  "hand": [
+                    "shelter",
+                    "unseal",
+                    "unfold",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 5,
+                  "hand": [
+                    "unfold",
+                    "unfold",
+                    "mark",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "guardian",
+                  "hp": 43,
+                  "ward": 4,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 4,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unseal",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "unfold",
+                  "targetId": "guardian"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "mage2",
+                  "spellId": "strike",
+                  "name": "Brass Sweep",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "The brass follows the mage holding most Ember · 6 damage to Fellow mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 2,
+                  "hand": [
+                    "shelter",
+                    "mark",
+                    "unfold",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 32,
+                  "ward": 0,
+                  "ember": 3,
+                  "hand": [
+                    "shelter",
+                    "unfold",
+                    "mark",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "guardian",
+                  "hp": 18,
+                  "ward": 0,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 5,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "mark",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "mend",
+                  "targetId": "mage2"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "guardian",
+                  "spellId": "rebind",
+                  "name": "Gather the Loose Brass",
+                  "amount": 6,
+                  "tier": 2,
+                  "text": "Its broken ward calls the rings home: gain 6 ward, no attack ·"
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 3,
+                  "hand": [
+                    "shelter",
+                    "mark",
+                    "unfold",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 2,
+                  "hand": [
+                    "shelter",
+                    "unfold",
+                    "mark",
+                    "mark"
+                  ]
+                },
+                {
+                  "id": "guardian",
+                  "hp": 14,
+                  "ward": 6,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 6,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "mark",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "shelter",
+                  "targetId": "mage1"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "mage1",
+                  "spellId": "heavy",
+                  "name": "Falling Hour",
+                  "amount": 12,
+                  "tier": 3,
+                  "text": "Its weakened heart swings a desperate pendulum; Unstitch halves this strike · 12 damage to Visiting mage."
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 37,
+                  "ward": 0,
+                  "ember": 4,
+                  "hand": [
+                    "shelter",
+                    "unfold",
+                    "unfold",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 2,
+                  "hand": [
+                    "unfold",
+                    "unfold",
+                    "mark",
+                    "mark"
+                  ]
+                },
+                {
+                  "id": "guardian",
+                  "hp": 10,
+                  "ward": 6,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            },
+            {
+              "round": 7,
+              "plans": [
+                {
+                  "actorId": "mage1",
+                  "spellId": "unfold",
+                  "targetId": "guardian"
+                },
+                {
+                  "actorId": "mage2",
+                  "spellId": "spark",
+                  "targetId": "guardian"
+                }
+              ],
+              "intentions": [
+                {
+                  "actorId": "guardian",
+                  "targetId": "guardian",
+                  "spellId": "purge",
+                  "name": "Polish the Margins",
+                  "amount": 4,
+                  "tier": 2,
+                  "text": "An inscription troubles the brass: erase it and gain 4 ward, no attack ·"
+                }
+              ],
+              "ending": [
+                {
+                  "id": "mage1",
+                  "hp": 37,
+                  "ward": 0,
+                  "ember": 0,
+                  "hand": [
+                    "shelter",
+                    "shelter",
+                    "unfold",
+                    "mend"
+                  ]
+                },
+                {
+                  "id": "mage2",
+                  "hp": 38,
+                  "ward": 0,
+                  "ember": 2,
+                  "hand": [
+                    "unfold",
+                    "mark",
+                    "mark",
+                    "shelter"
+                  ]
+                },
+                {
+                  "id": "guardian",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                },
+                {
+                  "id": "moth1",
+                  "hp": 0,
+                  "ward": 0,
+                  "ember": 0
+                }
+              ]
+            }
+          ],
+          "signatureInspected": true,
+          "result": "victory"
+        }
+      ],
+      "errors": [],
+      "screenshots": [
+        "evidence/local/benchmark-duo/same-hand/optional-echo.png",
+        "evidence/local/benchmark-duo/same-hand/lesson-planning.png",
+        "evidence/local/benchmark-duo/same-hand/lesson-signature-early.png",
+        "evidence/local/benchmark-duo/same-hand/lesson-signature-middle.png",
+        "evidence/local/benchmark-duo/same-hand/lesson-victory.png",
+        "evidence/local/benchmark-duo/same-hand/guardian-planning.png",
+        "evidence/local/benchmark-duo/same-hand/guardian-joint-forecast.png",
+        "evidence/local/benchmark-duo/same-hand/guardian-signature-early.png",
+        "evidence/local/benchmark-duo/same-hand/guardian-signature-middle.png",
+        "evidence/local/benchmark-duo/same-hand/guardian-victory.png",
+        "evidence/local/benchmark-duo/same-hand/rejoined-completion.png"
+      ],
+      "final": [
+        {
+          "stage": 5,
+          "facts": {
+            "echo": true
+          },
+          "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+          "viewport": [
+            1280,
+            720
+          ],
+          "drawingBuffer": [
+            1280,
+            720
+          ],
+          "loadingErrors": [],
+          "resources": {
+            "geometries": 129,
+            "textures": 103,
+            "calls": 221,
+            "triangles": 331248
+          },
+          "network": {
+            "sent": 195,
+            "received": 357,
+            "lastAckMs": 201.5,
+            "maxQueueBytes": 0,
+            "movementPending": false,
+            "movementCorrections": 0,
+            "lastMovementAckMs": 52.299999999813735
+          }
+        },
+        {
+          "stage": 5,
+          "facts": {
+            "echo": true
+          },
+          "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+          "viewport": [
+            1280,
+            720
+          ],
+          "drawingBuffer": [
+            1280,
+            720
+          ],
+          "loadingErrors": [],
+          "resources": {
+            "geometries": 102,
+            "textures": 97,
+            "calls": 221,
+            "triangles": 331248
+          },
+          "network": {
+            "sent": 0,
+            "received": 2,
+            "lastAckMs": 0,
+            "maxQueueBytes": 0,
+            "movementPending": false,
+            "movementCorrections": 0,
+            "lastMovementAckMs": 0
+          }
+        }
+      ],
+      "result": "passed",
+      "videos": [],
+      "completed": "2026-09-11T16:55:54.040Z"
+    }
+  ],
+  "completed": "2026-09-11T16:55:55.200Z",
+  "performanceCaveat": "Two real game clients share one local GPU; optional RECORD_VIDEO=1 adds recording cost. Screenshots are always captured. No benchmark performance claims are drawn from this walkthrough. No two-device internet validation."
+}

@@ -3,7 +3,7 @@ import { applyCommand, hydrateCampaign, initialCampaign, parseCommand, snapshot,
 
 interface Env { CAMPAIGNS: DurableObjectNamespace<Campaign>; ASSETS: Fetcher; SESSION_CREATION: RateLimit }
 interface Stored { state: CampaignState; tokens: Partial<Record<Seat, string>>; invitation: string; acknowledgements: { seat: Seat; ack: Ack }[] }
-interface Attachment { seat: Seat; window: number; count: number; movementAt: number; position: { x: number; z: number; yaw: number } }
+interface Attachment { seat: Seat; window: number; count: number; movementAt: number; movementCredit?: number; position: { x: number; z: number; yaw: number } }
 const opaque = () => crypto.randomUUID().replaceAll('-', '') + crypto.randomUUID().replaceAll('-', '');
 const json = (v: unknown, status = 200) => Response.json(v, { status, headers: { 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer' } });
 async function limitedBody(request: Request): Promise<string | null> {
@@ -73,7 +73,7 @@ export class Campaign extends DurableObject<Env> {
     }
     const pair = new WebSocketPair();
     this.ctx.acceptWebSocket(pair[1], [seat]);
-    pair[1].serializeAttachment({ seat, window: Date.now(), count: 0, movementAt: Date.now(), position: this.saved.state.positions[seat] } satisfies Attachment);
+    pair[1].serializeAttachment({ seat, window: Date.now(), count: 0, movementAt: Date.now(), movementCredit: 0.7, position: this.saved.state.positions[seat] } satisfies Attachment);
     this.broadcast();
     return new Response(null, { status: 101, webSocket: pair[0], headers: { 'Sec-WebSocket-Protocol': 'wizard-v1' } });
   }
@@ -92,19 +92,29 @@ export class Campaign extends DurableObject<Env> {
     const previous = this.saved.acknowledgements.find(x => x.seat === a.seat && x.ack.commandId === command.commandId);
     if (previous) { ws.send(JSON.stringify(previous.ack)); ws.send(JSON.stringify(snapshot(this.saved.state, this.connected()))); return; }
     if (command.kind === 'move') {
-      if (now - a.movementAt < 65) return;
+      const correctMovement = (reason: string) => ws.send(JSON.stringify({ type: 'movement', version: 1, seat: a.seat, commandId: command.commandId, position: this.saved!.state.positions[a.seat], correction: true, reason }));
+      // Reliable ordered transport may deliver several capped-rate client updates
+      // together after scheduling stalls. Do not discard their final position
+      // based on arrival spacing. Distance credit tolerates that burst while
+      // preserving a 7m/s sustained bound and a maximum 5m burst/displacement.
+      a.movementCredit = Math.min(5, (a.movementCredit ?? 0.7) + Math.max(0, now - a.movementAt) / 1000 * 7);
+      a.movementAt = now;
       const distance = Math.hypot(command.position.x - a.position.x, command.position.z - a.position.z);
-      if (distance > Math.min(5, (now - a.movementAt) / 1000 * 7 + 0.7)) {
-        ws.send(JSON.stringify({ type: 'error', version: 1, reason: 'Movement exceeded the walking bounds.' }));
-        ws.send(JSON.stringify(snapshot(this.saved.state, this.connected()))); return;
+      if (distance > a.movementCredit + 1e-6) {
+        ws.serializeAttachment(a);
+        correctMovement('Your walking position was restored after a connection delay. Walk closer and try again.'); return;
       }
       const result = applyCommand(this.saved.state, a.seat, command, this.connected());
       if (result.ack.accepted) {
         this.saved.state = result.state;
-        a.movementAt = now; a.position = command.position; ws.serializeAttachment(a);
+        a.movementCredit = Math.max(0, a.movementCredit - distance); a.position = command.position; ws.serializeAttachment(a);
+        // Ephemeral receipt: no acknowledgement history or SQLite write for movement.
+        ws.send(JSON.stringify({ type: 'movement', version: 1, seat: a.seat, commandId: command.commandId, position: command.position, correction: false }));
         const movement = JSON.stringify({ type: 'movement', version: 1, seat: a.seat, position: command.position });
-        for (const other of this.ctx.getWebSockets()) if (other !== ws) other.send(movement);
-      }
+        for (const other of this.ctx.getWebSockets()) if (other !== ws && other.readyState === 1) {
+          try { other.send(movement); } catch { /* Peer closing; its rejoin snapshot restores current positions. */ }
+        }
+      } else correctMovement(result.ack.reason ?? 'Walking is paused. Your shared position was restored.');
       return;
     }
     if (command.kind === 'sync') { ws.send(JSON.stringify(snapshot(this.saved.state, this.connected()))); return; }

@@ -63,3 +63,7 @@ be added independently without deployment credentials or deploy steps.
 No browser, GPU, public endpoint, paid service, credential file, dashboard, or Git
 mutation was used by this audit. Only the named source/tests and this review were
 edited; the lead owns integration and evidence claims.
+
+## Bunched movement regression
+
+The first integrated duo recording stopped at the lantern because the 65ms arrival gate lost final walking positions. A real Node WebSocket/DO probe reproduced eight 0.4m positions arriving together: only the first survived. The server now consumes cumulative distance credit (initial0.7m, cap5m, refill7m/s) for all ordered updates; the existing30-message/s ceiling remains. Movement attachments survive hibernation and ordinary movement still makes no SQLite writes. The same real probe accepts the final position and rejects a subsequent over5m jump. Run `node tests/network-movement-real.mjs`; it is a local protocol burst, not renderer, UI, geographic latency or packet-loss evidence.

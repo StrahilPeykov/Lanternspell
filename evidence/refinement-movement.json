@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "scenario": "real-local-authority-bunched-movement",
+  "endpoint": "http://127.0.0.1:5180",
+  "timestamp": "2026-09-11T16:51:34.087Z",
+  "result": "passed",
+  "mockedSockets": false,
+  "gameplayInput": false,
+  "stateInjection": false,
+  "applicationDeliveryBurst": true,
+  "realPacketLoss": false,
+  "separateDevices": false,
+  "burst": {
+    "waitMs": 1200,
+    "updates": 8,
+    "distancePerUpdate": 0.4,
+    "start": {
+      "x": -0.7,
+      "z": 10,
+      "yaw": 0
+    },
+    "expected": {
+      "x": 2.5,
+      "z": 10,
+      "yaw": 0
+    },
+    "actual": {
+      "x": 2.5,
+      "z": 10,
+      "yaw": 0
+    }
+  },
+  "clientBackpressure": {
+    "source": "actual SharedClient",
+    "applicationReceiptDelayMs": 600,
+    "inputPositions": 101,
+    "movementPacketsBeforeAck": 1,
+    "movementPacketsToReachFinal": 2,
+    "start": {
+      "x": 2.5,
+      "z": 10,
+      "yaw": 0
+    },
+    "final": {
+      "x": -1.5,
+      "z": 10,
+      "yaw": 0
+    },
+    "correctionCount": 1
+  },
+  "checks": [
+    "Final position of ordered burst accepted",
+    "Over-5m jump returns explicit authoritative correction",
+    "One movement in flight and one coalesced latest position",
+    "NPC interaction waits for final movement and succeeds",
+    "Correction clears pending state and subsequent legal walking succeeds"
+  ]
+}

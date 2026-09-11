@@ -6,6 +6,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { relative } from 'node:path';
 
 const base = process.env.GAME_URL || 'http://127.0.0.1:5180';
+const recordVideo = process.env.RECORD_VIDEO === '1';
 const scenarios = [
   { id: 'mixed-book', variant: 'book', traditions: ['margin', 'hearth'] },
   { id: 'same-hand', variant: 'hand', traditions: ['margin', 'margin'] },
@@ -90,15 +91,34 @@ try {
   for (const scenario of scenarios) {
     const directory = `evidence/local/benchmark-duo/${scenario.id}`;
     await mkdir(directory, { recursive: true });
-    const contexts = await Promise.all([0, 1].map(() => browser.newContext({ viewport: { width: 1280, height: 720 }, recordVideo: { dir: directory, size: { width: 1280, height: 720 } } })));
+    const contexts = await Promise.all([0, 1].map(() => browser.newContext({ viewport: { width: 1280, height: 720 }, ...(recordVideo ? { recordVideo: { dir: directory, size: { width: 1280, height: 720 } } } : {}) })));
     const pages = await Promise.all(contexts.map(c => c.newPage())); const [host, guest] = pages;
-    const evidence = { ...scenario, started: new Date().toISOString(), checks: [], encounters: [], errors: [], screenshots: [] };
+    const evidence = { ...scenario, recordVideo, started: new Date().toISOString(), checks: [], encounters: [], errors: [], screenshots: [] };
     const bothUntil = predicate => Promise.all(pages.map(page => until(page, predicate)));
-    pages.forEach((page, i) => { page.setDefaultTimeout(15000); page.on('pageerror', error => evidence.errors.push({ client: i, message: error.message })); });
+    const transportErrors = [];
+    pages.forEach((page, i) => {
+      page.setDefaultTimeout(15000);
+      page.on('pageerror', error => evidence.errors.push({ client: i, message: error.message }));
+      page.on('websocket', socket => socket.on('framereceived', event => {
+        try { const message = JSON.parse(String(event.payload));
+          if (message.type === 'error' || message.type === 'ack' && !message.accepted) {
+            transportErrors.push({ client: i, type: message.type, reason: message.reason, at: Date.now() });
+            if (transportErrors.length > 24) transportErrors.shift();
+          }
+        } catch { /* Non-JSON transport frame is not a gameplay assertion. */ }
+      }));
+    });
     const capture = async (page, name) => { const path = `${directory}/${name}.png`; await page.screenshot({ path }); evidence.screenshots.push(path); };
     async function walkBoth(x, z) { await Promise.all(pages.map(page => walkTo(page, x, z))); }
     async function skipBoth() {
-      for (const page of pages) if ((await inspect(page)).playing) await action(page, 'skip');
+      for (const page of pages) if ((await inspect(page)).playing) {
+        try { await page.locator('[data-action="skip"]').click({ force: true, timeout: 1200 }); }
+        catch (error) {
+          // Natural completion can remove the button between the read and click.
+          // Accept only that completed presentation, never a still-playing failure.
+          if ((await inspect(page)).playing) throw error;
+        }
+      }
       await bothUntil(() => !window.__orrery.playing);
     }
     async function encounter(kind) {
@@ -115,6 +135,8 @@ try {
         if (before.phase !== 'planning') break;
         const choice = await choosePlans(host); assert.ok(choice?.plans.length, 'A worthwhile legal action must remain available.');
         await Promise.all(choice.plans.map(plan => selectPlan(plan.actorId === 'mage1' ? host : guest, plan)));
+        await bothUntil(() => /after this round/i.test(document.querySelector('.round-forecast')?.textContent ?? ''));
+        if (kind === 'guardian' && before.round === 1) await capture(host, 'guardian-joint-forecast');
         if (kind === 'lesson' && before.round === 1) {
           await action(host, 'confirm'); await bothUntil(() => !!window.__orrery.shared.ready.mage1);
           const guestOriginal = choice.plans.find(p => p.actorId === 'mage2');
@@ -184,13 +206,13 @@ try {
       evidence.final = await Promise.all(pages.map(async page => { const s = await inspect(page); return { stage: s.stage, facts: factsOf(s), renderer: s.renderer, viewport: s.viewport, drawingBuffer: s.drawingBuffer, loadingErrors: s.loadingErrors, resources: s.resources, network: s.metrics }; }));
       assert.deepEqual(evidence.errors, []); evidence.result = 'passed';
     } catch (error) {
-      evidence.result = 'failed'; evidence.failure = String(error); process.exitCode = 1;
+      evidence.result = 'failed'; evidence.failure = String(error); evidence.transportErrors = transportErrors; process.exitCode = 1;
       evidence.failureState = await Promise.all(pages.map(async page => { try { return await inspect(page); } catch { return null; } }));
       await Promise.all(pages.map((page, i) => capture(page, `failure-client-${i}`).catch(() => {})));
       console.error(`${scenario.id}:`, error);
     } finally {
       await Promise.all(contexts.map(context => context.close()));
-      evidence.videos = await Promise.all(pages.map(async page => relative(process.cwd(), await page.video().path()).replaceAll('\\', '/')));
+      evidence.videos = recordVideo ? await Promise.all(pages.map(async page => relative(process.cwd(), await page.video().path()).replaceAll('\\', '/'))) : [];
       evidence.completed = new Date().toISOString(); report.results.push(evidence);
       await writeFile(`${directory}/report.json`, JSON.stringify(evidence, null, 2));
       console.log(JSON.stringify({ scenario: scenario.id, result: evidence.result, rounds: evidence.encounters.map(e => ({ kind: e.kind, rounds: e.rounds.length })), failure: evidence.failure }));
@@ -199,6 +221,6 @@ try {
   }
 } finally {
   await browser.close(); report.completed = new Date().toISOString();
-  report.performanceCaveat = 'Two recording game clients share one local GPU; no benchmark performance claims are drawn from this walkthrough. No two-device internet validation.';
+  report.performanceCaveat = 'Two real game clients share one local GPU; optional RECORD_VIDEO=1 adds recording cost. Screenshots are always captured. No benchmark performance claims are drawn from this walkthrough. No two-device internet validation.';
   await writeFile(process.env.EVIDENCE_FILE || 'evidence/benchmark-duo.json', JSON.stringify(report, null, 2));
 }

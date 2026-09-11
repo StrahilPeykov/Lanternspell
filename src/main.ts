@@ -161,7 +161,7 @@ function update() {
   el("subobjective").textContent = client
     ? shared?.paused
       ? "Shared visit · waiting for your friend"
-      : `Shared visit · ${seat() === "mage1" ? "Tideglass" : "Rosewood"} mage`
+      : `Shared visit · ${TRADITIONS[tradition].name}`
     : stage === 5
       ? "A small story, completed."
       : TRADITIONS[tradition].name + " · The Sleeping Orrery";
@@ -299,14 +299,14 @@ function interact() {
     panel(
       stage === 2 ? "A lesson with wings" : "The Drowsing Atlas",
       stage === 2
-        ? `<p>The college’s practice moth opens its paper wings. Its edges are soft; its intentions are plainly written.</p><p>Choose one spell each round. <strong>${spellView("mark").name}</strong> helps now and prepares a target; <strong>${spellView("unfold").name}</strong> turns that seed into a constellation. Your free <strong>${spellView("spark").name}</strong> always works. ${variant === "hand" ? "Used pages refill from a visible seeded cycle." : "Your full prepared book is available."}</p><p class="note">The queue previews the order. Wards & remedies → quick spells → unfolding → heavy strikes.</p>`
-        : `<p>Brass rings turn around the guardian’s sleeping heart. A stubborn ward holds them shut.</p><p><strong>Unstitch</strong> opens wards and softens a heavy strike. Protect or mend yourself when the pendulum rises. Its intention responds to wards, inscriptions and shelter, then stays fixed while you plan.</p><p class="note">${client ? "Both mages must choose to begin. Your friend’s dialogue stays their own." : "This is a solo encounter. Every spell in your book works for you."}</p>`,
+        ? `<p>The college’s practice moth opens its paper wings. Its edges are soft; its intentions are plainly written.</p><p>Choose one spell each round. <strong>${spellView("mark").name}</strong> helps now and prepares a target; <strong>${spellView("unfold").name}</strong> turns that seed into a constellation. Your free <strong>${spellView("spark").name}</strong> always works. ${variant === "hand" ? "Paid pages replace their own slot. Your free spell turns the leftmost page into the visible next page." : "Your full prepared book is available."}</p><p class="note">The queue previews the order. Wards & remedies → quick spells → unfolding → heavy strikes.</p>`
+        : `<p>Brass rings turn around the guardian’s sleeping heart. A stubborn ward holds them shut.</p><p><strong>${spellView("unseal").name}</strong> opens wards and softens a heavy strike. Protect or mend yourself when the pendulum rises. Its intention responds to wards, inscriptions and shelter, then stays fixed while you plan.</p><p class="note">${client ? "Both mages must choose to begin. Your friend’s dialogue stays their own." : "This is a solo encounter. Every spell in your book works for you."}</p>`,
       `<button class="primary" data-action="accept">${client ? "I’m ready to begin" : "Begin encounter"} →</button>`,
     );
   else if (stage === 3)
     panel(
       "A sky between the pages",
-      `<p>A handwritten note peeks from a weathered field book:</p><blockquote>“A constellation is a promise that small lights can make something together.”</blockquote><p>You copy the pattern into your own book. <strong>Folded Sky now deals 3 more damage.</strong> The same spell; a deeper understanding.</p>`,
+      `<p>A handwritten note peeks from a weathered field book:</p><blockquote>“A constellation is a promise that small lights can make something together.”</blockquote><p>You copy the pattern into your own book. <strong>${spellView("unfold").name} now deals 3 more damage.</strong> The same spell; a deeper understanding.</p>`,
       `<button class="primary" data-action="accept">Keep the margin note ✧</button>`,
     );
   else
@@ -496,7 +496,8 @@ function settings() {
 let binding: string | null = null;
 function updateSharedStatus() {
   const status = document.getElementById("shared-status");
-  if (status) status.textContent = `Connection: ${connection}. ${shared?.paused ? "Waiting safely for both seats." : ""}`;
+  if (status)
+    status.textContent = `Connection: ${connection}. ${shared?.paused ? "Waiting safely for both seats." : ""}`;
 }
 function sharedPanel() {
   modal = "shared";
@@ -562,6 +563,11 @@ function connect(credential: Credential) {
       }
     },
     onError: toast,
+    onNotice: toast,
+    onMovementCorrection: (position, reason) => {
+      world.position = { ...position };
+      toast(reason);
+    },
     onResult: (events) => {
       void present(events);
     },

@@ -200,5 +200,5 @@ try {
 } finally {
   await browser.close(); report.completed = new Date().toISOString();
   report.performanceCaveat = 'Two recording game clients share one local GPU; no benchmark performance claims are drawn from this walkthrough. No two-device internet validation.';
-  await writeFile('evidence/benchmark-duo.json', JSON.stringify(report, null, 2));
+  await writeFile(process.env.EVIDENCE_FILE || 'evidence/benchmark-duo.json', JSON.stringify(report, null, 2));
 }

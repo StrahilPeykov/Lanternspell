@@ -1,5 +1,11 @@
 # Cloudflare deployment
 
+## Current publication hold — 2026-09-11
+
+The benchmark assignment explicitly prohibits public deployment. Before pushing its checkpoints, the lead changed **both production deploy and non-production version commands** in the existing Worker dashboard to `npx wrangler deploy --dry-run` and saved them. Build command remains `npm run build`. Leave these commands in dry-run mode until the owner explicitly authorizes another publication. Direct pushes to main remain authorized; this pass does not update the public game. No billing or runtime resource changes were made.
+
+The September 10 deployment details below are historical; their publishing command is not the current dashboard command.
+
 2026-09-10: the owner requested repair of the existing Lanternspell Workers deployment and cross-network shared play. The signed-in account's Workers plans page showed **Free / Current plan** before any deployment change. Keep that plan; no paid services, billing changes, TURN, or new providers are required.
 
 ## Build settings

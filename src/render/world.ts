@@ -79,16 +79,19 @@ export class World {
     public canvas: HTMLCanvasElement,
     public onMove: (p: Position) => void,
   ) {
+    const renderProbe = import.meta.env.DEV
+      ? new URLSearchParams(location.search).get("renderProbe")
+      : null;
     this.renderer = new T.WebGLRenderer({
       canvas,
-      antialias: true,
+      antialias: renderProbe !== "no-aa",
       alpha: false,
       powerPreference: "high-performance",
     });
     this.renderer.outputColorSpace = T.SRGBColorSpace;
     this.renderer.toneMapping = T.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = 1.1;
-    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.enabled = renderProbe !== "no-shadows";
     this.renderer.shadowMap.type = T.PCFShadowMap;
     this.scene.background = new T.Color("#b9d7d6");
     this.scene.fog = new T.Fog("#b9d7d6", 35, 110);
@@ -685,6 +688,7 @@ export class World {
       );
     }
     for (let i = 0; i < this.mixers.length; i++) {
+      if (![this.player, this.npc, this.partner][i].visible) continue;
       const walk = i === 0 && this.moving;
       const acts = this.actions[i];
       if (acts.length > 1) {

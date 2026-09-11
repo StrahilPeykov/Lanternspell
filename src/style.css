@@ -839,6 +839,22 @@ input:not([type="range"], [type="checkbox"], [type="file"]) {
   margin-top: 8px;
   color: #decf9e;
 }
+.round-forecast {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 15px;
+  align-items: center;
+  margin: 8px 0 0;
+  padding: 7px 10px;
+  background: #b4d5bf12;
+  border-left: 2px solid #adc8a6;
+  font: 11px/1.4 var(--sans);
+  color: #d8e3cd;
+}
+.round-forecast > b { color: #adc8a6; font-size: 10px; text-transform: uppercase; letter-spacing: .8px; }
+.round-forecast .forecast-hurt { color: #f1c7a4; }
+.round-forecast .forecast-down { color: #ffb7a1; }
+.round-forecast.muted { color: #bcc7b7; }
 .laboratory {
   margin-top: 18px;
   font: 12px/1.6 var(--sans);

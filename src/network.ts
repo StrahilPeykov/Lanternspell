@@ -32,18 +32,28 @@ export class SharedClient {
     const data = await response.json() as Credential & { error?: string }; if (!response.ok) throw new Error(data.error ?? 'Session request failed.'); return data;
   }
   connect() {
-    this.socket?.close(); this.callbacks.onConnection?.('connecting'); this.initialized = false;
+    const previous = this.socket;
+    this.socket = undefined;
+    previous?.close();
+    if (this.movementTimer) clearTimeout(this.movementTimer);
+    this.movementTimer = null; this.pendingMovement = null; this.lastSentPosition = null;
+    this.callbacks.onConnection?.('connecting'); this.initialized = false;
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
     if (protocol === 'ws:' && !['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) throw new Error('Shared play requires HTTPS outside localhost.');
     const ws = new WebSocket(`${protocol}//${location.host}/api/session/${this.credential.sessionId}`, ['wizard-v1', `seat.${this.credential.token}`]);
     this.socket = ws;
     ws.onopen = () => {
+      if (this.socket !== ws) return;
       this.callbacks.onConnection?.('connected');
       // Retried commands retain their IDs; the authority replays acknowledgements.
       for (const { command } of this.pending.values()) this.transmit(command);
     };
-    ws.onclose = () => { if (this.socket === ws) this.callbacks.onConnection?.('disconnected'); };
-    ws.onerror = () => this.callbacks.onError?.('Shared connection interrupted. Rejoin keeps your seat and committed results.');
+    ws.onclose = () => {
+      if (this.socket !== ws) return;
+      this.socket = undefined;
+      this.callbacks.onConnection?.('disconnected');
+    };
+    ws.onerror = () => { if (this.socket === ws) this.callbacks.onError?.('Shared connection interrupted. Rejoin keeps your seat and committed results.'); };
     ws.onmessage = e => {
       this.metrics.received++;
       const handle = () => {
@@ -73,7 +83,7 @@ export class SharedClient {
     if (this.socket.bufferedAmount > 64 * 1024) { this.callbacks.onError?.('Connection queue is full. Rejoin to retry safely.'); return; }
     this.socket.send(JSON.stringify(command)); this.metrics.sent++;
   }
-  command(body: CommandBody, commandId = crypto.randomUUID()): string {
+  command(body: CommandBody, commandId: string = crypto.randomUUID()): string {
     const command = { ...body, version: 1 as const, commandId };
     if (body.kind !== 'move' && body.kind !== 'sync') {
       if (this.pending.size >= 32) { this.callbacks.onError?.('Too many pending actions. Wait for the connection.'); return commandId; }
@@ -109,5 +119,14 @@ export class SharedClient {
     const wait = Math.max(0, 100 - (performance.now() - this.lastMovement));
     if (wait === 0) flush(); else this.movementTimer = setTimeout(flush, wait);
   }
-  close() { if (this.movementTimer) clearTimeout(this.movementTimer); this.socket?.close(1000, 'Left shared session'); this.pendingMovement = null; }
+  close() {
+    // Permanent departure (including switching to solo) invalidates queued receive
+    // callbacks before closing. A later close event must not pause the new game.
+    const previous = this.socket;
+    this.socket = undefined;
+    if (this.movementTimer) clearTimeout(this.movementTimer);
+    this.movementTimer = null; this.pendingMovement = null; this.lastSentPosition = null;
+    this.pending.clear(); this.snapshot = null; this.initialized = false;
+    previous?.close(1000, 'Left shared session');
+  }
 }

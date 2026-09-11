@@ -6,16 +6,16 @@ const rand = (n: number) => {
 };
 export function buildEnvironment(w: World) {
   const grass = w.material("#8ca978", "leaf"),
-    path = w.material("#d8c59e", "stone"),
+    path = w.material("#d8c59e"),
     roof = w.material("#426875", "stone"),
     wood = w.material("#795d43", "stone"),
     dark = w.material("#254958"),
     pink = w.material("#df8e89");
   w.box(180, 0.6, 180, grass, 0, -0.4, -15);
-  w.box(26, 0.12, 39, path, 0, -0.05, -3.5);
+  w.box(26, 0.12, 39, w.material("#a79b83"), 0, -0.05, -3.5);
   // Broad, irregular paving with quiet variation, instanced to keep draw calls bounded.
   const tiles = new T.InstancedMesh(
-    new T.BoxGeometry(1.22, 0.035, 1.23),
+    new T.BoxGeometry(1.26, 0.035, 1.26),
     path,
     600,
   );
@@ -27,14 +27,14 @@ export function buildEnvironment(w: World) {
         new T.Vector3(x + (Math.round(z * 10) % 2) * 0.15, 0.036, z),
         new T.Quaternion().setFromAxisAngle(
           new T.Vector3(0, 1, 0),
-          (rand(count) - 0.5) * 0.065,
+          (rand(count) - 0.5) * 0.025,
         ),
-        new T.Vector3(0.92 + rand(count + 2) * 0.08, 1, 0.96),
+        new T.Vector3(0.985 + rand(count + 2) * 0.015, 1, 0.99),
       );
       tiles.setMatrixAt(count, mat);
       tiles.setColorAt(
         count,
-        new T.Color().setHSL(0.11, 0.24, 0.61 + rand(count) * 0.17),
+        new T.Color().setHSL(0.11, 0.16, 0.78 + rand(count) * 0.09),
       );
       count++;
     }
@@ -51,50 +51,73 @@ export function buildEnvironment(w: World) {
   }
   // Hero facades and social anchor arrive from the authored courtyard GLB.
   // Garden borders leave a clear central route and little pockets to explore.
+  // Folded opaque leaves replace smooth horizontal discs; six triangles per
+  // leaf keep readable paired growth cheaper than the previous small spheres.
+  const leafShape = new T.BufferGeometry();
+  leafShape.setAttribute(
+    "position",
+    new T.Float32BufferAttribute(
+      [
+        0, 0, 0, 0.12, 0.04, -0.07, 0.3, 0.1, 0, 0.12, 0.04, 0.07, 0.12, 0.085,
+        0,
+      ],
+      3,
+    ),
+  );
+  leafShape.setIndex([0, 4, 1, 1, 4, 2, 2, 4, 3, 3, 4, 0, 0, 1, 2, 0, 2, 3]);
+  // Match primitive attributes so leaves and stems retain their shared batch.
+  leafShape.setAttribute(
+    "uv",
+    new T.Float32BufferAttribute([0, 0.5, 0.4, 0, 1, 0.5, 0.4, 1, 0.4, 0.5], 2),
+  );
+  leafShape.computeVertexNormals();
   for (const x of [-6.6, 6.6])
     for (const z of [9, 2, -6, -13]) {
       w.box(2.5, 0.27, 3.8, w.stone, x, 0.15, z);
       w.box(2.25, 0.1, 3.55, grass, x, 0.33, z);
       for (let i = 0; i < 16; i++) {
         const px = x + (rand(i + z * 4) - 0.5) * 2,
-          pz = z + (rand(i + 100 + z * 4) - 0.5) * 3;
+          pz = z + (rand(i + 100 + z * 4) - 0.5) * 3,
+          height = 0.27 + rand(i + z * 7) * 0.27,
+          bloomY = 0.39 + height;
         const stem = w.mesh(
-          new T.CylinderGeometry(0.025, 0.035, 0.4, 5),
+          new T.CylinderGeometry(0.018, 0.025, height, 5, 1, true),
           w.green,
           px,
-          0.55,
+          0.39 + height / 2,
           pz,
         );
         stem.castShadow = false;
+        stem.receiveShadow = false;
         for (let petal = 0; petal < 5; petal++) {
           const a = (petal * Math.PI * 2) / 5;
           const fl = w.mesh(
             new T.SphereGeometry(0.074, 6, 3),
             pink,
             px + Math.cos(a) * 0.09,
-            0.73 + Math.sin(a) * 0.035,
+            bloomY + Math.sin(a) * 0.035,
             pz + Math.sin(a) * 0.09,
           );
           fl.scale.set(1.4, 0.7, 0.9);
           fl.castShadow = false;
+          fl.receiveShadow = false;
         }
         const center = w.mesh(
           new T.SphereGeometry(0.043, 5, 3),
           w.gold,
           px,
-          0.78,
+          bloomY + 0.045,
           pz,
         );
         center.castShadow = false;
-        const leaf = w.mesh(
-          new T.SphereGeometry(0.1, 6, 3),
-          w.green,
-          px + 0.05,
-          0.46,
-          pz,
-        );
-        leaf.scale.set(2, 0.35, 0.7);
-        leaf.castShadow = false;
+        center.receiveShadow = false;
+        for (let side = 0; side < 2; side++) {
+          const leaf = w.mesh(leafShape, w.green, px, 0.41 + side * 0.055, pz);
+          leaf.rotation.y = rand(i + z) * Math.PI * 2 + side * Math.PI;
+          leaf.scale.setScalar(0.85 + rand(i + side * 10) * 0.5);
+          leaf.castShadow = false;
+          leaf.receiveShadow = false;
+        }
       }
     }
   for (const x of [-7.3, 7.3])
@@ -111,15 +134,21 @@ export function buildEnvironment(w: World) {
       grass,
     );
   }
+  // Two low overlapping ridgelines preserve a sky opening around the orrery.
+  // Distant landscape silhouettes need neither shadow-map submission nor lookup.
   for (let i = 0; i < 12; i++) {
-    const m = w.sphere(
-      15 + rand(i) * 13,
-      w.material(i % 2 ? "#759996" : "#98b2a1"),
-      -75 + i * 13,
-      -4,
-      -65 - rand(i + 25) * 20,
+    const far = i < 6,
+      radius = 17 + rand(i) * 10;
+    const m = w.mesh(
+      new T.SphereGeometry(1, 12, 7),
+      w.material(far ? "#9fb9b2" : "#779b91"),
+      -68 + (i % 6) * 27 + (far ? 0 : 10),
+      -5,
+      (far ? -87 : -65) - rand(i + 25) * 9,
     );
-    m.scale.set(1, 1.2, 1);
+    m.scale.set(radius * 1.5, radius * (far ? 0.57 : 0.39), radius);
+    m.castShadow = false;
+    m.receiveShadow = false;
   }
   // Human touches: benches, cups, books, pots and pennants.
   for (const x of [-4.8, 4.8]) {
@@ -238,4 +267,11 @@ function tree(
     );
     m.rotation.z = (rand(i + x) - 0.5) * 0.14;
   }
+  if (!cypress)
+    group.traverse((object) => {
+      if (object instanceof T.Mesh) {
+        object.castShadow = false;
+        object.receiveShadow = false;
+      }
+    });
 }

@@ -1,20 +1,35 @@
 """Original benchmark architecture, Atlas, and bone-attach costume accessories.
 Run with Blender --background --python scripts/benchmark-art.py. No source .blend rewrite.
 """
-import bpy,math,pathlib,importlib.util,random
+import bpy,math,pathlib,importlib.util,random,sys
 from mathutils import Vector
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('artbuild',pathlib.Path(__file__).with_name('art-build.py'));a=importlib.util.module_from_spec(spec);spec.loader.exec_module(a)
 random.seed(81);OUT=ROOT/'public/assets'
+COURTYARD_DETAIL=False
 def at(x,y,z):return (x,-z,y)
 def group(name):
  o=bpy.data.objects.new(name,None);bpy.context.collection.objects.link(o);return o
-def box(name,x,y,z,w,h,d,m,bevel=.035):return a.cube(name,at(x,y,z),(w,d,h),m,bevel)
-def ball(name,x,y,z,sx,sy,sz,m):return a.sphere(name,at(x,y,z),(sx,sz,sy),m)
-def tube(name,pts,r,m):return a.curve(name,[at(*p) for p in pts],r,m)
+def box(name,x,y,z,w,h,d,m,bevel=.035):
+ if not COURTYARD_DETAIL:return a.cube(name,at(x,y,z),(w,d,h),m,bevel)
+ o=a.cube(name,at(x,y,z),(w,d,h),m,0)
+ if bevel:
+  mod=o.modifiers.new('Single carved bevel','BEVEL');mod.width=bevel;mod.segments=1;bpy.context.view_layer.objects.active=o;bpy.ops.object.modifier_apply(modifier=mod.name)
+ return o
+def ball(name,x,y,z,sx,sy,sz,m):
+ if not COURTYARD_DETAIL:return a.sphere(name,at(x,y,z),(sx,sz,sy),m)
+ bpy.ops.mesh.primitive_uv_sphere_add(segments=12,ring_count=6,location=at(x,y,z));o=bpy.context.object;o.scale=(sx,sz,sy);a.finish(o,name,m)
+ for p in o.data.polygons:p.use_smooth=True
+ return o
+def tube(name,pts,r,m):
+ o=a.curve(name,[at(*p) for p in pts],r,m)
+ if COURTYARD_DETAIL:o.data.bevel_resolution=0
+ return o
 def ring(name,x,y,z,r,t,m,axis='y'):
  rot=(0,0,0) if axis=='y' else ((math.pi/2,0,0) if axis=='z' else (0,math.pi/2,0))
- return a.torus(name,at(x,y,z),r,t,m,rot)
+ if not COURTYARD_DETAIL:return a.torus(name,at(x,y,z),r,t,m,rot)
+ bpy.ops.mesh.primitive_torus_add(major_radius=r,minor_radius=t,major_segments=32,minor_segments=6,location=at(x,y,z),rotation=rot)
+ return a.finish(bpy.context.object,name,m)
 def column(name,x,y,z,r,h,m,n=16):return a.cyl(name,at(x,y,z),r,h,m,n)
 def palette():
  return {k:a.mat(k,c,metal,True) for k,c,metal in [
@@ -76,6 +91,8 @@ def book(x,y,z,w,d,h,m,ink):
  for sy in [-1,1]:box('Book board',x,y+sy*h/2,z,w+.035,.025,d+.035,ink,.005)
  box('Book spine',x-w/2,y,z,.035,h,d+.035,ink,.005)
 def courtyard():
+ global COURTYARD_DETAIL
+ COURTYARD_DETAIL=True
  a.reset();p=palette();stone=p['Benchmark limestone'];edge=p['Benchmark carved edge'];slate=p['Benchmark slate'];dark=p['Benchmark ink'];wood=p['Benchmark wood'];gold=p['Benchmark brass'];paper=p['Benchmark parchment'];moss=p['Benchmark moss'];coral=p['Benchmark coral']
  # The existing six wings are replaced by continuous inward-facing arcaded studies.
  for side in [-1,1]:
@@ -98,13 +115,30 @@ def courtyard():
      box('Opening carved jamb',inner-side*.08,1.43,zz+s*.94,.27,2.86,.17,edge)
      box('Opening plinth',inner-side*.13,.18,zz+s*.94,.39,.36,.33,edge)
     arch(inner-side*.11,2.84,zz,.86,.22,.26,edge,'x')
-    transom(inner-side*.085,2.84,zz,.86,dark)
+    # Opaque warm glazing, painted in the same parchment wash as the college books.
+    # These surfaces sit behind the existing mullions. No transparent windows,
+    # extra point lights or modeled rooms are needed to suggest inhabited studies.
+    box('Warm study glazing',inner-side*.057,1.72,zz,.015,2.30,1.58,paper,0)
+    transom(inner-side*.085,2.84,zz,.86,paper)
     for t in [math.pi/4,math.pi/2,math.pi*3/4]:tube('Transom fanlight',[(inner-side*.12,2.84,zz),(inner-side*.12,2.84+.83*math.sin(t),zz+.83*math.cos(t))],.018,gold)
     # Arch interior radial glazing.
     for j in range(3):box('Oak vertical mullion',inner-side*.09,1.62,zz-.48+j*.48,.055,2.58,.048,gold,.007)
     for h in [.84,1.65,2.50]:box('Oak crossbar',inner-side*.10,h,zz,.055,.05,1.68,gold,.007)
-    # Recess furniture/books establish inhabited rooms without interiors.
-    for j in range(4):box('Books on window sill',inner-side*.18,.60+j*.08,zz-.44,.23,.06,.44,paper if j%2 else coral,.007)
+    # Alternate book-filled reading windows with gathered curtains, so the
+    # repeated facade has a practical use rather than twelve identical voids.
+    if (int((z+13)/8)+(1 if zz>z else 0)+(1 if side>0 else 0))%2==0:
+     box('Lower study bookcase',inner-side*.13,.72,zz,.09,.96,1.57,wood,.012)
+     for shelf in [.42,.82]:
+      box('Study shelf front',inner-side*.205,shelf,zz,.12,.055,1.61,gold,.008)
+      for j in range(7):
+       hh=.22+.055*((j+int(shelf*10))%3)
+       box('Collected study volumes',inner-side*.19,shelf+.045+hh/2,zz-.66+j*.21,.08,hh,.14,[coral,slate,paper,moss][j%4],.004)
+    else:
+     for sign in [-1,1]:
+      xx=inner-side*.13
+      mesh('Gathered study curtain',[(xx,2.79,zz+sign*.78),(xx,2.79,zz+sign*.25),(xx-side*.035,1.63,zz+sign*.60),(xx,1.1,zz+sign*.71)],[(0,1,2,3)],coral)
+      tube('Curtain cord',[(xx-side*.04,1.65,zz+sign*.50),(xx-side*.04,1.60,zz+sign*.73)],.015,gold)
+     for j in range(3):box('Books left on window sill',inner-side*.18,.61+j*.08,zz-.32,.23,.06,.50-j*.07,paper if j%2 else slate,.007)
    # Hanging college banners between studies, on inward-facing wall.
    banner(inner-side*.22,4.48,z,slate,gold,'x')
    # Deep arcade uprights and capped capitals interrupt the flat frontage.
@@ -123,6 +157,11 @@ def courtyard():
  mesh('Sundial index',[(0,1.10,3),(.42,1.11,3),(0,1.97,3)],[(0,1,2)],gold)
  for i in range(12):
   t=i*math.tau/12;ball('Dial hour stud',1.12*math.cos(t),.79,3+1.12*math.sin(t),.042,.04,.042,gold)
+ # Broad clock-like dial marks make the social anchor legible from the follow
+ # camera. The water and unlit armillary remain calm until the chapter wakes.
+ for i in range(8):
+  t=i*math.tau/8
+  tube('Dial brass measuring rays',[(.73*math.cos(t),.654,3+.73*math.sin(t)),(.94*math.cos(t),.654,3+.94*math.sin(t))],.014,gold)
  # Optional reading pocket in the reachable southern west corner.
  for x in [-11.45,-8.50]:
   box('Reading bench seat',x,.55,10.4,.48,.14,2.20,wood)
@@ -150,6 +189,7 @@ def courtyard():
   for xx in [-.18,.18]:box('Lantern corner',x+xx,1.87,z,.03,.46,.35,gold,.005)
   box('Lantern cap',x,2.13,z,.45,.10,.45,slate)
  batch_export('courtyard')
+ COURTYARD_DETAIL=False
 def guardian():
  a.reset();p=palette();gold=p['Benchmark brass'];blue=p['Benchmark slate'];paper=p['Benchmark parchment'];dark=p['Benchmark ink'];edge=p['Benchmark carved edge'];teal=p['Benchmark lagoon']
  roots={n:group(n) for n in ['AtlasBody','Core','Ring','ArmLeft','ArmRight','Head']}
@@ -239,4 +279,7 @@ def accessories():
  accessory('IonaApron','spine_03',apron)
  batch_export('mage-accessories')
 if __name__=='__main__':
- courtyard();guardian();accessories()
+ # A scoped rebuild avoids touching unrelated binary assets during art iteration.
+ requested=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
+ for name,build in [('courtyard',courtyard),('guardian',guardian),('mage-accessories',accessories)]:
+  if not requested or name in requested:build()

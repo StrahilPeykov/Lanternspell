@@ -15,6 +15,6 @@ try {
  await page.screenshot({path:'evidence/local/production-offline-solo.png'});
  await page.keyboard.press('KeyJ');assert.equal(await page.getByRole('dialog').count(),1);await page.keyboard.press('Escape');
  assert.deepEqual(errors,[]);
- await writeFile('evidence/benchmark-production.json',JSON.stringify({scenario:'production-client-offline-after-load',timestamp:new Date().toISOString(),endpoint:page.url(),stateFixtures:false,actualInputs:true,checks:['production has no debug surface','loaded code and art before disconnecting network','actual movement and NPC outcome while network offline','local spellbook opens while offline'],errors},null,2));
+ await writeFile(process.env.EVIDENCE_FILE || 'evidence/benchmark-production.json',JSON.stringify({scenario:'production-client-offline-after-load',timestamp:new Date().toISOString(),endpoint:page.url(),stateFixtures:false,actualInputs:true,checks:['production has no debug surface','loaded code and art before disconnecting network','actual movement and NPC outcome while network offline','local spellbook opens while offline'],errors},null,2));
  console.log('Production offline-after-load solo smoke passed.');
 }finally{await browser.close()}

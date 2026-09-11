@@ -64,7 +64,13 @@ export class Campaign extends DurableObject<Env> {
     const seat = (Object.entries(this.saved.tokens) as [Seat, string][]).find(([, t]) => t === token)?.[0];
     if (!seat || !protocols.includes('wizard-v1')) return json({ error: 'Invalid seat credential.' }, 403);
     // A rejoin replaces the prior connection; it cannot create a third participant.
-    for (const previous of this.ctx.getWebSockets(seat)) previous.close(4001, 'Seat resumed in another connection');
+    const previousConnections = this.ctx.getWebSockets(seat);
+    if (previousConnections.length) {
+      // Invalidate at replacement, before the new socket can confirm. The old
+      // socket's delayed close must not erase plans readied on its replacement.
+      this.persist({ ...this.saved, state: { ...this.saved.state, ready: {}, consent: {} } });
+      for (const previous of previousConnections) previous.close(4001, 'Seat resumed in another connection');
+    }
     const pair = new WebSocketPair();
     this.ctx.acceptWebSocket(pair[1], [seat]);
     pair[1].serializeAttachment({ seat, window: Date.now(), count: 0, movementAt: Date.now(), position: this.saved.state.positions[seat] } satisfies Attachment);
@@ -111,8 +117,10 @@ export class Campaign extends DurableObject<Env> {
   }
   webSocketClose(ws: WebSocket, code: number, reason: string) {
     try { ws.close(code === 1005 ? 1000 : code, reason); } catch { /* already closed */ }
+    const attachment = ws.deserializeAttachment() as Attachment;
+    const replaced = attachment?.seat && this.ctx.getWebSockets(attachment.seat).some(peer => peer !== ws && peer.readyState === 1);
     // Readiness is no longer current after participant loss. A committed result stays committed.
-    if (this.saved) this.persist({ ...this.saved, state: { ...this.saved.state, ready: {}, consent: {} } });
+    if (this.saved && !replaced) this.persist({ ...this.saved, state: { ...this.saved.state, ready: {}, consent: {} } });
     this.broadcast();
   }
   webSocketError(ws: WebSocket) { this.webSocketClose(ws, 1011, 'Connection interrupted; rejoin the saved seat.'); }

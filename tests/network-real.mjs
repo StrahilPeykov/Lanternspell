@@ -26,7 +26,7 @@ try {
     const restored = await pages[0].evaluate(() => window.__restored);
     assert.deepEqual(restored.battle, saved.state.battle); assert.equal(restored.stage, saved.state.stage); assert.deepEqual(restored.rewardIds, saved.state.rewardIds);
     const result = { scenario: 'process-restart-sqlite-reconstruction', result: 'passed', checked: ['battle including revision', 'shared quest stage', 'reward IDs', 'both persisted seat credentials'], timestamp: new Date().toISOString() };
-    await writeFile('evidence/network-reconstruction.json', JSON.stringify(result, null, 2));
+    await writeFile(process.env.EVIDENCE_FILE || 'evidence/network-reconstruction.json', JSON.stringify(result, null, 2));
     await rm('.wrangler/network-rejoin.json');
     console.log(JSON.stringify(result));
     await browser.close();
@@ -96,6 +96,13 @@ try {
   assert.equal((await send(pages[1], staleReady)).accepted, false);
   assert.deepEqual((await state()).ready, {});
   evidence.checks.push('plan edit invalidates joint readiness; stale confirm rejected');
+  await send(pages[0], makeReady(await state()));
+  await connect(pages[1], guest); // Live seat replacement, not a prior manual disconnect.
+  await waitState(() => window.__wire.snapshot?.paused === false && Object.keys(window.__wire.snapshot.ready).length === 0);
+  await send(pages[0], makeReady(await state()));
+  await new Promise(r => setTimeout(r, 300 + applicationDelayMs));
+  assert.equal((await state()).ready.mage1, (await state()).jointPlanKey);
+  evidence.checks.push('live seat replacement clears old readiness; replacement remains usable after old socket closes');
   await pages[1].evaluate(() => window.__wire.ws.close());
   await waitState(() => window.__wire.snapshot?.paused === true);
   assert.equal((await send(pages[0], makeReady(await state()))).accepted, false);

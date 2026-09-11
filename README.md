@@ -15,9 +15,11 @@ npm run dev
 
 Open **http://127.0.0.1:5180**. The server includes a real local SQLite-backed Cloudflare Durable Object. Solo runs in the browser and needs no game server after code and assets load. No paid service, runtime AI, or account login is used.
 
-WASD moves relative to the camera. Drag the world to orbit, scroll to zoom, R recenters, E interacts, J opens the spellbook. During battle, choose a spell card and a target, then confirm. Settings include remapping, camera sensitivity, reduced camera motion, low graphics, mute, and solo save export/import.
+WASD moves relative to the camera. Drag the world to orbit, scroll to zoom, R recenters, E interacts, J opens the spellbook. During battle, choose a spell card and a target, inspect the predicted end-of-round health/ward and ordered queue, then confirm. Settings include remapping, camera sensitivity, reduced camera motion, low graphics, mute, and solo save export/import.
 
 Choose **Marginweaver** (write through wards and spread unfolding magic) or **Hearthbinder** (protect, counter, and spend shelter as light). You can change tradition in the spellbook between encounters. The normal chapter uses the full prepared book. On the development server, **Spellbook → Development comparison** also offers the original baseline, seeded pages, a solo seed, and three signature presentations.
+
+In the seeded-page experiment, the free spell turns the leftmost held page into the visible next page; paid spells replace their own page.
 
 Take an optional detour around the west garden to the reading bench and sealed archive. Required progression still follows Iona’s brass lamps.
 

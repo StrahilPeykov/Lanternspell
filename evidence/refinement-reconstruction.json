@@ -1,0 +1,11 @@
+{
+  "scenario": "process-restart-sqlite-reconstruction",
+  "result": "passed",
+  "checked": [
+    "battle including revision",
+    "shared quest stage",
+    "reward IDs",
+    "both persisted seat credentials"
+  ],
+  "timestamp": "2026-09-11T16:18:24.465Z"
+}

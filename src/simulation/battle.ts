@@ -107,7 +107,10 @@ function stateIntentions(battle: Battle): Intention[] {
 export function getSpell(battle: Battle, actorId: string, spellId: SpellId): Spell {
   const base = SPELLS[spellId];
   const tradition = battle.actors.find(a => a.id === actorId)?.tradition;
-  return battle.variant && battle.variant !== 'baseline' && (tradition === 'margin' || tradition === 'hearth') ? traditionalSpell(base, tradition) : base;
+  const spell = battle.variant && battle.variant !== 'baseline' && (tradition === 'margin' || tradition === 'hearth') ? traditionalSpell(base, tradition) : base;
+  return battle.variant === 'hand' && spellId === 'spark'
+    ? { ...spell, description: 'Deal 5 damage for no Ember. Turn your leftmost held page into the visible next page.' }
+    : spell;
 }
 export function availableSpells(battle: Battle, actorId: string): Spell[] {
   const actor = battle.actors.find(a => a.id === actorId);
@@ -124,7 +127,6 @@ export function validatePlan(battle: Battle, plan: Plan): string | null {
   if (!Object.hasOwn(SPELLS, plan.spellId)) return 'Unknown spell.';
   const caster = battle.actors.find(a => a.id === plan.actorId);
   if (!caster || caster.team !== 'mage' || caster.hp <= 0) return 'Choose a living mage.';
-  if (!Object.hasOwn(SPELLS, plan.spellId)) return 'Unknown spell.';
   const spell = getSpell(battle, plan.actorId, plan.spellId);
   if (!availableSpells(battle, plan.actorId).some(s => s.id === spell.id)) return 'That page is not in your current hand.';
   if (caster.ember < spell.cost) return `Needs ${spell.cost} Ember.`;
@@ -222,9 +224,17 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
       case 'mend': amount = Math.min(12, target.maxHp - target.hp); target.hp += amount; text = `${target.name}: ${amount} health restored.`; if (tradition === 'hearth') { const extra = Math.min(6, 12 - amount); if (extra) { target.ward = Math.max(target.ward, extra); target.wardUntil = battle.round + 1; text += ` ${extra} excess healing becomes ward.`; } } break;
     }
     if (tradition) caster.lastSpell = spell.id;
-    if (battle.variant === 'hand' && spell.id !== 'spark' && caster.hand && caster.drawPile) {
-      const index = caster.hand.indexOf(spell.id);
-      if (index >= 0) caster.hand[index] = caster.drawPile[(caster.drawIndex ?? 0) % caster.drawPile.length]!;
+    if (battle.variant === 'hand' && caster.hand && caster.drawPile) {
+      const nextPage = caster.drawPile[(caster.drawIndex ?? 0) % caster.drawPile.length]!;
+      if (spell.id === 'spark') {
+        // A free attack can always advance a stranded hand, at the visible cost of its leftmost page.
+        const turned = caster.hand.shift()!;
+        caster.hand.push(nextPage);
+        text += ` Turned ${getSpell(battle, caster.id, turned).name}; drew ${getSpell(battle, caster.id, nextPage).name}.`;
+      } else {
+        const index = caster.hand.indexOf(spell.id);
+        if (index >= 0) caster.hand[index] = nextPage;
+      }
       caster.drawIndex = (caster.drawIndex ?? 0) + 1;
     }
     emit({ ...action, targetId: target.id, ...(target.id !== action.targetId ? { fallbackFrom: action.targetId } : {}) }, 'cast', amount, `${spell.name} — ${text}`);

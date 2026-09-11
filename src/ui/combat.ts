@@ -10,6 +10,7 @@ import {
   type Plan,
 } from "../simulation/battle";
 import type { SharedSnapshot } from "../network";
+import { roundForecast } from "./forecast";
 const escape = (s: string) =>
   s.replace(
     /[&<>"']/g,
@@ -38,6 +39,7 @@ export function combatMarkup(
     return `<div class="outcome"><div class="eyebrow">${battle.phase === "victory" ? "A LITTLE MAGIC, REMEMBERED" : "THE LIGHT RETREATS"}</div><h2>${battle.phase === "victory" ? (battle.kind === "lesson" ? "A lesson learned" : "Bellweather wakes") : "A chance to begin again"}</h2><p>${battle.phase === "victory" ? (battle.kind === "lesson" ? "The moth settles beside a forgotten field book. Find its margin note along the west garden." : "The observatory opens its golden eye. Its light belongs to the whole courtyard.") : "Try a ward before the heavy strike, or leave a seed for the following round."}</p><button class="primary" data-action="leave-battle">${battle.phase === "victory" ? "Return to the path" : "Take a breath & retry"} →</button></div>`;
   }
   const intentions = getIntentions(battle);
+  const forecast = roundForecast(battle, plans);
   const targetHtml = battle.actors
     .map(
       (a) =>
@@ -45,15 +47,26 @@ export function combatMarkup(
     )
     .join("");
   const queue = previewQueue(battle, plans);
+  const forecastHtml = forecast
+    ? `<div class="round-forecast"><b>After this round</b>${forecast.actors
+        .filter((a) => battle.actors.find((old) => old.id === a.id)!.hp > 0)
+        .map(
+          (a) =>
+            `<span class="${a.hp <= 0 ? "forecast-down" : a.healthChange < 0 ? "forecast-hurt" : ""}">${a.id === seat() ? "You" : a.id.startsWith("mage") ? "Friend" : escape(battle.actors.find((old) => old.id === a.id)!.name)}: <strong>${a.hp} HP</strong>${a.ward ? ` · ${a.ward} ward` : ""}${a.hp <= 0 ? " · down" : ""}</span>`,
+        )
+        .join(
+          "",
+        )}${forecast.phase !== "planning" ? `<strong>${forecast.phase === "victory" ? "Victory" : "Defeat"}</strong>` : ""}</div>`
+    : `<div class="round-forecast muted">${client ? "Both mages choose a spell to preview the shared result." : "Choose a spell and target to preview the round."}</div>`;
   return `<div class="targets">${targetHtml}</div><section class="battle-tray"><div class="battle-heading"><div><span class="eyebrow">${battle.kind === "lesson" ? "THE PAPER LESSON" : "THE DROWSING ATLAS"}</span><h3>Round ${battle.round} <span>${actor.tradition ? TRADITIONS[actor.tradition].name : "Original book"}</span></h3></div><div class="ember">✦ ${actor.ember}<small> / 7 Ember · +2 each round</small></div><button data-action="pace">${playbackSpeed}× playback</button></div><div class="cards" style="grid-template-columns:repeat(${availableSpells(battle, seat()).length},1fr)">${availableSpells(
     battle,
     seat(),
   )
     .map(
       (s, i) =>
-        `<button class="spell ${plan?.spellId === s.id ? "selected" : ""}" data-spell="${s.id}" ${actor.ember < s.cost || actor.hp <= 0 ? "disabled" : ""}><span class="card-top"><kbd>${i + 1}</kbd><span>${s.cost === 0 ? "Free" : `✦ ${s.cost}`}</span></span><span class="sigil">${["✦", "❧", "✧", "◈", "⌁", "❋"][i]}</span><strong>${s.name}</strong><span class="spell-description">${s.description.replace("Margin note adds 3 damage.", battle!.upgraded ? "Margin note: +3 damage." : "")}</span><small>${["WARD & REMEDY", "QUICK", "UNFOLDING", "HEAVY"][s.tier]}</small></button>`,
+        `<button class="spell ${plan?.spellId === s.id ? "selected" : ""}" data-spell="${s.id}" ${actor.ember < s.cost || actor.hp <= 0 ? "disabled" : ""}><span class="card-top"><kbd>${i + 1}</kbd><span>${s.cost === 0 ? "Free" : `✦ ${s.cost}`}</span></span><span class="sigil">${{ spark: "✦", mark: "❧", unfold: "✧", shelter: "◈", unseal: "⌁", mend: "❋" }[s.id]}</span><strong>${s.name}</strong><span class="spell-description">${s.description.replace("Margin note adds 3 damage.", battle!.upgraded ? "Margin note: +3 damage." : "")}</span><small>${["WARD & REMEDY", "QUICK", "UNFOLDING", "HEAVY"][s.tier]}</small></button>`,
     )
     .join(
       "",
-    )}</div>${battle.variant === "hand" ? `<div class="hand-note">Four pages + free spell · playing a page replaces one copy next round · Next: <strong>${getSpell(battle, seat(), nextDraw(battle, seat())!).name}</strong> · Held: ${actor.hand?.map((id) => getSpell(battle!, seat(), id).name).join(" / ")}</div>` : ""}<div class="queue-row"><div class="queue"><span class="eyebrow">RESOLUTION ORDER</span><div>${queue.map((q) => `<span>${q.actorId === seat() ? "You" : q.actorId.startsWith("mage") ? "Friend" : escape(battle!.actors.find((a) => a.id === q.actorId)?.name ?? "Foe")}: ${escape(q.name)} → ${escape(battle!.actors.find((a) => a.id === q.targetId)?.name ?? "—")}${q.fallbackFrom ? " ↪ retarget" : ""}</span>`).join("<b> → </b>")}</div>${client ? `<small>${shared?.paused ? "Paused · a mage is disconnected" : shared?.ready[seat()] ? "Your plan is confirmed. Edits reopen readiness." : "Both mages review the current queue before confirming."}</small>` : "<small>Pick a spell, then a target. You can change either before resolving.</small>"}</div><button class="primary" data-action="confirm" ${(!plan && actor.hp > 0) || shared?.paused ? "disabled" : ""}>${client ? (shared?.ready[seat()] ? "Ready ✓" : "Confirm plan ✓") : "Resolve round →"}</button></div></section>`;
+    )}</div>${battle.variant === "hand" ? `<div class="hand-note">Four pages · paid spell replaces its page; free spell turns the leftmost page · Next: <strong>${getSpell(battle, seat(), nextDraw(battle, seat())!).name}</strong> · Held: ${actor.hand?.map((id) => getSpell(battle!, seat(), id).name).join(" / ")}</div>` : ""}${forecastHtml}<div class="queue-row"><div class="queue"><span class="eyebrow">RESOLUTION ORDER</span><div>${queue.map((q) => `<span>${q.actorId === seat() ? "You" : q.actorId.startsWith("mage") ? "Friend" : escape(battle!.actors.find((a) => a.id === q.actorId)?.name ?? "Foe")}: ${escape(q.name)} → ${escape(battle!.actors.find((a) => a.id === q.targetId)?.name ?? "—")}${q.fallbackFrom ? " ↪ retarget" : ""}</span>`).join("<b> → </b>")}</div>${client ? `<small>${shared?.paused ? "Paused · a mage is disconnected" : shared?.ready[seat()] ? "Your plan is confirmed. Edits reopen readiness." : "Both mages review the current queue before confirming."}</small>` : "<small>Pick a spell, then a target. You can change either before resolving.</small>"}</div><button class="primary" data-action="confirm" ${(!plan && actor.hp > 0) || shared?.paused ? "disabled" : ""}>${client ? (shared?.ready[seat()] ? "Ready ✓" : "Confirm plan ✓") : "Resolve round →"}</button></div></section>`;
 }

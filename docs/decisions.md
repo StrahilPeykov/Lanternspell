@@ -14,3 +14,9 @@
 - Three signature presentations share outcome; travelling lantern crane provisional favorite for caster-to-target character. Pages remain the quieter alternative.
 - Cache surface washes, avoid pre-load proxies, preserve shadow flags, normalize mixed indexed geometry for batching. Low uses1024 shadows with environment casters disabled, reduced effect density, secondary light disabled and.85 pixel ratio.
 - Root renderer split by materials/environment/actors/effects; DOM shell/combat and import validation separated from controller. Prettier3.9.6 pinned using official install guidance; no runtime framework.
+
+- 2026-09-11: Continue the existing benchmark on main; preserve the completed first-playable history. Cloudflare production/version commands saved as dry-run before pushes, honoring the new no-publication instruction.
+- Free Spark turns the leftmost seeded page at resolution; paid casts replace their own slot. This repairs stranded hands while retaining a visible opportunity cost and the same bounded six roles. Baseline/full-book rules unchanged.
+- A read-only full-round HP/ward forecast uses the same pure resolver, only when every living mage has a legal plan. No second rules implementation or gameplay callback in presentation.
+- Warm shallow study windows and reduced architectural tessellation improve inhabitation without new interiors. Keep ordinary MSAA, selective distant shadow exclusions, and existing meaningful Low tier. Hardware High tail remains above target; do not claim 1080p60.
+- Permanent shared departure invalidates queued callbacks; a replaced socket cannot clear its replacement's fresh readiness. Real local protocol/reconstruction plus labelled lifecycle fixtures validate their respective boundaries.

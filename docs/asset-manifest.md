@@ -24,3 +24,7 @@ No proprietary inspiration-game assets were downloaded or incorporated. Browser 
 ## Benchmark additions, 2026-09-10
 
 Original reproducible courtyard/Atlas/accessory/Paper Moth GLBs and small original textures: [benchmark-art.md](benchmark-art.md). Original nine offline-designed PCM sounds: [audio.md](audio.md). No new third-party art/audio inputs, image APIs, paid services or vendor archives. Existing Quaternius licensing remains applicable to the base wizard assembly. New scripts are authoritative; historical useful .blend files retained without new binary revisions.
+
+## Refinement, 2026-09-11
+
+The courtyard GLB was regenerated from `scripts/benchmark-art.py` with original warm study glazing, curtains/books and instrument rays, plus lower tessellation. Existing ten original packed wash textures reused; no third-party additions. Repeated paving, folded flower leaves and distant ridgelines were revised in `src/render/environment.ts`. See [art refinement](art-refinement.md) for export measurements.

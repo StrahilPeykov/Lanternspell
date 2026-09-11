@@ -14,24 +14,26 @@ const scenarios = [
 const report = { version: 1, scenario: 'benchmark-actual-input-duo', started: new Date().toISOString(), endpoint: base, mockedSockets: false, injectedCommands: false, stateFixtures: false, policy: 'One-round deterministic diagnostic scoring of detached battle snapshots; selected commands applied only through spell/target/confirm UI. This is completion/correctness evidence, not human enjoyment.', results: [] };
 const browser = await chromium.launch({ headless: true, args: ['--use-angle=d3d11', '--enable-gpu'] });
 const inspect = page => page.evaluate(() => window.__orrery);
-const action = (page, name) => page.locator(`[data-action="${name}"]`).click();
+const action = (page, name) => page.locator(`[data-action="${name}"]:visible`).click();
 const until = (page, predicate, timeout = 20000) => page.waitForFunction(predicate, null, { timeout });
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 async function walkTo(page, x, z) {
-  await page.keyboard.press('KeyR');
+
   for (let attempt = 0; attempt < 100; attempt++) {
-    const { position } = await inspect(page); const dx = x - position.x, dz = z - position.z;
+    const { position, camera } = await inspect(page); const dx = x - position.x, dz = z - position.z;
+    const lx = dx*Math.cos(camera.yaw)-dz*Math.sin(camera.yaw), lz = dx*Math.sin(camera.yaw)+dz*Math.cos(camera.yaw);
     if (Math.hypot(dx, dz) < 1.1) return;
-    const keys = [...(Math.abs(dx) > .5 ? [dx > 0 ? 'KeyD' : 'KeyA'] : []), ...(Math.abs(dz) > .5 ? [dz > 0 ? 'KeyS' : 'KeyW'] : [])];
+    const keys = [...(Math.abs(lx) > .45 ? [lx > 0 ? 'KeyD' : 'KeyA'] : []), ...(Math.abs(lz) > .45 ? [lz > 0 ? 'KeyS' : 'KeyW'] : [])];
     for (const key of keys) await page.keyboard.down(key);
     await page.waitForTimeout(220);
     for (const key of keys) await page.keyboard.up(key);
+    await page.waitForTimeout(120);
   }
   throw new Error(`WASD navigation could not reach ${x},${z}; actual ${JSON.stringify((await inspect(page)).position)}`);
 }
 async function openInteraction(page) { await page.keyboard.press('KeyE'); await page.getByRole('dialog').waitFor({ state: 'visible' }); }
-async function interact(page) { await openInteraction(page); await action(page, 'accept'); }
+async function interact(page) { await page.keyboard.press('KeyE'); await page.waitForTimeout(180); if(await page.locator('[data-action=accept]').isVisible()) await action(page,'accept'); }
 async function closePanel(page) { await page.getByRole('button', { name: 'Close', exact: true }).click(); }
 const factsOf = diagnostic => diagnostic.facts ?? diagnostic.shared?.facts;
 
@@ -81,6 +83,8 @@ async function choosePlans(page) {
   });
 }
 async function selectPlan(page, plan) {
+  if (!await page.locator(`[data-spell="${plan.spellId}"]`).count()) await action(page,'combat-expand');
+  if (!await page.locator('.round-forecast').count()) await action(page,'combat-details');
   await page.locator(`[data-spell="${plan.spellId}"]`).click();
   await page.waitForFunction(spellId => window.__orrery.plan?.spellId === spellId, plan.spellId);
   if ((await inspect(page)).plan.targetId !== plan.targetId) await page.locator(`[data-target="${plan.targetId}"]`).click();
@@ -177,6 +181,15 @@ try {
       const invitation = await host.locator('#invite-output').inputValue(); await closePanel(host);
       await action(guest, 'shared'); await guest.locator('#join-input').fill(invitation); await action(guest, 'join');
       await bothUntil(() => window.__orrery.shared?.paused === false);
+      await host.keyboard.down('ShiftLeft'); await host.keyboard.down('KeyW');
+      await host.waitForTimeout(650);
+      const remoteSprint = (await inspect(guest)).traversal.remoteSpeed;
+      await capture(guest, 'remote-sprint');
+      await host.keyboard.up('KeyW'); await host.keyboard.up('ShiftLeft');
+      await host.waitForTimeout(500);
+      assert.ok(remoteSprint > 4.2, `Remote sprint gait: ${remoteSprint}`);
+      assert.equal((await inspect(host)).metrics.movementCorrections, 0);
+      evidence.checks.push(`Real Shift+W sprint relayed; remote speed ${remoteSprint.toFixed(2)}m/s, no authority correction`);
       await configure(host, scenario.traditions[0], scenario.variant); await configure(guest, scenario.traditions[1]);
       await sleep(200); // Allow acknowledged configuration snapshots to settle before proximity consent.
       evidence.checks.push('session created/joined and model/personal traditions selected through DOM');

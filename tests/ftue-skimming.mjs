@@ -37,6 +37,8 @@ try {
   assert.deepEqual(cards, [1, 2, 3]);
   await page.getByRole('button', { name: 'Return to the path' }).click();
   await walk('w', 1000); await walk('a', 1000);
+  await page.screenshot({ path: 'evidence/local/ftue-book-approach.png' });
+  for (let i=0;i<4 && !await page.getByRole('button', {name:/Read field book/}).isVisible();i++) await walk('a',250);
   await page.getByRole('button', { name: /Read field book/ }).click();
   assert.equal(await page.locator('[role="dialog"] [data-tradition]').count(), 2);
   await page.getByRole('button', { name: 'Keep the note' }).click();
@@ -44,4 +46,4 @@ try {
   await page.screenshot({ path: 'evidence/local/ftue-after.png' });
   await writeFile('evidence/local/ftue-skimming.json', JSON.stringify({ scenario: 'fresh profile, visible prompts, highlighted choices, no debug or save fixtures', cards, errors, result: 'practice complete; tradition choice reached' }, null, 2));
   console.log('Fresh skimming journey passed: 1 → 2 → 3 cards, practice victory, field-book choice.');
-} finally { await browser.close(); }
+} catch (e) { await page.screenshot({path:'evidence/local/ftue-failure.png'}); throw e; } finally { await browser.close(); }

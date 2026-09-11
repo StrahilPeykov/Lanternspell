@@ -67,11 +67,12 @@ let stage = 0,
 const world = new World(document.querySelector("#world")!, (p) => {
   if (client) client.move(p);
   if (world.moving) {
-    sound.step();
+    sound.step(world.sprinting);
     if (!movedHint) {
       movedHint = true;
       localStorage.setItem("orrery-moved-v1", "yes");
-      el("controls").style.display = "none";
+      el("controls").textContent = `${[world.bindings.forward, world.bindings.left, world.bindings.back, world.bindings.right].map(k => k.replace("Key", "")).join("")} · Move`;
+  el("controls").style.display = "none";
     }
   }
 });
@@ -137,6 +138,7 @@ function gate() {
     (!client || (connection === "connected" && !shared?.paused)) &&
     !battle;
   world.keys.clear();
+  if (!world.active) world.traversal.stop();
 }
 function paintIdentity() {
   world.partnerColor = seat() === "mage2" ? "#2b7f88" : "#bc745e";
@@ -485,7 +487,7 @@ function journal() {
   panel(
     "Spellbook",
     `<p><strong>${TRADITIONS[tradition].name}</strong> · ${TRADITIONS[tradition].description}</p>${
-      !battle && stage >= 3
+      !battle && (stage >= 3 || import.meta.env.DEV)
         ? `<div class="tradition-picker">${Object.values(TRADITIONS)
             .map(
               (t) =>
@@ -510,7 +512,7 @@ function settings() {
   modal = "settings";
   panel(
     "Settings",
-    `<div class="settings"><label>Camera sensitivity <input id="sensitivity" type="range" min="0.3" max="2" step="0.1" value="${world.sensitivity}"></label><label>Reduced camera motion <input id="reduced" type="checkbox" ${world.reduced ? "checked" : ""}></label><label>Low graphics <input id="quality" type="checkbox" ${world.low ? "checked" : ""}></label><label>Mute sound <input id="mute" type="checkbox" ${sound.muted ? "checked" : ""}></label></div><h3>Essential controls</h3><p class="note">Select a binding, then press a key. Escape closes panels. Number keys 1–6 select spells; Enter confirms a round.</p><div class="bindings">${Object.entries(
+    `<div class="settings"><label>Camera sensitivity <input id="sensitivity" type="range" min="0.3" max="2" step="0.1" value="${world.sensitivity}"></label><label>Reduced camera motion <input id="reduced" type="checkbox" ${world.reduced ? "checked" : ""}></label><label>Low graphics <input id="quality" type="checkbox" ${world.low ? "checked" : ""}></label><label>Mute sound <input id="mute" type="checkbox" ${sound.muted ? "checked" : ""}></label></div><h3>Essential controls</h3><p class="note">Hold Shift to sprint. Drag the world to orbit; scroll to zoom. Recenter follows your facing direction.</p><p class="note">Select a binding, then press a key. Escape closes panels. Number keys 1–6 select spells; Enter confirms a round.</p><div class="bindings">${Object.entries(
       world.bindings,
     )
       .map(

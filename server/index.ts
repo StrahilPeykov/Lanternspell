@@ -97,6 +97,7 @@ export class Campaign extends DurableObject<Env> {
       // together after scheduling stalls. Do not discard their final position
       // based on arrival spacing. Distance credit tolerates that burst while
       // preserving a 7m/s sustained bound and a maximum 5m burst/displacement.
+      // Exploration sprint is capped at 6m/s; keep 1m/s timing headroom.
       a.movementCredit = Math.min(5, (a.movementCredit ?? 0.7) + Math.max(0, now - a.movementAt) / 1000 * 7);
       a.movementAt = now;
       const distance = Math.hypot(command.position.x - a.position.x, command.position.z - a.position.z);

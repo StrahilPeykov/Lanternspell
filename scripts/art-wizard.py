@@ -76,7 +76,7 @@ bind(art.cube('Spellbook pages',(.224,-.025,.99),(.07,.145,.19),cream,.006),'spi
 # Import only free in-place clips; matching deformation-bone names and rest axes.
 animobs=load('**/Unreal-Godot/UAL1_Standard.glb')
 for o in animobs:bpy.data.objects.remove(o,do_unlink=True)
-selected={'Idle_Loop':'Idle','Walk_Loop':'Walk','Spell_Simple_Shoot':'Cast'}
+selected={'Idle_Loop':'Idle','Walk_Loop':'Walk','Spell_Simple_Shoot':'Cast','Sprint_Loop':'Sprint'}
 actions=[]
 for action in list(bpy.data.actions):
     if action.name not in selected:bpy.data.actions.remove(action);continue
@@ -117,7 +117,8 @@ for img in bpy.data.images:
         img.pack()
 bpy.context.scene.frame_set(1)
 bpy.ops.outliner.orphans_purge(do_recursive=True)
-bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'art/wizard.blend'),compress=True)
+if '--save-source' in sys.argv:
+    bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'art/wizard.blend'),compress=True)
 bpy.ops.export_scene.gltf(filepath=str(ROOT/'public/assets/wizard.glb'),export_format='GLB',export_yup=True,export_animations=True,export_animation_mode='NLA_TRACKS',export_nla_strips_merged_animation_name='Idle',export_bake_animation=True)
 print('EXPORTED WIZARD')
 

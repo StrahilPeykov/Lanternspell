@@ -107,11 +107,11 @@ export class Sound {
     }
     this.spells.clear();
   }
-  step() {
+  step(sprint = false) {
     const now = performance.now();
-    if (now - this.lastStep > 360) {
+    if (now - this.lastStep > (sprint ? 240 : 360)) {
       this.lastStep = now;
-      this.play(this.stepIndex++ % 2 ? "step-a" : "step-b", 0.24);
+      this.play(this.stepIndex++ % 2 ? "step-a" : "step-b", sprint ? 0.3 : 0.24);
     }
   }
 }

@@ -1,3 +1,9 @@
+import {
+  Traversal,
+  turnToward,
+  type MovementProfile,
+  type CameraProfile,
+} from "./traversal";
 import * as T from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { dressActor } from "./actors";
@@ -35,9 +41,19 @@ export class World {
   battle = false;
   active = true;
   moving = false;
+  sprinting = false;
+  traversal = new Traversal();
+  remoteSpeed = 0;
+  private cameraWalls = [
+    new T.Box3(new T.Vector3(8.3, 0, -17), new T.Vector3(13.6, 6.7, 7)),
+    new T.Box3(new T.Vector3(-13.6, 0, -17), new T.Vector3(-8.3, 6.7, 7)),
+  ];
+  private cameraRay = new T.Ray();
+  private cameraHit = new T.Vector3();
   target = new T.Vector3(0, 1.8, 10);
   keys = new Set<string>();
   bindings = {
+    sprint: "ShiftLeft",
     forward: "KeyW",
     back: "KeyS",
     left: "KeyA",
@@ -79,6 +95,15 @@ export class World {
     public canvas: HTMLCanvasElement,
     public onMove: (p: Position) => void,
   ) {
+    if (import.meta.env.DEV) {
+      const params = new URLSearchParams(location.search);
+      const move = params.get("movement"),
+        camera = params.get("camera");
+      if (["baseline", "snappy", "weighty"].includes(move ?? ""))
+        this.traversal.movement = move as MovementProfile;
+      if (["manual", "gentle", "adventure"].includes(camera ?? ""))
+        this.traversal.camera = camera as CameraProfile;
+    }
     const renderProbe = import.meta.env.DEV
       ? new URLSearchParams(location.search).get("renderProbe")
       : null;
@@ -143,6 +168,7 @@ export class World {
     canvas.addEventListener("pointerdown", (e) => {
       if (!this.active || this.battle) return;
       this.drag = { x: e.clientX, y: e.clientY };
+      this.traversal.manual(this.yaw);
       canvas.setPointerCapture(e.pointerId);
     });
     canvas.addEventListener("pointermove", (e) => {
@@ -154,8 +180,16 @@ export class World {
         0.85,
       );
       this.drag = { x: e.clientX, y: e.clientY };
+      this.traversal.manual(this.yaw);
     });
-    canvas.addEventListener("pointerup", () => (this.drag = null));
+    canvas.addEventListener("pointerup", () => {
+      this.drag = null;
+      this.traversal.manual(this.yaw);
+    });
+    canvas.addEventListener("pointercancel", () => {
+      this.drag = null;
+      this.traversal.manual(this.yaw);
+    });
     canvas.addEventListener(
       "wheel",
       (e) => {
@@ -171,6 +205,7 @@ export class World {
     );
     canvas.addEventListener("contextmenu", (e) => e.preventDefault());
     window.addEventListener("blur", () => {
+      this.traversal.stop();
       this.keys.clear();
       this.drag = null;
     });
@@ -386,12 +421,14 @@ export class World {
         const clips = gltf.animations;
         const idle = clips.find((c) => /idle/i.test(c.name)),
           walk = clips.find((c) => /walk/i.test(c.name)),
-          cast = clips.find((c) => /cast/i.test(c.name));
+          cast = clips.find((c) => /cast/i.test(c.name)),
+          sprint = clips.find((c) => /sprint/i.test(c.name));
         this.actions.push(
           [
             idle ? mixer.clipAction(idle) : null,
             walk ? mixer.clipAction(walk) : null,
             cast ? mixer.clipAction(cast) : null,
+            sprint ? mixer.clipAction(sprint) : null,
           ].filter(Boolean) as T.AnimationAction[],
         );
         this.actions[i][0]?.play();
@@ -596,7 +633,8 @@ export class World {
       intentions.find((i) => i.actorId === "guardian")?.spellId ?? "strike";
   }
   recenter() {
-    this.yaw = 0;
+    if (this.battle) return;
+    this.traversal.recenter(this.position.yaw);
     this.pitch = 0.27;
     this.distance = 9;
   }
@@ -661,35 +699,66 @@ export class World {
     if (this.frames.length > 1800) this.frames.shift();
     this.clock += dt;
     this.moving = false;
+    this.sprinting = false;
     if (this.active && !this.battle) {
       const b = this.bindings;
-      let dx = Number(this.keys.has(b.right)) - Number(this.keys.has(b.left)),
-        dz = Number(this.keys.has(b.back)) - Number(this.keys.has(b.forward));
-      if (dx || dz) {
-        const n = Math.hypot(dx, dz);
-        dx /= n;
-        dz /= n;
-        const xx =
-            (dx * Math.cos(this.yaw) + dz * Math.sin(this.yaw)) * dt * 3.8,
-          zz = (-dx * Math.sin(this.yaw) + dz * Math.cos(this.yaw)) * dt * 3.8;
-        if (!this.blocked(this.position.x + xx, this.position.z))
-          this.position.x += xx;
-        if (!this.blocked(this.position.x, this.position.z + zz))
-          this.position.z += zz;
-        this.position.yaw = Math.atan2(xx, zz);
-        this.moving = true;
-        this.onMove({ ...this.position });
-      }
+      const dx = Number(this.keys.has(b.right)) - Number(this.keys.has(b.left));
+      const dz =
+        Number(this.keys.has(b.back)) - Number(this.keys.has(b.forward));
+      const step = this.traversal.update(
+        dt,
+        dx,
+        dz,
+        this.keys.has(b.sprint),
+        this.yaw,
+        this.position.yaw,
+        this.reduced,
+        !!this.drag,
+      );
+      const oldX = this.position.x,
+        oldZ = this.position.z;
+      if (!this.blocked(this.position.x + step.x, this.position.z))
+        this.position.x += step.x;
+      else this.traversal.vx = 0;
+      if (!this.blocked(this.position.x, this.position.z + step.z))
+        this.position.z += step.z;
+      else this.traversal.vz = 0;
+      this.yaw = step.yaw;
+      this.position.yaw = step.facing;
+      this.moving =
+        Math.hypot(this.position.x - oldX, this.position.z - oldZ) > 0.0001;
+      this.sprinting = this.moving && this.traversal.speed > 4.2;
+      if (this.moving) this.onMove({ ...this.position });
       this.player.position.set(this.position.x, 0, this.position.z);
       this.player.rotation.y = this.position.yaw;
       this.target.lerp(
         new T.Vector3(this.position.x, 1.8, this.position.z),
-        1 - Math.exp(-dt * 7),
+        1 - Math.exp(-dt * (this.sprinting ? 11 : 8)),
       );
-    }
+    } else this.traversal.stop();
+    if (!this.battle && this.partner.visible) {
+      const before = this.partner.position.clone();
+      this.partner.position.lerp(
+        new T.Vector3(this.remote.x, 0, this.remote.z),
+        1 - Math.exp(-dt * 12),
+      );
+      const velocity =
+        before.distanceTo(this.partner.position) / Math.max(dt, 0.001);
+      this.remoteSpeed +=
+        (velocity - this.remoteSpeed) * (1 - Math.exp(-dt * 8));
+      this.partner.rotation.y = turnToward(
+        this.partner.rotation.y,
+        this.remote.yaw,
+        18,
+        dt,
+      );
+    } else this.remoteSpeed = 0;
     for (let i = 0; i < this.mixers.length; i++) {
       if (![this.player, this.npc, this.partner][i].visible) continue;
-      const walk = i === 0 && this.moving;
+      const walk =
+        (i === 0 && this.moving) || (i === 2 && this.remoteSpeed > 0.15);
+      const sprint =
+        (i === 0 && this.sprinting) || (i === 2 && this.remoteSpeed > 4.2);
       const acts = this.actions[i];
       if (acts.length > 1) {
         const casting =
@@ -697,7 +766,10 @@ export class World {
           this.actorMeshes.get(this.casting) ===
             [this.player, this.npc, this.partner][i];
         for (let j = 0; j < acts.length; j++) {
-          const desired = j === (casting ? 2 : walk ? 1 : 0) ? 1 : 0;
+          const desired =
+            j === (casting ? 2 : sprint && acts.length > 3 ? 3 : walk ? 1 : 0)
+              ? 1
+              : 0;
           acts[j].enabled = true;
           acts[j].setEffectiveWeight(
             T.MathUtils.lerp(
@@ -706,17 +778,21 @@ export class World {
               1 - Math.exp(-dt * 12),
             ),
           );
-          if (j < 2 && !acts[j].isRunning()) acts[j].play();
+          if (j !== 2 && !acts[j].isRunning()) acts[j].play();
         }
       }
+      if (acts[1])
+        acts[1].setEffectiveTimeScale(
+          Math.max(
+            0.65,
+            Math.min(
+              1.25,
+              (i === 0 ? this.traversal.speed : this.remoteSpeed) / 3.8,
+            ),
+          ),
+        );
+      if (acts[3]) acts[3].setEffectiveTimeScale(0.95);
       this.mixers[i].update(dt);
-    }
-    if (!this.battle) {
-      this.partner.position.lerp(
-        new T.Vector3(this.remote.x, 0, this.remote.z),
-        1 - Math.exp(-dt * 12),
-      );
-      this.partner.rotation.y = this.remote.yaw;
     }
     const d = this.battle ? 15 : this.distance,
       angle = this.battle ? 0.2 : this.yaw,
@@ -728,8 +804,26 @@ export class World {
     );
     this.camera.position.lerp(
       desired,
-      1 - Math.exp(-dt * (this.reduced ? 20 : 5)),
+      1 - Math.exp(-dt * (this.reduced ? 20 : this.sprinting ? 9 : 6)),
     );
+    if (!this.battle) {
+      // Scene-specific facade pull-in. Check the interpolated camera too, so
+      // a fast manual orbit cannot interpolate through the building corner.
+      const direction = this.camera.position.clone().sub(this.target);
+      let allowed = direction.length();
+      this.cameraRay.set(this.target, direction.normalize());
+      for (const wall of this.cameraWalls) {
+        const hit = this.cameraRay.intersectBox(wall, this.cameraHit);
+        if (hit)
+          allowed = Math.min(
+            allowed,
+            Math.max(0.45, this.target.distanceTo(hit) - 0.2),
+          );
+      }
+      this.camera.position
+        .copy(this.target)
+        .addScaledVector(direction, allowed);
+    }
     this.camera.lookAt(this.target);
     for (const id of ["moth1", "moth2"]) {
       const moth = this.actorMeshes.get(id)!;
@@ -811,6 +905,15 @@ export class World {
       loadingErrors: this.loadingErrors,
       position: { ...this.position },
       camera: { yaw: this.yaw, pitch: this.pitch, distance: this.distance },
+      traversal: {
+        movement: this.traversal.movement,
+        camera: this.traversal.camera,
+        speed: this.traversal.speed,
+        sprinting: this.sprinting,
+        remoteSpeed: this.remoteSpeed,
+        manualGrace: this.traversal.manualGrace,
+        sustained: this.traversal.sustained,
+      },
       effectChildren: this.fx.children.length,
     };
   }

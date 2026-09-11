@@ -962,3 +962,11 @@ input:not([type="range"], [type="checkbox"], [type="file"]) {
 .spell.recommended { outline: 2px solid #e5c476; outline-offset: 3px; }
 .disclosure { background: transparent; color: #eee2c5; padding: 7px 10px; margin: 8px 8px 0 0; font: 12px var(--sans); border-color: #ffffff40; }
 .queue-row > .primary { margin-left: auto; }
+
+#ui summary, #ui details { pointer-events: auto; }
+.rules-help { font: 14px/1.5 var(--sans); margin: 15px 0; }
+
+.battle-heading .disclosure { margin: 0; }
+
+.scrim { z-index: 10; }
+.opening-copy .quiet, .opening-copy .quiet:hover { background: transparent; color: #fff3d8; border-color: transparent; text-decoration: underline; text-underline-offset: 4px; }

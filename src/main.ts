@@ -32,7 +32,9 @@ const sound = new Sound();
 let movedHint = localStorage.getItem("orrery-moved-v1") === "yes";
 let lessonCompleted = localStorage.getItem("orrery-lesson-v1") === "yes";
 let expandedCombat = false;
-let detailedCombat = false;
+let detailedCombat = localStorage.getItem("orrery-round-details-v1") === "yes";
+let sprintHintShown = localStorage.getItem("orrery-sprint-hint-v1") === "yes";
+let sprintHintUntil = 0;
 
 let tradition: Tradition = "margin",
   variant: BattleVariant = "book",
@@ -68,11 +70,18 @@ const world = new World(document.querySelector("#world")!, (p) => {
   if (client) client.move(p);
   if (world.moving) {
     sound.step(world.sprinting);
+    if (world.sprinting) sprintHintUntil = 0;
+    if (stage >= 1 && !sprintHintShown) {
+      sprintHintShown = true;
+      sprintHintUntil = performance.now() + 4500;
+      localStorage.setItem("orrery-sprint-hint-v1", "yes");
+    }
     if (!movedHint) {
       movedHint = true;
       localStorage.setItem("orrery-moved-v1", "yes");
-      el("controls").textContent = `${[world.bindings.forward, world.bindings.left, world.bindings.back, world.bindings.right].map(k => k.replace("Key", "")).join("")} · Move`;
-  el("controls").style.display = "none";
+      el("controls").textContent =
+        `${[world.bindings.forward, world.bindings.left, world.bindings.back, world.bindings.right].map((k) => k.replace("Key", "")).join("")} · Move`;
+      el("controls").style.display = "none";
     }
   }
 });
@@ -212,6 +221,10 @@ function restore(v: Save) {
   seed = v.seed ?? 42;
   facts = v.facts ?? { echo: false };
   stage = v.stage;
+  if (stage >= 3) {
+    lessonCompleted = true;
+    localStorage.setItem("orrery-lesson-v1", "yes");
+  }
   identity = v.identity;
   world.position = { ...v.position };
   battle = v.battle;
@@ -242,7 +255,7 @@ function begin(resume = false) {
 function panel(
   title: string,
   body: string,
-  footer = '<button class="primary" data-action="close">Back to the courtyard</button>',
+  footer = '<button class="primary" data-action="close">Back</button>',
 ) {
   sound.book();
   el("modal").innerHTML =
@@ -284,8 +297,8 @@ function interact() {
     panel(
       "The staff kettle",
       facts.echo
-        ? "<p>The kettle hums your borrowed tune. Someone has put a second cup beside it.</p>"
-        : `<p>A kettle sits on a heatproof tile. A label on its handle reads <em>Return to staff room</em>. Its lid taps a rhythm.</p><p>You tap the table. The kettle answers in the same rhythm.</p><p class="note">Optional discovery: the kettle answers you.</p>`,
+        ? "<p>The kettle repeats your rhythm. Iona will want it back before tea.</p>"
+        : `<p>Someone has left the staff kettle beside the reading bench. Its lid taps a rhythm.</p><p>You tap the table. The kettle answers in the same rhythm.</p><p class="note">Optional discovery: the kettle answers you.</p>`,
       facts.echo
         ? undefined
         : '<button class="primary" data-action="accept">Tap the table</button>',
@@ -302,7 +315,7 @@ function interact() {
   if (stage === 0)
     panel(
       "Iona",
-      `<div class="speaker">OBSERVATORY KEEPER</div><p>“The telescope's stopped again. Could you start the lamp across the courtyard? The round one by the flower bed.”</p><p>“I'd do it, but it keeps burning my gloves.”</p>`,
+      `<div class="speaker">OBSERVATORY KEEPER</div><p>“The telescope's stopped again. Could you start the lamp across the courtyard? The round one by the flower bed.”</p><p>“Use the spare gloves. Mine are still drying.”</p>`,
       `<button class="primary" data-action="accept">I'll try</button>`,
     );
   else if (stage === 1) {
@@ -441,7 +454,7 @@ async function present(events: BattleEvent[]) {
     if (token !== playbackToken) break;
     if (!["cast", "attack", "status"].includes(event.kind)) continue;
     el("combat").innerHTML =
-      `<div class="resolution"><div class="eyebrow">THE ROUND UNFOLDS</div><h3>${escape((SPELLS[event.spellId as SpellId] && battle ? getSpell(battle, event.actorId, event.spellId as SpellId).name : undefined) ?? (event.spellId === "heavy" ? "Pendulum Fall" : event.text.split(" — ")[0]))}</h3><p>${escape(event.text)}</p><button data-action="skip">Skip presentation →</button></div>`;
+      `<div class="resolution"><div class="eyebrow">RESOLVING</div><h3>${escape((SPELLS[event.spellId as SpellId] && battle ? getSpell(battle, event.actorId, event.spellId as SpellId).name : undefined) ?? (event.spellId === "heavy" ? "Pendulum Fall" : event.text.split(" — ")[0]))}</h3><p>${escape(event.text)}</p><button data-action="skip">Skip presentation →</button></div>`;
     const seconds = (event.spellId === "unfold" ? 3.4 : 1.15) / playbackSpeed;
     world.effect(event.spellId, event.actorId, event.targetId, seconds);
     sound.cast(event.spellId);
@@ -497,14 +510,16 @@ function journal() {
               "",
             )}</div><p class="note">Changes apply to your next encounter. Your friend chooses separately.</p>`
         : ""
-    }<div class="journal-grid">${Object.values(SPELLS)
+    }<details class="rules-help"><summary>Battle help</summary><p>Choose one spell, then Resolve. Ember pays for spells and refills by 2 each round. The free spell is always available.</p><p>Marks strengthen your signature. Ward absorbs damage. Protection and recovery work on you or your friend.</p><p>Round details shows the exact forecast and order: protection/recovery, quick spells, signatures, heavy attacks. In shared play, both confirm the current joint plan.</p></details><div class="journal-grid">${Object.values(
+      SPELLS,
+    )
       .map((base) => {
         const s = spellView(base.id);
         return `<article><h3>${s.name} <small>✦ ${s.cost}</small></h3><p>${s.description}</p></article>`;
       })
       .join(
         "",
-      )}</div><p class="note">${stage >= 4 ? "Margin note learned: signature +3." : "A margin note waits along the west garden."} ${facts.echo ? "Optional field note: The Kettle Chorus. A tune for tea, not combat." : "The west reading pocket is worth a detour."}</p>${import.meta.env.DEV ? `<details class="laboratory"><summary>Development comparison</summary><label>Combat model <select id="combat-model" ${battle || (client && seat() !== "mage1") ? "disabled" : ""}><option value="baseline" ${variant === "baseline" ? "selected" : ""}>Original baseline</option><option value="book" ${variant === "book" ? "selected" : ""}>Traditions · full book</option><option value="hand" ${variant === "hand" ? "selected" : ""}>Traditions · seeded pages</option></select></label><label>Solo deck seed <input id="deck-seed" type="number" value="${seed}" ${battle || client ? "disabled" : ""}></label><label>Signature presentation <select id="signature-treatment"><option value="spirit" ${world.effects.treatment === "spirit" ? "selected" : ""}>Lantern crane</option><option value="pages" ${world.effects.treatment === "pages" ? "selected" : ""}>Unfolding pages</option><option value="eclipse" ${world.effects.treatment === "eclipse" ? "selected" : ""}>Borrowed eclipse</option></select></label><p>Models apply next encounter. Presentations use the identical committed result.</p></details>` : ""}`,
+      )}</div><p class="note">${stage >= 4 ? "Margin note learned: signature +3." : "A margin note waits along the west garden."} ${facts.echo ? "Optional field note: The staff kettle." : "There is a reading bench behind the west garden."}</p>${import.meta.env.DEV ? `<details class="laboratory"><summary>Development comparison</summary><label>Combat model <select id="combat-model" ${battle || (client && seat() !== "mage1") ? "disabled" : ""}><option value="baseline" ${variant === "baseline" ? "selected" : ""}>Original baseline</option><option value="book" ${variant === "book" ? "selected" : ""}>Traditions · full book</option><option value="hand" ${variant === "hand" ? "selected" : ""}>Traditions · seeded pages</option></select></label><label>Solo deck seed <input id="deck-seed" type="number" value="${seed}" ${battle || client ? "disabled" : ""}></label><label>Signature presentation <select id="signature-treatment"><option value="spirit" ${world.effects.treatment === "spirit" ? "selected" : ""}>Lantern crane</option><option value="pages" ${world.effects.treatment === "pages" ? "selected" : ""}>Unfolding pages</option><option value="eclipse" ${world.effects.treatment === "eclipse" ? "selected" : ""}>Borrowed eclipse</option></select></label><p>Models apply next encounter. Presentations use the identical committed result.</p></details>` : ""}`,
   );
 }
 
@@ -563,6 +578,10 @@ function connect(credential: Credential) {
       facts = { ...s.facts };
       world.setEcho(facts.echo);
       stage = s.stage;
+      if (stage >= 3) {
+        lessonCompleted = true;
+        localStorage.setItem("orrery-lesson-v1", "yes");
+      }
       battle = s.battle;
       if (entering) {
         toastUntil = 0;
@@ -694,6 +713,10 @@ ui.addEventListener("click", async (e) => {
         break;
       case "combat-details":
         detailedCombat = !detailedCombat;
+        localStorage.setItem(
+          "orrery-round-details-v1",
+          detailedCombat ? "yes" : "no",
+        );
         renderCombat();
         break;
       case "confirm":
@@ -889,6 +912,14 @@ if (matchMedia("(prefers-reduced-motion: reduce)").matches)
   world.reduced = true;
 setInterval(() => {
   if (!started) return;
+  if (movedHint) {
+    const showSprint =
+      performance.now() < sprintHintUntil && !modal && !battle && world.active;
+    el("controls").style.display = showSprint ? "block" : "none";
+    if (showSprint)
+      el("controls").textContent =
+        `${world.bindings.sprint.replace("Left", "").replace("Key", "")} · Hold to sprint`;
+  }
   const p = nearbyPoint(),
     near = Math.hypot(world.position.x - p.x, world.position.z - p.z) < 3.3;
   const promptHtml =

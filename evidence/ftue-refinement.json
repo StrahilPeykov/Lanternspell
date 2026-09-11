@@ -1,0 +1,1827 @@
+{
+  "date": "2026-09-11T20:05:57.110Z",
+  "scope": "Sleeping Orrery FTUE refinement; no publication",
+  "unitTests": {
+    "files": 11,
+    "passed": 68
+  },
+  "skimming": {
+    "endpoint": "http://127.0.0.1:5181/",
+    "scenario": "fresh profile, visible prompts, highlighted choices, no debug or save fixtures",
+    "cards": [
+      1,
+      2,
+      3
+    ],
+    "errors": [],
+    "result": "practice complete; tradition choice reached"
+  },
+  "solo": [
+    {
+      "tradition": "margin",
+      "lessonRounds": 3,
+      "guardianRounds": 9,
+      "errors": []
+    },
+    {
+      "tradition": "hearth",
+      "lessonRounds": 3,
+      "guardianRounds": 8,
+      "errors": []
+    }
+  ],
+  "duo": {
+    "scenario": "mixed-book",
+    "checks": [
+      "Real Shift+W sprint relayed; remote speed 6.23m/s, no authority correction",
+      "session created/joined and model/personal traditions selected through DOM",
+      "optional echo shared once without advancing required chapter; local NPC dialogue preserved",
+      "concurrent personal plans accepted; edit after ready cleared joint readiness",
+      "lesson completed through real spell/target/confirm UI; both committed states matched; skip/repeated Enter harmless",
+      "guardian completed through real spell/target/confirm UI; both committed states matched; skip/repeated Enter harmless",
+      "fresh-page and same-client seat rejoin restored completed quest plus optional fact without cinematic replay"
+    ],
+    "mockedSockets": false,
+    "separateDevices": false
+  },
+  "productionOffline": {
+    "scenario": "production-client-offline-after-load",
+    "timestamp": "2026-09-11T20:07:59.277Z",
+    "endpoint": "http://127.0.0.1:5181/",
+    "stateFixtures": false,
+    "actualInputs": true,
+    "checks": [
+      "production has no debug surface",
+      "loaded code and art before disconnecting network",
+      "actual movement and NPC outcome while network offline",
+      "local spellbook opens while offline"
+    ],
+    "errors": []
+  },
+  "productionProtocol": {
+    "scenario": "real-local-do-two-browser-protocol",
+    "endpoint": "http://127.0.0.1:5181",
+    "mocking": false,
+    "gameplayInput": false,
+    "separateDevices": false,
+    "applicationDelayMs": 0,
+    "delayIsPacketLoss": false,
+    "started": "2026-09-11T20:12:36.412Z",
+    "checks": [
+      "cross-origin creation, malformed join, and consumed invitation rejected",
+      "two independently authenticated seats connected",
+      "proximity-validated shared progression and independent encounter consent",
+      "unknown/prototype spell ID rejected without resolving or disconnecting",
+      "simultaneous plan submission against common battle revision accepted",
+      "plan edit invalidates joint readiness; stale confirm rejected",
+      "live seat replacement clears old readiness; replacement remains usable after old socket closes",
+      "disconnect before commit pauses, opaque credential resumes original seat",
+      "duplicate command acknowledgement and old-round rejection cannot double-resolve",
+      "disconnect after committed result restores authoritative state",
+      "legal complete teaching encounter awards shared progression once"
+    ],
+    "timings": [
+      {
+        "kind": "interact",
+        "ms": 20,
+        "accepted": true
+      },
+      {
+        "kind": "interact",
+        "ms": 37,
+        "accepted": true
+      },
+      {
+        "kind": "consent",
+        "ms": 32,
+        "accepted": true
+      },
+      {
+        "kind": "consent",
+        "ms": 14,
+        "accepted": true
+      },
+      {
+        "kind": "plan",
+        "ms": 26,
+        "accepted": false
+      },
+      {
+        "kind": "plan",
+        "ms": 15,
+        "accepted": true
+      },
+      {
+        "kind": "plan",
+        "ms": 31,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 23,
+        "accepted": true
+      },
+      {
+        "kind": "plan",
+        "ms": 15,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 16,
+        "accepted": false
+      },
+      {
+        "kind": "ready",
+        "ms": 11,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 13,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 46,
+        "accepted": false
+      },
+      {
+        "kind": "ready",
+        "ms": 12,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 17,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 6,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 15,
+        "accepted": false
+      },
+      {
+        "kind": "plan",
+        "ms": 18,
+        "accepted": true
+      },
+      {
+        "kind": "plan",
+        "ms": 35,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 25,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 16,
+        "accepted": true
+      },
+      {
+        "kind": "plan",
+        "ms": 26,
+        "accepted": true
+      },
+      {
+        "kind": "plan",
+        "ms": 42,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 25,
+        "accepted": true
+      },
+      {
+        "kind": "ready",
+        "ms": 16,
+        "accepted": true
+      }
+    ],
+    "completed": "2026-09-11T20:12:41.459Z",
+    "result": "passed"
+  },
+  "motion": {
+    "scenario": "same real inputs; read-only diagnostics; local D3D11 captures",
+    "runs": [
+      {
+        "movement": "baseline",
+        "camera": "manual",
+        "samples": [
+          {
+            "label": "forward",
+            "time": 1789156160167,
+            "position": {
+              "x": 0,
+              "z": 7.340380000000007,
+              "yaw": 3.141592653589793
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.6998999999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "around basin",
+            "time": 1789156161318,
+            "position": {
+              "x": 3.230000000000001,
+              "z": 7.086540000000006,
+              "yaw": 1.5707963267948966
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.8500000000000001
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "90 degree turn",
+            "time": 1789156163002,
+            "position": {
+              "x": 3.5465400000000016,
+              "z": 1.7665400000000113,
+              "yaw": 3.141592653589793
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.3999999999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "curve",
+            "time": 1789156163728,
+            "position": {
+              "x": 2.2925144078369035,
+              "z": 0.38597440783691395,
+              "yaw": 3.9269908169872423
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.4667000000000007
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "brief backward",
+            "time": 1789156164225,
+            "position": {
+              "x": 2.1581641194114596,
+              "z": 0.9485441194114683,
+              "yaw": 0
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.2
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "sustained backward",
+            "time": 1789156167295,
+            "position": {
+              "x": 2.1581641194114596,
+              "z": 11.777784119411455,
+              "yaw": 0
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 2.799799999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "180 turn and sprint",
+            "time": 1789156169189,
+            "position": {
+              "x": 2.1581641194114596,
+              "z": 5.888164119411469,
+              "yaw": 3.141592653589793
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.5998999999999999
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual orbit while moving",
+            "time": 1789156169922,
+            "position": {
+              "x": 0.7420116815276737,
+              "z": 4.798566270304992,
+              "yaw": 3.57238898038469
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.7999999999999994,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 2.1832999999999996,
+              "sustained": 0.46670000000000067
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual grace",
+            "time": 1789156171104,
+            "position": {
+              "x": 0.45098171982901575,
+              "z": 4.280299896790412,
+              "yaw": 3.5723889803846895
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.7999999999999994,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.0666000000000009,
+              "sustained": 1.6501000000000006
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "follow resumes",
+            "time": 1789156173572,
+            "position": {
+              "x": 0.45098171982901575,
+              "z": 4.280299896790412,
+              "yaw": 3.57238898038469
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.7999999999999994,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 4.083299999999999
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "recenter",
+            "time": 1789156174085,
+            "position": {
+              "x": -0.3739939532556469,
+              "z": 4.648579626171966,
+              "yaw": 5.129814978365024
+            },
+            "camera": {
+              "yaw": 0.41966973406795566,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 3.7999999999999994,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.7500000000000004,
+              "sustained": 4.599900000000006
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "stop",
+            "time": 1789156174508,
+            "position": {
+              "x": -0.5475064296362832,
+              "z": 4.7259968112167545,
+              "yaw": 5.132058714452645
+            },
+            "camera": {
+              "yaw": 0.42634573095299383,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "baseline",
+              "camera": "manual",
+              "speed": 0,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.3167000000000009,
+              "sustained": 0
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          }
+        ]
+      },
+      {
+        "movement": "snappy",
+        "camera": "manual",
+        "samples": [
+          {
+            "label": "forward",
+            "time": 1789156179859,
+            "position": {
+              "x": 0,
+              "z": 7.478566300000006,
+              "yaw": 3.141592653589793
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.7165999999999999
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "around basin",
+            "time": 1789156180997,
+            "position": {
+              "x": 3.0993703000000044,
+              "z": 7.203721800000006,
+              "yaw": 1.570796591296825
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.8665000000000013
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "90 degree turn",
+            "time": 1789156182676,
+            "position": {
+              "x": 3.4371686400000043,
+              "z": 2.077381400000013,
+              "yaw": 3.1415926535719003
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.3998999999999995
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "curve",
+            "time": 1789156183417,
+            "position": {
+              "x": 2.2752294225294776,
+              "z": 0.514246922529483,
+              "yaw": 3.9268599022719735
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.4833000000000002
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "brief backward",
+            "time": 1789156183928,
+            "position": {
+              "x": 2.0152012756989452,
+              "z": 0.8473806812714363,
+              "yaw": 6.2313941873222385
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.21669999999999986
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "sustained backward",
+            "time": 1789156187008,
+            "position": {
+              "x": 2.0152012756989452,
+              "z": 11.686569541271421,
+              "yaw": 6.283185307179586
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 2.833299999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "180 turn and sprint",
+            "time": 1789156188915,
+            "position": {
+              "x": 2.0152012756989452,
+              "z": 2.8410577012714096,
+              "yaw": 3.141592653590517
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 6,
+              "sprinting": true,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.6166000000000005
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual orbit while moving",
+            "time": 1789156190033,
+            "position": {
+              "x": -0.27221611753817043,
+              "z": 0.4022298501961229,
+              "yaw": 3.6524392277142037
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.7999999999999994,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 2.1833000000000014,
+              "sustained": 0.8164999999999984
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual grace",
+            "time": 1789156191205,
+            "position": {
+              "x": -2.1234459611458867,
+              "z": -3.6258151287652782,
+              "yaw": 3.572388980445461
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.7999999999999994,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.0501000000000011,
+              "sustained": 1.9830999999999985
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "follow resumes",
+            "time": 1789156193649,
+            "position": {
+              "x": -6.0110921070866885,
+              "z": -10.868903765378006,
+              "yaw": 3.5723889803846895
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 1.6640681629642273,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 4.433000000000001
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "recenter",
+            "time": 1789156194167,
+            "position": {
+              "x": -7.65779830248799,
+              "z": -10.474535759608221,
+              "yaw": 5.116761550330804
+            },
+            "camera": {
+              "yaw": 0.42152674759983316,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 3.8000000000000003,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.7334000000000014,
+              "sustained": 4.966300000000004
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "stop",
+            "time": 1789156194602,
+            "position": {
+              "x": -8.023554211528873,
+              "z": -10.309672274029143,
+              "yaw": 5.1300370783807425
+            },
+            "camera": {
+              "yaw": 0.4263457309529934,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "manual",
+              "speed": 0,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.3334999999999997,
+              "sustained": 0
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          }
+        ]
+      },
+      {
+        "movement": "weighty",
+        "camera": "manual",
+        "samples": [
+          {
+            "label": "forward",
+            "time": 1789156200219,
+            "position": {
+              "x": 0,
+              "z": 7.842524870000002,
+              "yaw": 3.141592653589793
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.7000000000000002
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "around basin",
+            "time": 1789156201354,
+            "position": {
+              "x": 2.7909136799999996,
+              "z": 7.297555110000001,
+              "yaw": 1.5723270464448575
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.8667
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "90 degree turn",
+            "time": 1789156203067,
+            "position": {
+              "x": 3.4591435600000002,
+              "z": 2.4876677000000047,
+              "yaw": 3.1415711677804525
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.3999000000000004
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "curve",
+            "time": 1789156203800,
+            "position": {
+              "x": 2.548005347723343,
+              "z": 0.8744778138811365,
+              "yaw": 3.9082143401806704
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.4666999999999998
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "brief backward",
+            "time": 1789156204297,
+            "position": {
+              "x": 2.1433877570586866,
+              "z": 0.7782270846297512,
+              "yaw": 5.847325367004333
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 2.815800000000005,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.21660000000000038
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "sustained backward",
+            "time": 1789156207379,
+            "position": {
+              "x": 2.1433877570586866,
+              "z": 11.441839464629743,
+              "yaw": 6.2831853071317125
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 2.816499999999998
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "180 turn and sprint",
+            "time": 1789156209268,
+            "position": {
+              "x": 2.1433877570586866,
+              "z": 3.7094393546297306,
+              "yaw": 3.1416013337539783
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 6,
+              "sprinting": true,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.5998999999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual orbit while moving",
+            "time": 1789156210165,
+            "position": {
+              "x": 0.8635843405242432,
+              "z": 1.2227380995255441,
+              "yaw": 3.7967025853271936
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 3.799978116710565,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 2.1834,
+              "sustained": 0.5832999999999993
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual grace",
+            "time": 1789156211330,
+            "position": {
+              "x": -1.040646597525868,
+              "z": -2.920630642762884,
+              "yaw": 3.57240417286173
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 3.7999999999999994,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.0500000000000003,
+              "sustained": 1.7832999999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "follow resumes",
+            "time": 1789156213819,
+            "position": {
+              "x": -4.9281340575551695,
+              "z": -11.379317930144728,
+              "yaw": 3.572388980384736
+            },
+            "camera": {
+              "yaw": -1.1400000000000003,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 3.7999999999999994,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 4.233100000000001
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "recenter",
+            "time": 1789156214351,
+            "position": {
+              "x": -5.048754788871762,
+              "z": -12.3573122466596,
+              "yaw": 5.056413660442372
+            },
+            "camera": {
+              "yaw": 0.42544824483603333,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 0.22731907239215957,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.683399999999998,
+              "sustained": 4.783100000000007
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "stop",
+            "time": 1789156214770,
+            "position": {
+              "x": -5.048754788871762,
+              "z": -12.338169522406513,
+              "yaw": 5.08321369618175
+            },
+            "camera": {
+              "yaw": 0.4277073559230293,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "weighty",
+              "camera": "manual",
+              "speed": 0,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.2667,
+              "sustained": 0
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          }
+        ]
+      },
+      {
+        "movement": "snappy",
+        "camera": "gentle",
+        "samples": [
+          {
+            "label": "forward",
+            "time": 1789156220518,
+            "position": {
+              "x": 0,
+              "z": 7.464856500000007,
+              "yaw": 3.141592653589793
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.7166999999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "around basin",
+            "time": 1789156221650,
+            "position": {
+              "x": 3.0998707000000025,
+              "z": 7.127438160000006,
+              "yaw": 1.5707965908211499
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.8666000000000006
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "90 degree turn",
+            "time": 1789156223347,
+            "position": {
+              "x": 3.4905316000000015,
+              "z": 1.9250878600000085,
+              "yaw": 3.141592653576498
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.4164000000000005
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "curve",
+            "time": 1789156224078,
+            "position": {
+              "x": 2.3793813170376907,
+              "z": 0.4761388570376981,
+              "yaw": 3.926813994544152
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.46660000000000046
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "brief backward",
+            "time": 1789156224561,
+            "position": {
+              "x": 2.237492633928696,
+              "z": 0.8975669739287028,
+              "yaw": 6.218801725820387
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.2
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "sustained backward",
+            "time": 1789156227615,
+            "position": {
+              "x": 2.237492633928696,
+              "z": 11.614829133928689,
+              "yaw": 6.283185307179586
+            },
+            "camera": {
+              "yaw": -1.0462232044820612,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 2.7998999999999987
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "180 turn and sprint",
+            "time": 1789156229491,
+            "position": {
+              "x": 5.047616489833144,
+              "z": 8.957317630588358,
+              "yaw": 8.198381151252796
+            },
+            "camera": {
+              "yaw": -1.226396809515988,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 2.08682114229836,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.6000000000000003
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual orbit while moving",
+            "time": 1789156230270,
+            "position": {
+              "x": 5.04295976001771,
+              "z": 7.216325064377585,
+              "yaw": 8.765883138477145
+            },
+            "camera": {
+              "yaw": -2.366396809515987,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 3.0641880669384864,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 2.1834,
+              "sustained": 0.4998999999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual grace",
+            "time": 1789156231429,
+            "position": {
+              "x": 7.7464143038759214,
+              "z": 4.13519648029568,
+              "yaw": 8.629177478151885
+            },
+            "camera": {
+              "yaw": -2.366396809515987,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.0499999999999998,
+              "sustained": 1.6665999999999992
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "follow resumes",
+            "time": 1789156233888,
+            "position": {
+              "x": 8.243941670863979,
+              "z": -1.8855814119583472,
+              "yaw": 8.629177478048291
+            },
+            "camera": {
+              "yaw": -1.0276447090604315,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 2.705127304142763,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 4.116399999999995
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "recenter",
+            "time": 1789156234401,
+            "position": {
+              "x": 8.243941670863979,
+              "z": -3.2594546833908686,
+              "yaw": 8.62917747804829
+            },
+            "camera": {
+              "yaw": -0.8002160186290056,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 2.70567786915217,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.7334000000000012,
+              "sustained": 4.632999999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "stop",
+            "time": 1789156234821,
+            "position": {
+              "x": 8.243941670863979,
+              "z": -3.4535537149746403,
+              "yaw": 8.62917747804829
+            },
+            "camera": {
+              "yaw": -0.8002160186290056,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "gentle",
+              "speed": 0,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.3167999999999982,
+              "sustained": 0
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          }
+        ]
+      },
+      {
+        "movement": "snappy",
+        "camera": "adventure",
+        "samples": [
+          {
+            "label": "forward",
+            "time": 1789156240705,
+            "position": {
+              "x": 0,
+              "z": 7.469829300000006,
+              "yaw": 3.141592653589793
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.7167000000000004
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "around basin",
+            "time": 1789156241850,
+            "position": {
+              "x": 3.1134600999999993,
+              "z": 7.132030580000006,
+              "yaw": 1.57079659034633
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.8666999999999999
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "90 degree turn",
+            "time": 1789156243548,
+            "position": {
+              "x": 3.451258819999999,
+              "z": 1.9339437800000123,
+              "yaw": 3.1415926535765455
+            },
+            "camera": {
+              "yaw": 0,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.4166000000000005
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "curve",
+            "time": 1789156244255,
+            "position": {
+              "x": 2.3811822486364735,
+              "z": 0.5895919486364893,
+              "yaw": 3.926752417905673
+            },
+            "camera": {
+              "yaw": 0.19197318319135848,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.45
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "brief backward",
+            "time": 1789156244746,
+            "position": {
+              "x": 2.2918471727683323,
+              "z": 0.9025748249523498,
+              "yaw": 6.49676971435943
+            },
+            "camera": {
+              "yaw": 0.26949926976391075,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 3.8,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 0.21660000000000038
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "sustained backward",
+            "time": 1789156247802,
+            "position": {
+              "x": 5.069105978869834,
+              "z": 11.294249862701122,
+              "yaw": 6.552684576943497
+            },
+            "camera": {
+              "yaw": -1.5777935425288707,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 3.796626404674208,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 2.8164999999999987
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "180 turn and sprint",
+            "time": 1789156249711,
+            "position": {
+              "x": 12.795121395966634,
+              "z": 13.80042187334708,
+              "yaw": 7.626791863906873
+            },
+            "camera": {
+              "yaw": -1.7979860968623709,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 1.4413179969159158,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 1.6499000000000026
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual orbit while moving",
+            "time": 1789156250447,
+            "position": {
+              "x": 12.797005914825295,
+              "z": 12.912213697194028,
+              "yaw": 8.194279999249089
+            },
+            "camera": {
+              "yaw": -2.9379860968623697,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 1.706292107136102,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 2.1833000000000014,
+              "sustained": 0.4333999999999997
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "manual grace",
+            "time": 1789156251598,
+            "position": {
+              "x": 12.797005914825295,
+              "z": 11.938040312232028,
+              "yaw": 8.05758819084207
+            },
+            "camera": {
+              "yaw": -2.9379860968623697,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 0.9173095761495567,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.083400000000001,
+              "sustained": 1.5833000000000004
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "follow resumes",
+            "time": 1789156254059,
+            "position": {
+              "x": 12.797005914825295,
+              "z": 10.055605839644874,
+              "yaw": 8.057588190701907
+            },
+            "camera": {
+              "yaw": -1.4014018222255218,
+              "pitch": 0.31000000000000005,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 1.685346503721025,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 0,
+              "sustained": 4.033200000000001
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "recenter",
+            "time": 1789156254572,
+            "position": {
+              "x": 12.797005914825295,
+              "z": 9.645833986527686,
+              "yaw": 8.057588190701907
+            },
+            "camera": {
+              "yaw": -1.3721708064796145,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 0.9156401245055864,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.6999999999999993,
+              "sustained": 4.566500000000006
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          },
+          {
+            "label": "stop",
+            "time": 1789156254994,
+            "position": {
+              "x": 12.797005914825295,
+              "z": 9.618013294140926,
+              "yaw": 8.057588190701907
+            },
+            "camera": {
+              "yaw": -1.3721708064796145,
+              "pitch": 0.27,
+              "distance": 9
+            },
+            "traversal": {
+              "movement": "snappy",
+              "camera": "adventure",
+              "speed": 0,
+              "sprinting": false,
+              "remoteSpeed": 0,
+              "manualGrace": 1.2832999999999972,
+              "sustained": 0
+            },
+            "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+            "loadingErrors": []
+          }
+        ]
+      }
+    ]
+  },
+  "performance": {
+    "scenario": "steady-state-courtyard-two-settings",
+    "date": "2026-09-11T20:05:57.110Z",
+    "build": "0.2.1 FTUE refinement after college detail pass",
+    "fixtures": false,
+    "input": "UI starts solo and selects low graphics; stationary courtyard sampling excludes loading warmup",
+    "browser": "153.0.8010.12",
+    "headless": true,
+    "requestedBackend": "D3D11; actual identity below",
+    "high": {
+      "inspection": {
+        "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "viewport": [
+          1920,
+          1080
+        ],
+        "drawingBuffer": [
+          1920,
+          1080
+        ],
+        "resources": {
+          "geometries": 62,
+          "textures": 81,
+          "calls": 141,
+          "triangles": 289338
+        },
+        "quality": {
+          "low": false,
+          "shadowSize": 2048,
+          "surfaceMaterials": 15
+        },
+        "loadedAtMs": 2124.100000000093,
+        "loadingErrors": []
+      },
+      "steadyFrameMs": {
+        "p50": 33.30000000000109,
+        "p95": 66.60000000000036,
+        "p99": 66.80000000000109,
+        "samples": 340,
+        "durationMs": 12010.899999999907
+      }
+    },
+    "low": {
+      "inspection": {
+        "renderer": "ANGLE (Intel, Intel(R) UHD Graphics (0x00009BC4) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+        "viewport": [
+          1280,
+          720
+        ],
+        "drawingBuffer": [
+          1088,
+          612
+        ],
+        "resources": {
+          "geometries": 62,
+          "textures": 81,
+          "calls": 113,
+          "triangles": 226487
+        },
+        "quality": {
+          "low": true,
+          "shadowSize": 1024,
+          "surfaceMaterials": 15
+        },
+        "loadedAtMs": 2124.100000000093,
+        "loadingErrors": []
+      },
+      "steadyFrameMs": {
+        "p50": 16.69999999999709,
+        "p95": 16.799999999999272,
+        "p99": 16.80000000000291,
+        "samples": 720,
+        "durationMs": 12007.199999999997
+      }
+    },
+    "errors": [],
+    "caveat": "One Intel machine. Stationary exploration, not worst-case combat; no broad GPU/device guarantee."
+  },
+  "limits": "Agent UI/motion inspection and deterministic completion are not human enjoyment evidence. One Intel hardware renderer. Historical before measurements are in refinement-after.json. No geographic or process-reconstruction repeat this pass."
+}

@@ -1,3 +1,7 @@
+# Current FTUE refinement
+
+See [ftue-results.md](ftue-results.md) for current tested paths and blind human questions. Snappy/Gentle are provisional agent-inspected choices. Foliage occlusion remains, sustained reverse/held-heading conventions need human feedback, and High still misses reliable 1080p60 on the tested Intel UHD. No jump or new region was added. The previous benchmark notes below remain historical context.
+
 # Benchmark limitations and next evaluation
 
 The chapter is stronger and remains bounded. Human enjoyment and the 5–10 minute target are unmeasured. Runtime art is still simpler than the concept, especially foliage, brushwork, facial character and interiors. The new facades, Atlas and moth are authored GLBs; costume sidecars reuse the same rig. Short clips now blend, but the grand cast remains a slowed/held version of the same licensed gesture. Coarse sleeve/cape intersections remain possible. The camera has no full obstruction solver. There is no new region or interior, voice acting, score, physics expansion or full creator.

@@ -1,5 +1,8 @@
 # Battle rules, format 1
 
+The table below describes the retained original baseline. Normal full-book traditions and adaptive intentions are specified in combat-refinement.md. September 11 FTUE change: only the full-book solo practice moth rises to 24 HP so basic → setup → signature has a meaningful payoff. Baseline/hand solo remain 18 HP; duo remains 28 HP. Progressive card visibility is local UI only, with an All spells opt-out; no alternate tutorial resolver.
+
+
 The simulation is pure TypeScript. A complete result and event list are computed before playback. Clients may skip, speed up, replay, or abandon animation without applying any state again. A finalized battle ignores further resolution calls. The network layer additionally deduplicates commands and commits quest rewards once.
 
 Each living mage prepares one spell. Ember starts at 3, gains 2 at each new round, and caps at 7. Wick Spark costs zero, guaranteeing an available action. Plans must name a living mage, a known affordable spell, and a target on the correct team. Incomplete, duplicate, or invalid plans reject the whole round.

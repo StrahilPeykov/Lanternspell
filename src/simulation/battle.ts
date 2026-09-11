@@ -10,8 +10,8 @@ export interface Spell {
 }
 export const SPELLS: Record<SpellId, Spell> = {
   spark: { id: 'spark', name: 'Wick Spark', cost: 0, tier: 1, target: 'enemy', description: 'Deal 5 damage. Always available.' },
-  mark: { id: 'mark', name: 'Inkseed', cost: 1, tier: 1, target: 'enemy', description: 'Deal 2 damage and inscribe a seed through the next two rounds.' },
-  unfold: { id: 'unfold', name: 'Folded Sky', cost: 4, tier: 2, target: 'enemy', description: 'Deal 9 damage, or 18 to an inscribed target. Consume its seed. Margin note adds 3 damage.' },
+  mark: { id: 'mark', name: 'Inkseed', cost: 1, tier: 1, target: 'enemy', description: '2 damage. Mark the foe for 2 more rounds.' },
+  unfold: { id: 'unfold', name: 'Folded Sky', cost: 4, tier: 2, target: 'enemy', description: '9 damage; 18 if marked. Uses the mark.' },
   shelter: { id: 'shelter', name: 'Hearthveil', cost: 2, tier: 0, target: 'mage', description: 'Give yourself or an ally 11 ward through the next round. Ward does not stack.' },
   unseal: { id: 'unseal', name: 'Unstitch', cost: 2, tier: 0, target: 'enemy', description: 'Remove all ward, deal 4 damage, and halve this round’s heavy attack.' },
   mend: { id: 'mend', name: 'Mending Light', cost: 3, tier: 0, target: 'mage', description: 'Restore 12 health to yourself or a living ally.' },
@@ -80,7 +80,7 @@ export function getIntentions(battle: Battle): Intention[] {
     const heavy = enemy.id === 'guardian' && battle.round % 3 === 2;
     const amount = enemy.id === 'guardian' ? (heavy ? 12 : 6) : (battle.kind === 'lesson' ? 4 : 3);
     return { actorId: enemy.id, targetId: target.id, name: heavy ? 'Pendulum Fall' : enemy.id === 'guardian' ? 'Brass Sweep' : 'Paper Flutter', spellId: heavy ? 'heavy' : 'strike', tier: heavy ? 3 : 2, amount,
-      text: `${amount} damage to ${target.name}${heavy ? ' · Unstitch halves this strike' : ''}.` };
+      text: `${amount} damage to ${target.name}${heavy ? ' · Disruption halves this strike' : ''}.` };
   });
 }
 /** Intentions are locked at the planning boundary, never chosen after seeing this round's plans. */
@@ -94,14 +94,14 @@ function stateIntentions(battle: Battle): Intention[] {
     if (enemy.id !== 'guardian') {
       const reader = [...mages].sort((a, b) => a.ward - b.ward || a.hp - b.hp || a.id.localeCompare(b.id))[0]!;
       const amount = enemy.markedUntil >= battle.round ? 6 : battle.kind === 'lesson' ? 4 : 3;
-      return { ...intention('strike', amount === 6 ? 'Inkflutter' : 'Paper Flutter', amount, 2, amount === 6 ? 'Its inscription stirs the wings' : 'The moth seeks an unguarded reader', reader.id), text: `${amount === 6 ? 'Inscribed wings' : 'Least ward'} · ${amount} damage to ${reader.name}.` };
+      return { ...intention('strike', amount === 6 ? 'Inkflutter' : 'Paper Flutter', amount, 2, amount === 6 ? 'Marked wings' : 'Targets least ward', reader.id), text: `${amount === 6 ? 'Marked: stronger attack' : 'Least ward'} · ${amount} damage to ${reader.name}.` };
     }
-    if (enemy.ward === 0 && enemy.lastIntent !== 'rebind') return intention('rebind', 'Gather the Loose Brass', 6, 2, 'Its broken ward calls the rings home: gain 6 ward, no attack', enemy.id);
-    if (enemy.hp <= enemy.maxHp * .4 && enemy.lastIntent !== 'heavy') return intention('heavy', 'Falling Hour', 12, 3, 'Its weakened heart swings a desperate pendulum; Unstitch halves this strike');
-    if (enemy.markedUntil >= battle.round && enemy.lastIntent !== 'purge') return intention('purge', 'Polish the Margins', 4, 2, 'An inscription troubles the brass: erase it and gain 4 ward, no attack', enemy.id);
-    if (target.ward >= 8 && enemy.lastIntent !== 'heavy') return intention('heavy', 'Test the Shelter', 12, 3, 'A strong shelter draws the pendulum; Unstitch halves this strike');
-    if (enemy.lastIntent === 'strike' && enemy.ward > 0) return intention('heavy', 'Pendulum Fall', 12, 3, 'Its intact rings wind up after a sweep; Unstitch halves this strike');
-    return intention('strike', 'Brass Sweep', 6, 2, 'The brass follows the mage holding most Ember');
+    if (enemy.ward === 0 && enemy.lastIntent !== 'rebind') return intention('rebind', 'Repair Ward', 6, 2, 'Ward broken: restore 6 ward. No attack', enemy.id);
+    if (enemy.hp <= enemy.maxHp * .4 && enemy.lastIntent !== 'heavy') return intention('heavy', 'Pendulum Fall', 12, 3, 'Low health: heavy attack. Disruption halves it');
+    if (enemy.markedUntil >= battle.round && enemy.lastIntent !== 'purge') return intention('purge', 'Clear Mark', 4, 2, 'Remove its mark; gain 4 ward. No attack', enemy.id);
+    if (target.ward >= 8 && enemy.lastIntent !== 'heavy') return intention('heavy', 'Pendulum Fall', 12, 3, 'Heavy attack against strong ward. Disruption halves it');
+    if (enemy.lastIntent === 'strike' && enemy.ward > 0) return intention('heavy', 'Pendulum Fall', 12, 3, 'Heavy attack after a sweep. Disruption halves it');
+    return intention('strike', 'Brass Sweep', 6, 2, 'Targets most Ember');
   });
 }
 export function getSpell(battle: Battle, actorId: string, spellId: SpellId): Spell {
@@ -174,7 +174,7 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
       if (action.spellId === 'rebind' || action.spellId === 'purge') {
         if (action.spellId === 'purge') caster.markedUntil = 0;
         caster.ward = Math.max(caster.ward, action.amount); caster.wardUntil = 9999;
-        emit(action, 'status', action.amount, `${caster.name} restores ${action.amount} ward.${action.spellId === 'purge' ? ' The inscription is polished away.' : ''}`);
+        emit(action, 'status', action.amount, `${caster.name} restores ${action.amount} ward.${action.spellId === 'purge' ? ' Mark removed.' : ''}`);
       } else {
         const target = targetFor(battle, action.targetId, 'mage', caster.id);
         if (!target) continue;
@@ -200,7 +200,7 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
         else amount = hit(target, tradition === 'hearth' ? 3 : 2);
         target.markedUntil = battle.round + 2;
         if (tradition === 'hearth') { caster.ward = Math.max(caster.ward, 6); caster.wardUntil = battle.round + 1; }
-        text = `${target.name}: ${tradition === 'margin' ? '4 damage through ward' : `${tradition === 'hearth' ? 3 : 2} damage`}; inscribed through round ${target.markedUntil}.${tradition === 'hearth' ? ' Your kindling grants 6 ward.' : ''}`; break;
+        text = `${target.name}: ${tradition === 'margin' ? '4 damage through ward' : `${tradition === 'hearth' ? 3 : 2} damage`}; marked through round ${target.markedUntil}.${tradition === 'hearth' ? ' You gain 6 ward.' : ''}`; break;
       }
       case 'unfold': {
         const seeded = target.markedUntil >= battle.round;
@@ -210,14 +210,14 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
         target.markedUntil = 0; amount = hit(target, damage);
         const spread = tradition === 'margin' && seeded ? battle.actors.filter(a => a.team === 'enemy' && a.id !== target.id && a.hp > 0) : [];
         for (const other of spread) hit(other, 5);
-        text = `${target.name}: ${damage} damage${seeded ? '; seed unfolds into a constellation' : ''}.${released ? ` Released ${released} of your ward.` : ''}${spread.length ? ' Loose pages deal 5 to other foes.' : ''}`;
+        text = `${target.name}: ${damage} damage${seeded ? '; mark bonus applied' : ''}.${released ? ` Released ${released} of your ward.` : ''}${spread.length ? ' 5 damage to other foes.' : ''}`;
         break;
       }
       case 'shelter': target.ward = Math.max(target.ward, 11); target.wardUntil = battle.round + 1; if (tradition === 'hearth') target.counter = 5; amount = 11; text = `${target.name}: 11 ward through round ${target.wardUntil}.${tradition === 'hearth' ? ' The next absorbed attack returns 5 damage.' : ''}`; break;
       case 'unseal': {
         const removed = target.ward; target.ward = 0; target.staggeredUntil = battle.round;
         amount = hit(target, 4); text = `${target.name}: ${removed} ward removed, 4 damage; heavy strike halved this round.`;
-        if (removed && tradition === 'margin') { target.markedUntil = battle.round + 2; text += ' The cut binding leaves an inscription.'; }
+        if (removed && tradition === 'margin') { target.markedUntil = battle.round + 2; text += ' Target marked.'; }
         if (removed && tradition === 'hearth') { caster.ward = Math.max(caster.ward, Math.min(4, removed)); caster.wardUntil = battle.round + 1; text += ` Rewoven ${Math.min(4, removed)} ward onto you.`; }
         break;
       }
@@ -246,7 +246,7 @@ function execute(input: Battle, plans: Plan[]): { battle: Battle; events: Battle
     battle.phase = won ? 'victory' : 'defeat';
     battle.rewardGranted = won;
     events.push({ id: `${battle.id}:${battle.round}:outcome`, kind: won ? 'victory' : 'defeat', actorId: '', targetId: '', spellId: '', amount: won ? 1 : 0,
-      text: won ? (battle.kind === 'lesson' ? 'The paper moth settles. A margin note awaits on the path.' : 'The sleeping orrery opens its golden eye. Bellweather wakes.') : 'The light retreats. Take a breath and try a different plan.' });
+      text: won ? (battle.kind === 'lesson' ? 'Practice complete. Read the field book.' : 'Victory. The observatory is open.') : 'Defeat. Return to the path and try again.' });
   } else {
     battle.round += 1;
     for (const a of battle.actors) {

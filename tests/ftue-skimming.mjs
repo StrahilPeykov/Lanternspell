@@ -44,6 +44,6 @@ try {
   await page.getByRole('button', { name: 'Keep the note' }).click();
   assert.deepEqual(errors, []);
   await page.screenshot({ path: 'evidence/local/ftue-after.png' });
-  await writeFile('evidence/local/ftue-skimming.json', JSON.stringify({ scenario: 'fresh profile, visible prompts, highlighted choices, no debug or save fixtures', cards, errors, result: 'practice complete; tradition choice reached' }, null, 2));
+  await writeFile('evidence/local/ftue-skimming.json', JSON.stringify({ endpoint: page.url(), scenario: 'fresh profile, visible prompts, highlighted choices, no debug or save fixtures', cards, errors, result: 'practice complete; tradition choice reached' }, null, 2));
   console.log('Fresh skimming journey passed: 1 → 2 → 3 cards, practice victory, field-book choice.');
 } catch (e) { await page.screenshot({path:'evidence/local/ftue-failure.png'}); throw e; } finally { await browser.close(); }

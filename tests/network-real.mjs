@@ -47,6 +47,8 @@ try {
       ws.onmessage = event => { const receive = () => { const msg = JSON.parse(event.data); wire.messages.push(msg); if (msg.type === 'snapshot') wire.snapshot = msg; }; if (applicationDelayMs) setTimeout(receive, applicationDelayMs); else receive(); };
       await new Promise((resolve, reject) => { ws.onopen = resolve; ws.onerror = reject; });
     }, { credential, applicationDelayMs });
+    // An open transport does not imply that this client has received its snapshot.
+    await page.waitForFunction(() => window.__wire.snapshot !== null);
   }
   await Promise.all([connect(pages[0], host), connect(pages[1], guest)]);
   const state = async (page = pages[0]) => page.evaluate(() => window.__wire.snapshot);

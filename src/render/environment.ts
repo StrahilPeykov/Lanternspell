@@ -1,3 +1,4 @@
+import { collegeDetails } from "./college-details";
 import * as T from "three";
 import type { World } from "./world";
 const rand = (n: number) => {
@@ -75,7 +76,7 @@ export function buildEnvironment(w: World) {
     for (const z of [9, 2, -6, -13]) {
       w.box(2.5, 0.27, 3.8, w.stone, x, 0.15, z);
       w.box(2.25, 0.1, 3.55, grass, x, 0.33, z);
-      for (let i = 0; i < 16; i++) {
+      for (let i = 0; i < 10; i++) {
         const px = x + (rand(i + z * 4) - 0.5) * 2,
           pz = z + (rand(i + 100 + z * 4) - 0.5) * 3,
           height = 0.27 + rand(i + z * 7) * 0.27,
@@ -150,7 +151,8 @@ export function buildEnvironment(w: World) {
     m.castShadow = false;
     m.receiveShadow = false;
   }
-  // Human touches: benches, cups, books, pots and pennants.
+  collegeDetails(w);
+  // Seating and the two chapter interaction props.
   for (const x of [-4.8, 4.8]) {
     w.box(1.7, 0.13, 0.6, wood, x, 0.55, 11);
     w.box(1.7, 0.65, 0.12, wood, x, 0.95, 11.3);

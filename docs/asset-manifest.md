@@ -28,3 +28,7 @@ Original reproducible courtyard/Atlas/accessory/Paper Moth GLBs and small origin
 ## Refinement, 2026-09-11
 
 The courtyard GLB was regenerated from `scripts/benchmark-art.py` with original warm study glazing, curtains/books and instrument rays, plus lower tessellation. Existing ten original packed wash textures reused; no third-party additions. Repeated paving, folded flower leaves and distant ridgelines were revised in `src/render/environment.ts`. See [art refinement](art-refinement.md) for export measurements.
+
+### FTUE institutional details — 2026-09-11
+
+Equipment trolley/gloves/repair kit, plain loan and department signs, replacement bench slat, plaster patches and reading-table kettle are original project geometry in `src/render/college-details.ts`. One original 512×512 CanvasTexture sign atlas, shared material and static batching; no external asset or license added. Flowers reduced from 16 to 10 per bed. Sprint provenance is recorded in the existing Quaternius row above.

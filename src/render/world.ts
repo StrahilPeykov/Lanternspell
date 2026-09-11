@@ -682,6 +682,7 @@ export class World {
     this.camera.updateProjectionMatrix();
   }
   private blocked(x: number, z: number) {
+    if (Math.abs(x + 4.05) < 0.7 && Math.abs(z - 6.65) < 0.47) return true;
     if (Math.hypot(x, z - 3) < 1.35) return true;
     if (Math.abs(x) > 12.8 || z > 15.5 || z < -19) return true;
     if (Math.abs(x) > 8.25 && z < 7) return true;
